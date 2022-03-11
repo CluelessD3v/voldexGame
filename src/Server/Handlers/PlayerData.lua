@@ -27,7 +27,7 @@ end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 -- Builds a data object for a player from the given metadata and object value types.
-function PlayerData:BuildDataObjectForPlayer(player, fromTable)
+function PlayerData:BuildPlayerDataObject(player, fromTable)
     table.insert(self.PlayerDataObjects, player.Name)
 
     fromTable.ObjectValues = fromTable.ObjectValues or {}
@@ -58,6 +58,12 @@ end
     Metadata Type Interface:
     None, given by the coder
 --]]
+
+
+function PlayerData:SetDataValue(valueName)
+    
+end
+
 
 
 return PlayerData.new()
