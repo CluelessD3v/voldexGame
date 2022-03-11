@@ -30,7 +30,6 @@ Players.PlayerAdded:Connect(function(player:Player)
         }
     })
 
-
     PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
 end)
 

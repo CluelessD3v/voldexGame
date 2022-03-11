@@ -25,6 +25,11 @@ local function MapObjectValues(fromObjectValuesTable: table)
     end
 end
 
+local function SetObjectValueInstanceValue(parent, name, newValue)
+    local ov: objectValue = parent:FindFirstChild(name, true)
+    ov.Value = newValue
+end
+
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 -- Builds a data object for a player from the given metadata and object value types.
 function PlayerData:BuildPlayerDataObject(player, fromTable)
@@ -66,8 +71,8 @@ function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: a
     if playerDataObject then
         for key, objectValue in pairs(playerDataObject.ObjectValues) do
             if name == objectValue.Name or name == key then
-
                 objectValue.Value = newValue
+                SetObjectValueInstanceValue(objectValue.Parent, name or key, newValue)
                 return
             end
         end
