@@ -8,7 +8,10 @@ local Players           = game:GetService("Players")
 local CollectionService = game:GetService("CollectionService")
 
 --? <|=============== LIFE CYCLE METHODS ===============|>
-local GoldCoin = {}
+local GoldCoin = {
+
+    Tag = "GoldCoin"
+}
 GoldCoin.__index = GoldCoin
 
 function GoldCoin.new(instance: Model)
@@ -26,6 +29,7 @@ function GoldCoin.new(instance: Model)
 end
 
 function GoldCoin:Init()
+    print("Init")
     self.RootPart.Touched:Connect(function(theTouchedPart) 
         local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)
         

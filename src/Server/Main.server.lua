@@ -6,13 +6,17 @@ local Handlers   = game:GetService("ServerScriptService").Handlers
 local Components = game:GetService("ServerScriptService").Components
 --# <|=============== Dependencies ===============|>
 -- Handlers
-local PlayerDataHandler: ModuleScript = require(Handlers.PlayerData)
-
+local PlayerDataHandler: ModuleScript  = require(Handlers.PlayerData)
+local ComponentsHandlers: ModuleScript = require(Handlers.Components)
 -- Components
 local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
 
 --# <|=============== Services ===============|>
 local Players = game:GetService("Players")
+
+ComponentsHandlers.LoadFrom(script.Parent.Components)
+ComponentsHandlers.OnInstanceTaggedInitComponent()
+print(ComponentsHandlers)
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
@@ -32,5 +36,7 @@ Players.PlayerAdded:Connect(function(player:Player)
 
 end)
 
-local gc = GoldCoinComponent.new(workspace.Coin)
-gc:Init()
+
+
+-- local gc = GoldCoinComponent.new(workspace.Coin)
+-- gc:Init()
