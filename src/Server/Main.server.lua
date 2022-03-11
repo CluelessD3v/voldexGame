@@ -18,14 +18,13 @@ Players.PlayerAdded:Connect(function(player:Player)
     PlayerDataHandler.SetObjectValuesFor(player, 
     {
         GoldCoins = {
-            Type = "NumberValue",
+            Type  = "NumberValue",
             Value = 0
         }
     },
 
     stats)
-    
-    stats.Parent = player
 
+    stats.Parent = player
 
 end)

@@ -9,8 +9,8 @@ PlayerData.SetObjectValuesFor = function(player: Player, fromTable: table, paren
 
     for key, object in pairs(fromTable) do 
         local objectVal: ObjectValue = Instance.new(object.Type)
-        objectVal.Name = key
-        objectVal.Value = objectVal.Value
+        objectVal.Name   = key
+        objectVal.Value  = objectVal.Value
         objectVal.Parent = parent
     end
 end
