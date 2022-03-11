@@ -19,17 +19,18 @@ Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
 
-    PlayerDataHandler.SetObjectValuesFor(player, 
-    {
-        GoldCoins = {
-            Type  = "NumberValue",
-            Value = 0
+    PlayerDataHandler:BuildDataObjectFor(player,    {
+        ObjectValues = {
+            GoldCoins = {
+                OfType     = "NumberValue",
+                Named      = "GoldCoins",
+                WithValue  = 0,
+                ParentedTo = player
+            }
         }
-    },
+    })
 
-    stats)
 
-    stats.Parent = player
 
 end)
 
