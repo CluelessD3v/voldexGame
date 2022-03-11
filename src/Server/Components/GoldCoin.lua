@@ -43,7 +43,6 @@ end
 function GoldCoin:Destroy()
     print("Destroying")
     self.Instance:Destroy()
-    self = nil
 end
 
 
