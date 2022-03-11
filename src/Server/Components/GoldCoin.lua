@@ -2,7 +2,7 @@
     Gold coin component for instances that represent gold coins that reward the player
     when he touches them
 ]]
-
+local Players = game:GetService("Players")
 local CollectionService = game:GetService("CollectionService")
 
 local GoldCoin = {}
@@ -28,7 +28,11 @@ end
 
 function GoldCoin:Init()
     self.RootPart.Touched:Connect(function(theTouchedPart) 
-        self:Destroy()
+        local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)
+        
+        if player then
+            self:Destroy()
+        end
     end)
 
 end
