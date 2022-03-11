@@ -17,11 +17,11 @@ end
 local function MapObjectValues(fromObjectValuesTable: table)
     
     for key, dataObject in pairs(fromObjectValuesTable) do
-        local objectVal: ObjectValue = Instance.new(dataObject.OfType) or error("Value Type field missing")
+        local objectVal: ObjectValue = Instance.new(dataObject.Type) or error("Value Type field missing")
 
-        objectVal.Name   = dataObject.Named or key
-        objectVal.Value  = dataObject.WithValue or error("Value field missing")
-        objectVal.Parent = dataObject.ParentedTo or error("Parent field missing")
+        objectVal.Name   = dataObject.Name or key
+        objectVal.Value  = dataObject.Value or error("Value field missing")
+        objectVal.Parent = dataObject.Parent or error("Parent field missing")
     end
 end
 
@@ -51,8 +51,8 @@ end
 
     ObjectValues Type Interface:
     - OfType    : any      -> Mapped to the Instance Type if no type is given the operation will fail
-    - Named     : string?   -> Mapped to the Name property if no name is given the key name will be used,
-    - WithValue : any?     -> Mapped to the Value property if no value is given then it will default to nil,
+    - OfName    : string?   -> Mapped to the Name property if no name is given the key name will be used,
+    - OfValue   : any?     -> Mapped to the Value property if no value is given then it will default to nil,
     - ParentedTo: Instance? -> Mapped to the Parent property if no Parent is given it will default to the Player instance
 
     Metadata Type Interface:
@@ -60,8 +60,25 @@ end
 --]]
 
 
-function PlayerData:SetDataValue(valueName)
-    
+function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
+    local playerDataObject = self.PlayerDataObjects[player.Name]
+
+    if playerDataObject then
+        for key, objectValue in pairs(playerDataObject.ObjectValues) do
+            if name == objectValue.Name or name == key then
+
+                objectValue.Value = newValue
+                return
+            end
+        end
+
+        warn("Object Value not found!")
+    end
+
+
+    warn("Player Data Object Not found")
+
+
 end
 
 

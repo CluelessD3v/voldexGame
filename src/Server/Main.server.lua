@@ -22,13 +22,16 @@ Players.PlayerAdded:Connect(function(player:Player)
     PlayerDataHandler:BuildPlayerDataObject(player,    {
         ObjectValues = {
             GoldCoins = {
-                OfType     = "NumberValue",
-                Named      = "GoldCoins",
-                WithValue  = 0,
-                ParentedTo = player
+                Type     = "NumberValue",
+                Name      = "GoldCoins",
+                Value  = 0,
+                Parent = player
             }
         }
     })
+
+
+    PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
 end)
 
 
