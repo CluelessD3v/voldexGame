@@ -73,7 +73,7 @@ end
 --]]
 
 -- Object value functions
---# Sets to PlayerDataObject ObjectValue value... Overwrites old value, so be mindful when using!
+--* OverWrites value fromn PlayerDataObject ObjectValue field
 function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
@@ -90,59 +90,63 @@ function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: a
             end
         end
 
-        warn("Object Value not found!")
+        warn("ObjectValue field not found!")
+        return nil
     end
 
-
-    warn("Player Data Object Not found")
+    warn("Given PlayerDataObject was not found")
+    return nil
 end
 
-function PlayerData:GetPlayerDataValue(player: Player, name: string)
+--* Gets value from PlayerDataObject ObjectValues field
+function PlayerData:GetPlayerObjectValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
     --# The PlayerDataObject Exists? Great!
     --# Now look if the objectvalue type exist... It does!? Great!
-    --# Then return the interal data value
+    --# Then return the inter ObjectValue value field
     
     if playerDataObject then
-        for key, objectValue in pairs(playerDataObject.ObjectValues) do
-            if name == objectValue.Name or name == key then
-                return objectValue.Value
-            end
-        end
-
-        warn("Object Value not found!")
+        return playerDataObject.ObjectValues[name]
+        --warn("Object Value not found!")
     end     
 
-    warn("Player Data Object Not found")
+    warn("Given PlayerDataObject Not found")
+    return nil
 end
 
 
 
 -- Metadata functions
-
+--* Overwrites value found in the PlayerDataObject metadata field
 function PlayerData:SetPlayerMetaValue(player: Player, keyName: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
     --# The PlayerDataObject Exists? Great!
     --# Does the meta data key exist? Great!
     --# Then overwrite it with the new value
+
     if playerDataObject then
         if playerDataObject.MetaData[keyName] then 
             playerDataObject.MetaData[keyName] = newValue
+            return
         end
-        warn("Object Value not found!")
+        --warn("Object Value not found!")
     end
 
     warn("Player Data Object Not found")
+    return nil
 end
 
 
-function PlayerData:GetPlayerMetaValue(player: Player, keyName: string)
+function PlayerData:GetPlayerMetaValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
     if playerDataObject then
-        return playerDataObject.MetaData[keyName]
+        return playerDataObject.MetaData[name]
     end
+
+    warn("Given PlayerDataObject was not found")
+    return nil
 end
 
 
