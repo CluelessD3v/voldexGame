@@ -19,6 +19,8 @@ Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
 
+    --* Mock data to test PlayerData Handler
+    --* //TODO look into moving these data into a config module
     PlayerDataHandler:BuildPlayerDataObject(player,    {
         ObjectValues = {
             GoldCoins = {
@@ -43,9 +45,10 @@ Players.PlayerAdded:Connect(function(player:Player)
     PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
     print(PlayerDataHandler:GetPlayerDataValue(player, "GoldCoins"))
 
-    PlayerDataHandler:OverwritePlayerMetaValue(player, "Inventory", {Name = "parapa"})
+    PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
     local inventory = PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")
     print(inventory)
+    
 end)
 
 
