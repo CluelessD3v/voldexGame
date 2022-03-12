@@ -46,8 +46,8 @@ Players.PlayerAdded:Connect(function(player:Player)
     print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
 
     PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
-    local inventory = PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")
-    print(inventory)
+    print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
+    
     
 end)
 
