@@ -22,16 +22,30 @@ Players.PlayerAdded:Connect(function(player:Player)
     PlayerDataHandler:BuildPlayerDataObject(player,    {
         ObjectValues = {
             GoldCoins = {
-                Type     = "NumberValue",
-                Name      = "GoldCoins",
+                Type   = "NumberValue",
+                Name   = "GoldCoins",
                 Value  = 0,
                 Parent = player
+            }
+        },
+
+        MetaData = {
+            Inventory = {
+                GhostSword = {
+                    Name   = "Ghost Sword",
+                    Damage = 25,
+                    Speed  = 15,
+                }
             }
         }
     })
                                     
     PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
     print(PlayerDataHandler:GetPlayerDataValue(player, "GoldCoins"))
+
+    PlayerDataHandler:OverwritePlayerMetaValue(player, "Inventory", {Name = "parapa"})
+    local inventory = PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")
+    print(inventory)
 end)
 
 

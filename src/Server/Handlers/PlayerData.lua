@@ -31,7 +31,7 @@ end
 --# Value synced!
 
 local function SetObjectValueInstanceValue(parent, name, newValue)
-    local ov: objectValue = parent:FindFirstChild(name, true)
+    local ov: ObjectValue = parent:FindFirstChild(name, true)
     ov.Value = newValue
 end
 
@@ -68,10 +68,11 @@ end
     - Value : any?     -> Mapped to the Value property if no value is given then it will default to nil,
     - Parent: Instance? -> Mapped to the Parent property if no Parent is given it will default to the Player instance
 
-    Metadata Type Interface:
+    MetaData Type Interface:
     None, given by the coder
 --]]
 
+-- Object value functions
 --# Sets to PlayerDataObject ObjectValue value... Overwrites old value, so be mindful when using!
 function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
@@ -111,9 +112,37 @@ function PlayerData:GetPlayerDataValue(player: Player, name: string)
         end
 
         warn("Object Value not found!")
+    end     
+
+    warn("Player Data Object Not found")
+end
+
+
+
+-- Metadata functions
+
+function PlayerData:SetPlayerMetaValue(player: Player, keyName: string, newValue: any )
+    local playerDataObject = self.PlayerDataObjects[player.Name]
+
+    --# The PlayerDataObject Exists? Great!
+    --# Does the meta data key exist? Great!
+    --# Then overwrite it with the new value
+    if playerDataObject then
+        if playerDataObject.MetaData[keyName] then 
+            playerDataObject.MetaData[keyName] = newValue
+        end
+        warn("Object Value not found!")
     end
 
     warn("Player Data Object Not found")
+end
+
+
+function PlayerData:GetPlayerMetaValue(player: Player, keyName: string)
+    local playerDataObject = self.PlayerDataObjects[player.Name]
+    if playerDataObject then
+        return playerDataObject.MetaData[keyName]
+    end
 end
 
 
