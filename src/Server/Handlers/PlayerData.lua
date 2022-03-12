@@ -37,7 +37,7 @@ end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
---# Builds a data object for a player from the given metadata and object value types.
+--# Builds a data object for a player from the given MetaData and ObjectvVlue tables.
 --# Also Instances object values under the given parent for the system to track as player owned.
 function PlayerData:BuildPlayerDataObject(player, fromTable)
     
@@ -73,7 +73,8 @@ end
 --]]
 
 -- Object value functions
---* OverWrites value fromn PlayerDataObject ObjectValue field
+
+--* Overwrites value field from both PlayerDataObject ObjectValue and its physical instance in the game
 function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
@@ -98,17 +99,23 @@ function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: a
     return nil
 end
 
---* Gets value from PlayerDataObject ObjectValues field
+--* Returns ObjectValue table from PlayerDataObject, NOT THE PHYSICAL OBJECT VALUE INSTANCE
 function PlayerData:GetPlayerObjectValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
-    --# The PlayerDataObject Exists? Great!
-    --# Now look if the objectvalue type exist... It does!? Great!
+    --# Does the given PlayerDataObject Exists? Great!
+    --# Now Does the given objectvalue field exist, It does!? Great!
     --# Then return the inter ObjectValue value field
     
     if playerDataObject then
-        return playerDataObject.ObjectValues[name]
-        --warn("Object Value not found!")
+        local objectValue: table = playerDataObject.ObjectValues[name]
+
+        if objectValue then
+            return playerDataObject.ObjectValues[name]
+        end
+
+        warn("Given ObjectValue field not found!")
+        return nil
     end     
 
     warn("Given PlayerDataObject Not found")
@@ -118,31 +125,42 @@ end
 
 
 -- Metadata functions
---* Overwrites value found in the PlayerDataObject metadata field
-function PlayerData:SetPlayerMetaValue(player: Player, keyName: string, newValue: any )
+--* Overwrites value  from the given PlayerDataObject MetaData field
+function PlayerData:SetPlayerMetaValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
-    --# The PlayerDataObject Exists? Great!
-    --# Does the meta data key exist? Great!
+    --# The given PlayerDataObject Exists? Great!
+    --# Does the given MetaData field exist? Great!
     --# Then overwrite it with the new value
 
     if playerDataObject then
-        if playerDataObject.MetaData[keyName] then 
-            playerDataObject.MetaData[keyName] = newValue
+        local metaDataValue: any = playerDataObject.MetaData[name]
+
+        if metaDataValue then
+            playerDataObject.MetaData[name] = newValue
             return
-        end
-        --warn("Object Value not found!")
+        end            
+        
+        warn("Given MetaData field not found!")
+        return nil
     end
 
-    warn("Player Data Object Not found")
+    warn("Given PlayerDataObject Not found")
     return nil
 end
 
-
+--* Returns Value from the given PlayerDataObject MetaData field
 function PlayerData:GetPlayerMetaValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
     if playerDataObject then
-        return playerDataObject.MetaData[name]
+        local metaDataValue: any = playerDataObject.MetaData[name]
+
+        if metaDataValue then
+            return playerDataObject.MetaData[name] 
+        end            
+        
+        warn("Given MetaData field not found!")
+        return nil
     end
 
     warn("Given PlayerDataObject was not found")
