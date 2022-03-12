@@ -73,7 +73,6 @@ end
 --]]
 
 -- Object value functions
-
 --* Overwrites value field from both PlayerDataObject ObjectValue and its physical instance in the game
 function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
