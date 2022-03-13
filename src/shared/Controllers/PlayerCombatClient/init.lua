@@ -28,8 +28,8 @@ function PlayerCombatClient.new()
     return self
 end
 
-
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
+
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
 function PlayerCombatClient:Start()
     self:SwitchState(self.States.Idle)
@@ -47,7 +47,7 @@ end
 function PlayerCombatClient:SwitchState(newState: ModuleScript)
     --# Does the Current state object exist? Great
     --# transition out of said current state, set 
-    --# new state as current & start it else default to idle
+    --# new state as current & start it, else default to idle
 
     if self.CurrentState then
         self.CurrentState:Exit()
