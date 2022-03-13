@@ -1,3 +1,11 @@
+--[[
+    This handler serves and the handler class for player combat, it sends signals to and validates
+    request from its clients counter part PlayerCombatClient Controller.
+
+    This handler will kickstart automatically when ** a player equipped a tool ** from his
+    inventory.
+
+]]
 --# <|=============== Services ===============|>
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -11,6 +19,7 @@ PlayerCombat.__index = PlayerCombat
 function PlayerCombat.new()
     local self = setmetatable({}, PlayerCombat)
 
+    --# Adding remote events folders to namespace in Replicated Storage
     self.Events      = Instance.new("Folder")
     self.Events.Name = "Events"
 

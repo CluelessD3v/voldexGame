@@ -4,7 +4,14 @@
     require to function.
 
     It also holds an internal reference to the player(Host) it is current operating in
+
+    It has a control dependency with its server counterpart PlayerCombat Handler and needs it
+    to recieve data to process and to send requests to the server.  
+
+    This controller will only start when the StartCombatMode event is fired
+    This controller will only stop when the ExitCombatMode event is fired
 ]]
+
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,7 +21,7 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 
 --? <|=============== CONSTRUCTOR ===============|>
 local Controllers = ReplicatedStorage.Controllers
-local NameSpace   =  Controllers.PlayerCombatClient
+local nameSpace   =  Controllers.PlayerCombatClient
 
 local PlayerCombatClient = {}
 PlayerCombatClient.__index = PlayerCombatClient
@@ -26,8 +33,8 @@ function PlayerCombatClient.new()
     self.Host  = Players.LocalPlayer
     self.Trove = Trove.new()
 
-    self.StartCombatMode = NameSpace.Events:WaitForChild("StartCombatMode")
-    self.ExitCombatMode  = NameSpace.Events:WaitForChild("ExitCombatMode")
+    self.StartCombatMode = nameSpace.Events:WaitForChild("StartCombatMode")
+    self.ExitCombatMode  = nameSpace.Events:WaitForChild("ExitCombatMode")
     
     --# Concrete states the context manages
     self.States = {
