@@ -8,5 +8,12 @@ local PlayerCombat = require(Controllers:FindFirstChild("PlayerCombatClient", tr
 local Players = game:GetService("Players")
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
-    print(PlayerCombat)
+    PlayerCombat:Start()    
+    task.wait(3)
+    PlayerCombat:Exit()
+    task.wait(3)
+    PlayerCombat:Start()    
+    task.wait(3)
+    PlayerCombat:Exit()
+
 end)

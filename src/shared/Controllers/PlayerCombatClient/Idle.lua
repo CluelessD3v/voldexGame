@@ -1,4 +1,3 @@
-
 --# <|=============== SERVICES ===============|>
 local UserInputService = game:GetService("UserInputService")
 
@@ -10,23 +9,21 @@ function Idle.new(controller: table)
     local self = setmetatable({}, Idle)
     self.Controller = controller
     self.Name = "Idle"
-    self.Connections = {}
+
+    self.ActionOneConn = nil
     return self
 end
 
 function Idle:Start()
-     table.insert(self.Connections, UserInputService.InputBegan:Connect(function(io: InputObject, busy: boolean )
+    self.ActionOneConn = UserInputService.InputBegan:Connect(function(io: InputObject, busy: boolean )
         if io.UserInputType == Enum.UserInputType.MouseButton1 and not busy then
             self.Controller:SwitchState(self.Controller.States.CastingActionOne)
         end
-    end))
+    end)
 end
 
 function Idle:Exit()
-    for _, conn: RBXScriptSignal in ipairs(self.Connections) do
-        print("in")
-        conn:Disconnect()
-    end
+    self.ActionOneConn:Disconnect()
 end
 
 
