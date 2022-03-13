@@ -14,9 +14,14 @@ function PlayerCombat.new()
     self.Events      = Instance.new("Folder")
     self.Events.Name = "Events"
 
+    --# Events
     self.StartCombatMode        = Instance.new("RemoteEvent")
     self.StartCombatMode.Name   = "StartCombatMode"
     self.StartCombatMode.Parent = Controllers.PlayerCombatClient.Events
+
+    self.ExitCombatMode        = Instance.new("RemoteEvent")
+    self.ExitCombatMode.Name   = "ExitCombatMode"
+    self.ExitCombatMode.Parent = Controllers.PlayerCombatClient.Events
     return self
 end
 

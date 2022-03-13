@@ -10,6 +10,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
+local Trove = require(ReplicatedStorage.Packages.trove)
 
 --? <|=============== CONSTRUCTOR ===============|>
 local Controllers = ReplicatedStorage.Controllers
@@ -21,10 +22,13 @@ PlayerCombatClient.__index = PlayerCombatClient
 
 function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
-    self.Host = Players.LocalPlayer
+    
+    self.Host  = Players.LocalPlayer
+    self.Trove = Trove.new()
 
-    self.StartCombatMode = NameSpace.Events:WaitForChild("StartCombatMode") 
-
+    self.StartCombatMode = NameSpace.Events:WaitForChild("StartCombatMode")
+    self.ExitCombatMode  = NameSpace.Events:WaitForChild("ExitCombatMode")
+    
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
@@ -40,16 +44,19 @@ end
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
 function PlayerCombatClient:Start()
-    self.StartCombatMode.OnClientEvent:Connect(function()
+    self.Trove:Add(self.StartCombatMode.OnClientEvent:Connect(function()
         self:SwitchState(self.States.Idle)
-    end)
-end
+    end))
 
+    self.Trove:Add(self.ExitCombatMode.OnClientEvent:Connect(function()
+        self:Exit()
+    end))
+end
 
 --* Exits from the combat system
 function PlayerCombatClient:Exit()
     self.CurrentState:Exit()
-    self.CurrentState = nil
+    self.Trove:Clean()
 end
 
 --* Context Interface function that allows Required Concrete states to transition Between each other 

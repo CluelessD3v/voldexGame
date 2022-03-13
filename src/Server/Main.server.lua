@@ -42,7 +42,9 @@ Players.PlayerAdded:Connect(function(player:Player)
             }
         }
     })
-                                    
+    
+
+    --* Mock calls to test PlayerCombatHander Handler
     PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
     print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
 
@@ -51,6 +53,10 @@ Players.PlayerAdded:Connect(function(player:Player)
     
     
     PlayerCombatHandler.StartCombatMode:FireClient(player)
+
+    task.wait(3)
+
+    PlayerCombatHandler.ExitCombatMode:FireClient(player)
 end)
 
 
