@@ -40,29 +40,39 @@ Players.PlayerAdded:Connect(function(player:Player)
 
         MetaData = {
             Inventory = {
-                GhostSword = {
-                    Name   = "Ghost Sword",
-                    Damage = 25,
-                    Speed  = 15,
+                ClassicSword = {
+                    Name        = "ClassicSword",
+                    ItemTypeTag = "Weapon"
                 }
             }
         }
     })
     
 
-    --* Mock calls to test PlayerCombatHander Handler
-    PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
-    print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
+    -- --* Mock calls to test PlayerCombatHander Handler
+    -- PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
+    -- print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
 
-    PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
-    print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
+    -- -- PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
+    -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
     
     
-    PlayerCombatHandler.StartCombatMode:FireClient(player)
+    -- PlayerCombatHandler.StartCombatMode:FireClient(player)
+    -- PlayerCombatHandler.ExitCombatMode:FireClient(player)
 
-    task.wait(3)
 
-    PlayerCombatHandler.ExitCombatMode:FireClient(player)
+    for _, savedItem in pairs(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")) do
+        local itemTypeList: table = CollectionService:GetTagged(savedItem.ItemTypeTag)
+        
+        for _, item in ipairs(itemTypeList) do
+            print(item)
+            if item.Name == savedItem.Name then
+                print(item, "is compat")
+                local playerItem: Tool = item:Clone()
+                playerItem.Parent = game.StarterPack
+            end
+        end
+    end
 end)
 
 
