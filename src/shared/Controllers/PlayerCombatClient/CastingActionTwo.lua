@@ -16,7 +16,7 @@ end
 
 
 function CastingActionTwo:Exit()
-    
+    return
 end
 
 
