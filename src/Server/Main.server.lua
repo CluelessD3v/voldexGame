@@ -10,6 +10,7 @@ local PlayerDataHandler: ModuleScript  = require(Handlers.PlayerData)
 local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
 -- Components
 local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
+local SwordComponent: ModuleScript = require(Components.Sword)
 
 --# <|=============== Services ===============|>
 local Players = game:GetService("Players")
