@@ -17,7 +17,6 @@ local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
 local Components = game:GetService("ServerScriptService").Components
 
 local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
-local SwordComponent: ModuleScript    = require(Components.Sword)
 
 
 

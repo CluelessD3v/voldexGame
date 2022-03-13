@@ -1,6 +1,8 @@
 --[[
     Singleton class to handle the player data Creation, Reading, Writing operations
 ]]
+
+--? <|=============== CONSTRUCTOR ===============|>
 local PlayerData = {}
 PlayerData.__index = PlayerData
 
@@ -10,6 +12,7 @@ function PlayerData.new()
     self.PlayerDataObjects = {}
     return self
 end
+
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
 --# Aux function to map data from PlayerData Object

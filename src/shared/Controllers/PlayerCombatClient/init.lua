@@ -20,8 +20,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Trove = require(ReplicatedStorage.Packages.trove)
 
 --? <|=============== CONSTRUCTOR ===============|>
-local Controllers = ReplicatedStorage.Controllers
-local nameSpace   =  Controllers.PlayerCombatClient
+local eventsNameSpace   = ReplicatedStorage.Events.PlayerCombat 
 
 local PlayerCombatClient = {}
 PlayerCombatClient.__index = PlayerCombatClient
@@ -33,8 +32,8 @@ function PlayerCombatClient.new()
     self.Host  = Players.LocalPlayer
     self.Trove = Trove.new()
 
-    self.StartCombatMode = nameSpace.Events:WaitForChild("StartCombatMode")
-    self.ExitCombatMode  = nameSpace.Events:WaitForChild("ExitCombatMode")
+    self.StartCombatMode = eventsNameSpace:WaitForChild("StartCombatMode")
+    self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
     
     --# Concrete states the context manages
     self.States = {

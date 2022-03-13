@@ -12,25 +12,22 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --# <|=============== DEPENDENCIES ===============|>
 
 --? <|=============== CONSTRUCTOR ===============|>
-local Controllers = ReplicatedStorage.Controllers
+local EventsNameSpace: Folder = ReplicatedStorage.Events.PlayerCombat
+
 local PlayerCombat = {}
 PlayerCombat.__index = PlayerCombat
 
 function PlayerCombat.new()
     local self = setmetatable({}, PlayerCombat)
 
-    --# Adding remote events folders to namespace in Replicated Storage
-    self.Events      = Instance.new("Folder")
-    self.Events.Name = "Events"
-
-    --# Events
+    --# Adding remote events to namespace in Replicated Storage
     self.StartCombatMode        = Instance.new("RemoteEvent")
     self.StartCombatMode.Name   = "StartCombatMode"
-    self.StartCombatMode.Parent = Controllers.PlayerCombatClient.Events
+    self.StartCombatMode.Parent = EventsNameSpace
 
     self.ExitCombatMode        = Instance.new("RemoteEvent")
     self.ExitCombatMode.Name   = "ExitCombatMode"
-    self.ExitCombatMode.Parent = Controllers.PlayerCombatClient.Events
+    self.ExitCombatMode.Parent = EventsNameSpace
     return self
 end
 
