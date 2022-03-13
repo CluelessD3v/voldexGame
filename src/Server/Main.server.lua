@@ -2,18 +2,24 @@
     Main script:
     This is were the core loop of the game is ran, all server handler functions are called from this script
 ]]
-local Handlers   = game:GetService("ServerScriptService").Handlers
-local Components = game:GetService("ServerScriptService").Components
---# <|=============== Dependencies ===============|>
--- Handlers
-local PlayerDataHandler: ModuleScript  = require(Handlers.PlayerData)
-local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
--- Components
-local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
-local SwordComponent: ModuleScript = require(Components.Sword)
 
 --# <|=============== Services ===============|>
-local Players = game:GetService("Players")
+local Players           = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+
+--# <|=============== Dependencies ===============|>
+-- Handlers
+local Handlers   = game:GetService("ServerScriptService").Handlers
+
+local PlayerDataHandler: ModuleScript   = require(Handlers.PlayerData)
+local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
+-- Components
+local Components = game:GetService("ServerScriptService").Components
+
+local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
+local SwordComponent: ModuleScript    = require(Components.Sword)
+
+
 
 
 
@@ -64,3 +70,8 @@ end)
 
 local gc = GoldCoinComponent.new(workspace.Coin)
 gc:Init()
+
+for _, sword in ipairs(CollectionService:GetTagged("Sword")) do
+    local newSword = SwordComponent.new(sword)
+    newSword:Init()
+end

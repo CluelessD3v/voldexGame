@@ -1,5 +1,6 @@
---# <|=============== Services ===============|>
-local CollectionService = game:GetService("CollectionService")
+--# <|=============== SERVICES ===============|>
+
+--# <|=============== DEPENDENCIES ===============|>
 
 --? <|=============== CONSTRUCTOR ===============|>
 local Sword = {}
@@ -8,14 +9,18 @@ Sword.__index = Sword
 
 function Sword.new(instance: Tool)
     local self = setmetatable({}, Sword)
+    print("Constructed")
     self.Instance = instance
-    CollectionService:AddTag(self.Instance, "Sword")    
     return self
+end
+
+function Sword:Init()
+    print("Init")
 end
 
 
 function Sword:Destroy()
-    
+
 end
 
 

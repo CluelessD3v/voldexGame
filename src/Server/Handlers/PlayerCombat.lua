@@ -35,9 +35,5 @@ function PlayerCombat.new()
 end
 
 
-function PlayerCombat:Destroy()
-    
-end
-
 
 return PlayerCombat.new()
