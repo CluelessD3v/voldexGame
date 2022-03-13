@@ -7,6 +7,7 @@ local Components = game:GetService("ServerScriptService").Components
 --# <|=============== Dependencies ===============|>
 -- Handlers
 local PlayerDataHandler: ModuleScript  = require(Handlers.PlayerData)
+local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
 -- Components
 local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
 
@@ -49,6 +50,7 @@ Players.PlayerAdded:Connect(function(player:Player)
     print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
     
     
+    PlayerCombatHandler.StartCombatMode:FireClient(player)
 end)
 
 

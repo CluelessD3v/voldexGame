@@ -7,8 +7,14 @@
 ]]
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+--# <|=============== DEPENDENCIES ===============|>
 
 --? <|=============== CONSTRUCTOR ===============|>
+local Controllers = ReplicatedStorage.Controllers
+local NameSpace   =  Controllers.PlayerCombatClient
+
 local PlayerCombatClient = {}
 PlayerCombatClient.__index = PlayerCombatClient
 
@@ -16,6 +22,8 @@ PlayerCombatClient.__index = PlayerCombatClient
 function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
     self.Host = Players.LocalPlayer
+
+    self.StartCombatMode = NameSpace.Events:WaitForChild("StartCombatMode") 
 
     --# Concrete states the context manages
     self.States = {
@@ -32,7 +40,9 @@ end
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
 function PlayerCombatClient:Start()
-    self:SwitchState(self.States.Idle)
+    self.StartCombatMode.OnClientEvent:Connect(function()
+        self:SwitchState(self.States.Idle)
+    end)
 end
 
 
