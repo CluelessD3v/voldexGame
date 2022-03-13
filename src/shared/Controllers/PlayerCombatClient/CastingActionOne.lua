@@ -2,15 +2,15 @@ local CastingActionOne = {}
 CastingActionOne.__index = CastingActionOne
 
 
-function CastingActionOne.new(controller)
+function CastingActionOne.new(context)
     local self = setmetatable({}, CastingActionOne)
     self.Name = "CastingActionOne"
-    self.Controller = controller
+    self.Context = context
     return self
 end
 
 function CastingActionOne:Start()
-    self.Controller:SwitchState(self.Controller.States.Idle)
+    self.Context:SwitchState(self.Context.States.Idle)
 end
 
 

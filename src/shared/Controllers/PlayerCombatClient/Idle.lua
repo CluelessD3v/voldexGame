@@ -5,9 +5,9 @@ local Idle = {}
 Idle.__index = Idle
 
 
-function Idle.new(controller: table)
+function Idle.new(context: table)
     local self = setmetatable({}, Idle)
-    self.Controller = controller
+    self.Context = context
     self.Name = "Idle"
 
     self.ActionOneConn = nil
@@ -17,7 +17,7 @@ end
 function Idle:Start()
     self.ActionOneConn = UserInputService.InputBegan:Connect(function(io: InputObject, busy: boolean )
         if io.UserInputType == Enum.UserInputType.MouseButton1 and not busy then
-            self.Controller:SwitchState(self.Controller.States.CastingActionOne)
+            self.Context:SwitchState(self.Context.States.CastingActionOne)
         end
     end)
 end

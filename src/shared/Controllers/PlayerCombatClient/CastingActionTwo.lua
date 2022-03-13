@@ -2,9 +2,10 @@ local CastingActionTwo = {}
 CastingActionTwo.__index = CastingActionTwo
 
 
-function CastingActionTwo.new()
+function CastingActionTwo.new(context)
     local self = setmetatable({}, CastingActionTwo)
     self.Name = "CastingActionTwo"
+    self.Context = context
     return self
 end
 
