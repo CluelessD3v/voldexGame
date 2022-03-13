@@ -71,7 +71,7 @@ end)
 local gc = GoldCoinComponent.new(workspace.Coin)
 gc:Init()
 
-for _, sword in ipairs(CollectionService:GetTagged("Sword")) do
+for _, sword in ipairs(CollectionService:GetTagged("Weapon")) do
     local newSword = SwordComponent.new(sword)
     newSword:Init()
 end
