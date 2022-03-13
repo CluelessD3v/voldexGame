@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Controllers  = ReplicatedStorage.Controllers
 local PlayerCombat = require(Controllers:FindFirstChild("PlayerCombatClient", true))
 
---# <|=============== Services ===============|>
+--# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 
 Players.LocalPlayer.CharacterAdded:Connect(function()

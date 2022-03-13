@@ -1,12 +1,13 @@
+local Players = game:GetService("Players")
+
+
 local PlayerCombatClient = {}
 PlayerCombatClient.__index = PlayerCombatClient
 
 
-function PlayerCombatClient.new(player: Player)
+function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
-    self.Host = player
-    
-
+    self.Host = Players.LocalPlayer
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
         CastingActionTwo = require(script.CastingActionTwo),
@@ -22,7 +23,8 @@ end
 
 function PlayerCombatClient:SwitchState(newState: ModuleScript)
     self.CurrentState:Exit()
-    self.CurrentState = newState.new()
+    self.CurrentState = newState.new(self)
+    print(self.CurrentState.Name)
     self.CurrentState:Start()
 end
 
