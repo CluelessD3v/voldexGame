@@ -2,7 +2,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
-local Trove = require(ReplicatedStorage.Packages.Trove)
+local Trove = require(ReplicatedStorage.Packages.trove)
 
 --? <|=============== CONSTRUCTOR ===============|>
 local Sword = {}
@@ -16,16 +16,12 @@ function Sword.new(instance: Tool)
 
     self.Instance = instance
     self.Trove:Add(self.Instance)
+
     return self
 end
 
-function Sword:Init()
-    print("Init")
-end
-
-
 function Sword:Destroy()
-
+    self.Trove:Clean()
 end
 
 
