@@ -10,7 +10,7 @@ function CastingActionTwo.new(context)
 end
 
 function CastingActionTwo:Start()
-    
+    self.Context:SwitchState(self.Context.States.Idle)
 end
 
 
