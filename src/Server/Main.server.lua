@@ -2,16 +2,23 @@
     Main script:
     This is were the core loop of the game is ran, all server handler functions are called from this script
 ]]
-local Handlers   = game:GetService("ServerScriptService").Handlers
-local Components = game:GetService("ServerScriptService").Components
---# <|=============== Dependencies ===============|>
--- Handlers
-local PlayerDataHandler: ModuleScript  = require(Handlers.PlayerData)
--- Components
-local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
 
 --# <|=============== Services ===============|>
-local Players = game:GetService("Players")
+local Players           = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+
+--# <|=============== Dependencies ===============|>
+-- Handlers
+local Handlers   = game:GetService("ServerScriptService").Handlers
+
+local PlayerDataHandler: ModuleScript   = require(Handlers.PlayerData)
+local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
+-- Components
+local Components = game:GetService("ServerScriptService").Components
+
+local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
+
+
 
 
 
@@ -33,22 +40,39 @@ Players.PlayerAdded:Connect(function(player:Player)
 
         MetaData = {
             Inventory = {
-                GhostSword = {
-                    Name   = "Ghost Sword",
-                    Damage = 25,
-                    Speed  = 15,
+                ClassicSword = {
+                    Name        = "ClassicSword",
+                    ItemTypeTag = "Weapon"
                 }
             }
         }
     })
-                                    
-    PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
-    print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
+    
 
-    PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
-    print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
+    -- --* Mock calls to test PlayerCombatHander Handler
+    -- PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
+    -- print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
+
+    -- -- PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
+    -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
     
     
+    -- PlayerCombatHandler.StartCombatMode:FireClient(player)
+    -- PlayerCombatHandler.ExitCombatMode:FireClient(player)
+
+
+    for _, savedItem in pairs(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")) do
+        local itemTypeList: table = CollectionService:GetTagged(savedItem.ItemTypeTag)
+        
+        for _, item in ipairs(itemTypeList) do
+            print(item)
+            if item.Name == savedItem.Name then
+                print(item, "is compat")
+                local playerItem: Tool = item:Clone()
+                playerItem.Parent = game.StarterPack
+            end
+        end
+    end
 end)
 
 

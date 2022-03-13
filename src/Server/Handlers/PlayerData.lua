@@ -1,6 +1,8 @@
 --[[
     Singleton class to handle the player data Creation, Reading, Writing operations
 ]]
+
+--? <|=============== CONSTRUCTOR ===============|>
 local PlayerData = {}
 PlayerData.__index = PlayerData
 
@@ -10,6 +12,7 @@ function PlayerData.new()
     self.PlayerDataObjects = {}
     return self
 end
+
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
 --# Aux function to map data from PlayerData Object
@@ -73,7 +76,6 @@ end
 --]]
 
 -- Object value functions
-
 --* Overwrites value field from both PlayerDataObject ObjectValue and its physical instance in the game
 function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]

@@ -5,7 +5,10 @@
 
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
-      "$path": "src/Shared"
+      "$path": "src/Shared",
+      "Packages": {
+        "$path": "Packages"
+      }
     },
 
     "ServerScriptService": {

@@ -1,3 +1,0 @@
-local Combat = {}
-
-return Combat
