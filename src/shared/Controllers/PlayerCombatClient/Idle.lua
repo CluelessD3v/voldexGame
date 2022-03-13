@@ -1,9 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
---# <|=============== DEPENDENCIES ===============|>
-local Trove = require(ReplicatedStorage.Packages.trove)
 
+--? <|=============== CONSTRUCTOR ===============|>
 local Idle = {}
 Idle.__index = Idle
 
