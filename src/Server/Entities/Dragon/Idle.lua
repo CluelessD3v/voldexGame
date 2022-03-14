@@ -1,3 +1,8 @@
+--[[
+    Dragon entity base state, here the dragon will simply stay in his Spawn location and wait
+    for an instance with a valid target tag to enter the detection radius.
+]]--
+
 --# <|=============== SERVICES ===============|>
 local RunService = game:GetService("RunService")
 
@@ -18,9 +23,12 @@ end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 function Idle:Start()
+    --# Poll every frame to see if a valid instance
+    --# Entered the detection radius, did it entered?
+    --# Great! Then start chasing it.
+
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         if self.Context:TaggedInstanceEnteredAgro() then
-            print("Close")
             self.Context:SwitchState(self.Context.States.ChasingPlayer)
         end
         
