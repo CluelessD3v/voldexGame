@@ -2,24 +2,22 @@
 local RunService = game:GetService("RunService")
 local Players    = game:GetService("Players")
 
+local ChasingPlayer = {}
+ChasingPlayer.__index = ChasingPlayer
 
---? <|=============== CONSTRUCTOR ===============|>
-local Idle = {}
-Idle.__index = Idle
 
-function Idle.new(context: table)
-    local self = setmetatable({}, Idle)
-    
-    self.Name    = "Idle"
+function ChasingPlayer.new(context: table)
+    local self = setmetatable({}, ChasingPlayer)
+
+    self.Name    = "ChasingPlayer"
     self.Context = context
     self.Trove   = context.Trove:Extend()
 
     return self
 end
 
-
---+ <|=============== PUBLIC FUNCTIONS ===============|>
-function Idle:Start()
+function ChasingPlayer:Start()
+    print("inside")
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         for _, player in ipairs(Players:GetPlayers()) do
             if #Players:GetPlayers() > 0 then
@@ -32,9 +30,9 @@ function Idle:Start()
                         local rootPart: Part       = humanoid.RootPart
                         local dragonRootPart: Part = self.Context.Instance.PrimaryPart
 
-                        if (rootPart.Position - dragonRootPart.Position).Magnitude <= self.Context.DetectionAgro then
-                            print("Close")
-                            self.Context:SwitchState(self.Context.States.ChasingPlayer)
+                        if (rootPart.Position - dragonRootPart.Position).Magnitude > self.Context.DetectionAgro then
+                            print("He left")
+                            self.Context:SwitchState(self.Context.States.Idle)
                         end
                     end
                 end
@@ -44,12 +42,10 @@ function Idle:Start()
     end))
 end
 
-function Idle:Exit()
-    self.Trove:Clean()
-    return    
+function ChasingPlayer:Exit()
+    self.Trove:Clean()    
+    return
 end
 
 
-return Idle
-
-
+return ChasingPlayer

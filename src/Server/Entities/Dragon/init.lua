@@ -19,10 +19,11 @@ function Dragon.new(instance: Model)
     self.Instance = instance
     self.Trove    = Trove.new()
     
-    self.DetectionAgro = 25
+    self.DetectionAgro = 60
 
     self.States = {
-        Idle = require(script.Idle)
+        Idle          = require(script.Idle),
+        ChasingPlayer = require(script.ChasingPlayer)
     }
 
     self.CurrentState = nil
