@@ -33,7 +33,7 @@ function ChasingPlayer:Start()
 
                         if (playerRootPart.Position - dragonRootPart.Position).Magnitude > self.Context.DetectionAgro then
                             print("He left")
-                            self.Context:SwitchState(self.Context.States.Idle)
+                            self.Context:SwitchState(self.Context.States.Homing)
                         else
                             dragonHumanoid:MoveTo(playerRootPart.Position)
                         end

@@ -21,11 +21,12 @@ function Dragon.new(instance: Model)
     self.Trove    = Trove.new()
     
     self.DetectionAgro = 60
-    self.SpawnLocaltion = workspace.Part
+    self.SpawnLocation = workspace.Part
 
     self.States = {
         Idle          = require(script.Idle),
-        ChasingPlayer = require(script.ChasingPlayer)
+        ChasingPlayer = require(script.ChasingPlayer),
+        Homing        = require(script.Homing),
     }
 
     self.CurrentState = nil
