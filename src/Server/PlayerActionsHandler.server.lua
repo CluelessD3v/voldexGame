@@ -16,7 +16,9 @@ local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
 
 -- Entities
 local Entities = ServerScriptService.Entities
-local eGoldCoin: ModuleScript   = require(Entities.GoldCoin)
+local eGoldCoin: ModuleScript = require(Entities.GoldCoin)
+local eDragon: ModuleScript   = require(Entities.Dragon)
+
 -- Configs
 local Configs = ServerScriptService.Configs
 local tPlayerDataSchema  = require(Configs.PlayerDataSchema)
@@ -38,12 +40,19 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     -- -- PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
     -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
+
+    player.CharacterAdded:Connect(function(character)
+        CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
     
-    
+    end)
+
     hPlayerCombat.StartCombatMode:FireClient(player)
     task.wait(3)
     hPlayerCombat.ExitCombatMode:FireClient(player)
 end)
 
 
-
+for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
+    local newDragon = eDragon.new(dragon)
+    newDragon:Start()
+end

@@ -14,6 +14,10 @@ return {
                 Name        = "ClassicSword",
                 ItemTypeTag = "Weapon"
             }
+        },
+
+        Tags = {
+            DragonTarget = "DragonTarget"
         }
     }
 }
