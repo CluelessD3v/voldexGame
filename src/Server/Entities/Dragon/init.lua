@@ -3,6 +3,7 @@
 ]]
 
 --# <|=============== SERVICES ===============|>
+local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 
@@ -20,6 +21,7 @@ function Dragon.new(instance: Model)
     self.Trove    = Trove.new()
     
     self.DetectionAgro = 60
+    self.SpawnLocaltion = workspace.Part
 
     self.States = {
         Idle          = require(script.Idle),

@@ -21,18 +21,21 @@ function ChasingPlayer:Start()
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         for _, player in ipairs(Players:GetPlayers()) do
             if #Players:GetPlayers() > 0 then
-                local character: Model = player.Character
+                local playerCharacter: Model = player.Character
 
-                if character then
-                    local humanoid: Humanoid = player.Character:FindFirstChild("Humanoid")
+                if playerCharacter then
+                    local playerHumanoid: Humanoid = player.Character:FindFirstChild("Humanoid")
 
-                    if humanoid then
-                        local rootPart: Part       = humanoid.RootPart
-                        local dragonRootPart: Part = self.Context.Instance.PrimaryPart
+                    if playerHumanoid then
+                        local playerRootPart: Part     = playerHumanoid.RootPart
+                        local dragonRootPart: Part     = self.Context.Instance.PrimaryPart
+                        local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
 
-                        if (rootPart.Position - dragonRootPart.Position).Magnitude > self.Context.DetectionAgro then
+                        if (playerRootPart.Position - dragonRootPart.Position).Magnitude > self.Context.DetectionAgro then
                             print("He left")
                             self.Context:SwitchState(self.Context.States.Idle)
+                        else
+                            dragonHumanoid:MoveTo(playerRootPart.Position)
                         end
                     end
                 end
