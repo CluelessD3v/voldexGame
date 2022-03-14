@@ -1,5 +1,14 @@
 --[[
     Concrete dragon entity module that handles a dragon mob state life cycle.
+    
+    To avoid the dragon chasing a player infinitely, the detection is done from
+    the spawn location instead of the dragon instance itself, this is simply to avoid
+    doing 2 distance checking ops(How far from the player, how far from the  spawn)
+    
+    DragonEntity type interface:
+    - Detection Agro: how far the dragon spawn location can detect a player
+    - SpawnLocation: The place the dragon would spawn at
+    - ValidTargetTags: Tags the dragon will actively look to determine if he should chase an instance
 ]]
 
 --# <|=============== SERVICES ===============|>
@@ -13,19 +22,24 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 local Dragon = {}
 Dragon.__index = Dragon
 
-function Dragon.new(instance: Model)
+function Dragon.new(instance: Model, config: table)
     local self = setmetatable({}, Dragon)
-    
-    self.Instance = instance
+
+    if not config then 
+        config = {}
+        warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
+    end
     self.Trove    = Trove.new()
+
+    self.Instance = instance
+    self.Trove:Add(self.Instance)
     
-    self.DetectionAgro = 60
-    self.SpawnLocation = workspace.Part
+    --# Type Interface
+    self.DetectionAgro = config.DetectionAgro or 60
+    self.SpawnLocation = config.SpawnLocation or workspace.Baseplate
+    self.ValidTargetTags = config.ValidTargetTags or {"DragonTarget"}
 
-    self.ValidTargetTags = {
-        "DragonTarget"
-    }
-
+    --# States
     self.States = {
         Idle          = require(script.Idle),
         ChasingPlayer = require(script.ChasingPlayer),
@@ -48,6 +62,7 @@ end
 
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
+--* Checks if an instance with a valid target tag entered the spawn location detection radius
 function Dragon:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
@@ -62,6 +77,7 @@ function Dragon:TaggedInstanceEnteredAgro()
     end
 end
 
+--* Switches Dragon concrete states
 function Dragon:SwitchState(newState: table)
     --# Does the Current state object exist? Great
     --# transition out of said current state, set 
