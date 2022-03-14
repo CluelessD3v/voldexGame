@@ -6,52 +6,33 @@
 --# <|=============== Services ===============|>
 local Players             = game:GetService("Players")
 local CollectionService   = game:GetService("CollectionService")
-local ServerScriptService = game:GetService("ServerScriptService").Components
+local ServerScriptService = game:GetService("ServerScriptService")
 
 --# <|=============== Dependencies ===============|>
 -- Handlers
-local Handlers = ServerScriptService
-local PlayerDataHandler: ModuleScript   = require(Handlers.PlayerData)
-local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
+local Handlers = ServerScriptService.Handlers
+local hPlayerData: ModuleScript   = require(Handlers.PlayerData)
+local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
 
 -- Entities
 local Entities = ServerScriptService.Entities
-local GoldCoinEntity: ModuleScript = require(Entities.GoldCoin)
-
+local eGoldCoin: ModuleScript   = require(Entities.GoldCoin)
 -- Configs
 local Configs = ServerScriptService.Configs
-local PlayerDataObjects =  require(Configs.PlayerDataObjects)
-
+local cPlayerDataSchema  = require(Configs.PlayerDataSchema)
 
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
-
-    --* Mock data to test PlayerData Handler
-    --* //TODO look into moving these data into a config module
-    PlayerDataHandler:BuildPlayerDataObject(player,    {
-        ObjectValues = {
-            GoldCoins = {
-                Type   = "NumberValue",
-                Name   = "GoldCoins",
-                Value  = 0,
-                Parent = player
-            }
-        },
-
-        MetaData = {
-            Inventory = {
-                ClassicSword = {
-                    Name        = "ClassicSword",
-                    ItemTypeTag = "Weapon"
-                }
-            }
-        }
-    })
+    
+    cPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
     
 
-    -- --* Mock calls to test PlayerCombatHander Handler
+    hPlayerData:BuildPlayerDataObject(player, cPlayerDataSchema)
+
+    print(hPlayerData.PlayerDataObjects)
+
     -- PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
     -- print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
 
