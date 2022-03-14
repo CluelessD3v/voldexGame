@@ -19,17 +19,17 @@ local Entities = ServerScriptService.Entities
 local eGoldCoin: ModuleScript   = require(Entities.GoldCoin)
 -- Configs
 local Configs = ServerScriptService.Configs
-local cPlayerDataSchema  = require(Configs.PlayerDataSchema)
+local tPlayerDataSchema  = require(Configs.PlayerDataSchema)
 
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
     
-    cPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
+    tPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
     
 
-    hPlayerData:BuildPlayerDataObject(player, cPlayerDataSchema)
+    hPlayerData:BuildPlayerDataObject(player, tPlayerDataSchema)
 
     print(hPlayerData.PlayerDataObjects)
 
@@ -40,8 +40,9 @@ Players.PlayerAdded:Connect(function(player:Player)
     -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
     
     
-    -- PlayerCombatHandler.StartCombatMode:FireClient(player)
-    -- PlayerCombatHandler.ExitCombatMode:FireClient(player)
+    hPlayerCombat.StartCombatMode:FireClient(player)
+    task.wait(3)
+    hPlayerCombat.ExitCombatMode:FireClient(player)
 end)
 
 
