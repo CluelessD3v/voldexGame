@@ -15,9 +15,9 @@ local hPlayerData: ModuleScript   = require(Handlers.PlayerData)
 local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
 
 -- Entities
-local Entities = ServerScriptService.Entities
-local eGoldCoin: ModuleScript = require(Entities.GoldCoin)
-local eDragon: ModuleScript   = require(Entities.Dragon)
+-- local Entities = ServerScriptService.Entities
+-- local eGoldCoin: ModuleScript = require(Entities.GoldCoin)
+-- local eDragon: ModuleScript   = require(Entities.Dragon)
 
 -- Configs
 local Configs = ServerScriptService.Configs
@@ -52,7 +52,7 @@ Players.PlayerAdded:Connect(function(player:Player)
 end)
 
 
-for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
-    local newDragon = eDragon.new(dragon)
-    newDragon:Start()
-end
+-- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
+--     local newDragon = eDragon.new(dragon)
+--     newDragon:Start()
+-- end
