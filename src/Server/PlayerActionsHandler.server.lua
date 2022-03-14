@@ -43,7 +43,7 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-    
+        
     end)
 
     hPlayerCombat.StartCombatMode:FireClient(player)
