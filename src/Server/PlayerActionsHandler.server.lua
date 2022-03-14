@@ -40,8 +40,12 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     -- -- PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
     -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
+
+    player.CharacterAdded:Connect(function(character)
+        CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
     
-    
+    end)
+
     hPlayerCombat.StartCombatMode:FireClient(player)
     task.wait(3)
     hPlayerCombat.ExitCombatMode:FireClient(player)

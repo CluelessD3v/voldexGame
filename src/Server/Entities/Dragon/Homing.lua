@@ -1,8 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local RunService = game:GetService("RunService")
-local Players    = game:GetService("Players")
 
-
+--? <|=============== CONSTRUCTOR ===============|>s
 local Homing = {}
 Homing.__index = Homing
 
@@ -19,39 +18,26 @@ end
 
 
 function Homing:Start()
+    local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
+
     self.Trove:Add(RunService.Heartbeat:Connect(function()
-        for _, player in ipairs(Players:GetPlayers()) do
-            if #Players:GetPlayers() > 0 then
-                local playerCharacter: Model = player.Character
 
-                if playerCharacter then
-                    local playerHumanoid: Humanoid = player.Character:FindFirstChild("Humanoid")
+        local didEnter, taggedInstance =  self.Context:TaggedInstanceEnteredAgro()
 
-                    if playerHumanoid then
-                        local playerRootPart: Part     = playerHumanoid.RootPart
-                        local dragonRootPart: Part     = self.Context.Instance.PrimaryPart
-                        local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
-
-                        if (playerRootPart.Position - dragonRootPart.Position).Magnitude <= self.Context.DetectionAgro then
-                            print("He entered again")
-                            self.Context:SwitchState(self.Context.States.ChasingPlayer)
-                        else
-
-                            print("welp, guess i am going home")
-                            dragonHumanoid:MoveTo(self.Context.SpawnLocation.Position, self.Context.SpawnLocation)
-                            dragonHumanoid.MoveToFinished:Connect(function(reachedSpawn)
-                                
-                                if reachedSpawn or not reachedSpawn then
-                                    self.Context:SwitchState(self.Context.States.Idle)
-                                end
-                                
-                            end)
-                        end
-                    end
+        if didEnter then
+            print(taggedInstance, "Detected, chasing")
+            self.Context:SwitchState(self.Context.States.ChasingPlayer)
+            
+        else
+            dragonHumanoid:MoveTo(self.Context.SpawnLocation.Position, self.Context.SpawnLocation)
+           
+            dragonHumanoid.MoveToFinished:Connect(function(reachedSpawn)
+                if reachedSpawn or not reachedSpawn then
+                    self.Context:SwitchState(self.Context.States.Idle)
                 end
-            end
+            end)
         end
-        
+
     end))
 end
 

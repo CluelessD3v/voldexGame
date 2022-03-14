@@ -3,9 +3,8 @@
 ]]
 
 --# <|=============== SERVICES ===============|>
-local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
+local CollectionService = game:GetService("CollectionService")
 
 --# <|=============== DEPENDENCIES ===============|>
 local Trove = require(ReplicatedStorage.Packages.trove)
@@ -22,6 +21,10 @@ function Dragon.new(instance: Model)
     
     self.DetectionAgro = 60
     self.SpawnLocation = workspace.Part
+
+    self.ValidTags = {
+        "DragonTarget"
+    }
 
     self.States = {
         Idle          = require(script.Idle),
@@ -41,6 +44,23 @@ function Dragon:Destroy()
     self.Trove:Clean()
 end
 
+--- <|=============== PRIVATE FUNCTIONS ===============|>
+
+
+--+ <|=============== PUBLIC FUNCTIONS ===============|>
+function Dragon:TaggedInstanceEnteredAgro()
+    for _, validTag in ipairs(self.ValidTags) do
+        for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
+            local target: Part = taggedInstance
+
+            if (target:GetPivot().Position - self.SpawnLocation.Position).Magnitude <= self.DetectionAgro then
+                return true, taggedInstance
+            else
+                return false
+            end
+        end
+    end
+end
 
 function Dragon:SwitchState(newState: table)
     --# Does the Current state object exist? Great

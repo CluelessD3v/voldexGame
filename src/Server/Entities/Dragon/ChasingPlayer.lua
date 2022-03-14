@@ -1,7 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local RunService = game:GetService("RunService")
-local Players    = game:GetService("Players")
 
+--? <|=============== CONSTRUCTOR ===============|>
 local ChasingPlayer = {}
 ChasingPlayer.__index = ChasingPlayer
 
@@ -19,27 +19,13 @@ end
 function ChasingPlayer:Start()
     print("inside")
     self.Trove:Add(RunService.Heartbeat:Connect(function()
-        for _, player in ipairs(Players:GetPlayers()) do
-            if #Players:GetPlayers() > 0 then
-                local playerCharacter: Model = player.Character
-
-                if playerCharacter then
-                    local playerHumanoid: Humanoid = player.Character:FindFirstChild("Humanoid")
-
-                    if playerHumanoid then
-                        local playerRootPart: Part     = playerHumanoid.RootPart
-                        local dragonRootPart: Part     = self.Context.Instance.PrimaryPart
-                        local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
-
-                        if (playerRootPart.Position - dragonRootPart.Position).Magnitude > self.Context.DetectionAgro then
-                            print("He left")
-                            self.Context:SwitchState(self.Context.States.Homing)
-                        else
-                            dragonHumanoid:MoveTo(playerRootPart.Position)
-                        end
-                    end
-                end
-            end
+        local didEnter, taggedInstance =  self.Context:TaggedInstanceEnteredAgro()
+        if didEnter then
+            local dragonHumanoid = self.Context.Instance.Humanoid
+            dragonHumanoid:MoveTo(taggedInstance:GetPivot().Position)
+        else
+            print("He left")
+            self.Context:SwitchState(self.Context.States.Homing)
         end
         
     end))
