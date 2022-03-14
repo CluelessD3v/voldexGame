@@ -1,5 +1,5 @@
 --[[
-    Concrete dragon entity module that handles a dragon mob state life cycle
+    Concrete dragon entity module that handles a dragon mob state life cycle.
 ]]
 
 --# <|=============== SERVICES ===============|>
@@ -22,7 +22,7 @@ function Dragon.new(instance: Model)
     self.DetectionAgro = 60
     self.SpawnLocation = workspace.Part
 
-    self.ValidTags = {
+    self.ValidTargetTags = {
         "DragonTarget"
     }
 
@@ -49,7 +49,7 @@ end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 function Dragon:TaggedInstanceEnteredAgro()
-    for _, validTag in ipairs(self.ValidTags) do
+    for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
