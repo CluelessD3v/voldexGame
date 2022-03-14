@@ -4,21 +4,23 @@
 ]]
 
 --# <|=============== Services ===============|>
-local Players           = game:GetService("Players")
-local CollectionService = game:GetService("CollectionService")
+local Players             = game:GetService("Players")
+local CollectionService   = game:GetService("CollectionService")
+local ServerScriptService = game:GetService("ServerScriptService").Components
 
 --# <|=============== Dependencies ===============|>
 -- Handlers
-local Handlers   = game:GetService("ServerScriptService").Handlers
-
+local Handlers = ServerScriptService
 local PlayerDataHandler: ModuleScript   = require(Handlers.PlayerData)
 local PlayerCombatHandler: ModuleScript = require(Handlers.PlayerCombat)
--- Components
-local Components = game:GetService("ServerScriptService").Components
 
-local GoldCoinComponent: ModuleScript = require(Components.GoldCoin)
+-- Entities
+local Entities = ServerScriptService.Entities
+local GoldCoinEntity: ModuleScript = require(Entities.GoldCoin)
 
-
+-- Configs
+local Configs = ServerScriptService.Configs
+local PlayerDataObjects =  require(Configs.PlayerDataObjects)
 
 
 
@@ -59,23 +61,7 @@ Players.PlayerAdded:Connect(function(player:Player)
     
     -- PlayerCombatHandler.StartCombatMode:FireClient(player)
     -- PlayerCombatHandler.ExitCombatMode:FireClient(player)
-
-
-    for _, savedItem in pairs(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory")) do
-        local itemTypeList: table = CollectionService:GetTagged(savedItem.ItemTypeTag)
-        
-        for _, item in ipairs(itemTypeList) do
-            print(item)
-            if item.Name == savedItem.Name then
-                print(item, "is compat")
-                local playerItem: Tool = item:Clone()
-                playerItem.Parent = game.StarterPack
-            end
-        end
-    end
 end)
 
 
 
-local gc = GoldCoinComponent.new(workspace.Coin)
-gc:Init()
