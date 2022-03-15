@@ -15,23 +15,26 @@ local ServerStorage          = game:GetService("ServerStorage")
 local Handlers = ServerScriptService.Handlers
 local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
 local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
-local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
+-- local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
 
 -- Entities
--- local Entities = ServerScriptService.Entities
--- local eGoldCoin: ModuleScript = require(Entities.GoldCoin)
--- local eDragon: ModuleScript   = require(Entities.Dragon)
+local Entities = ServerScriptService.Entities
+-- local eGoldCoin: ModuleScript     = require(Entities.GoldCoin)
+-- local eDragon: ModuleScript       = require(Entities.Dragon)
+local eLootableItem: ModuleScript = require(Entities.LootableItem)
+
 
 -- Configs
 local Configs = ServerScriptService.Configs
-local tPlayerDataSchema  = require(Configs.PlayerDataSchema)
-local tItems = require(Configs.Items)
+local tPlayerDataSchema = require(Configs.PlayerDataSchema)
+local tLootableItems    = require(Configs.LootableItems)
 
-for _, item: Part | MeshPart in ipairs(CollectionService:GetTagged("Lootable")) do
-    item.Owner.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoPlayerBackpack(player, item, tItems[item:GetAttribute("TypeOfItem")])
-    end)
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableSword")) do
+    local newLootableSword = eLootableItem.new(workspace.ClassicSword, tLootableItems.Swords[lootableItem.Name])
+    newLootableSword:Start()
 end
+
+
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")

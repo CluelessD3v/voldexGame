@@ -1,23 +1,28 @@
---# <|=============== Services ===============|>
+--# <|=============== SERVICES ===============|>
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---# <|=============== Dependencies ===============|>
+--# <|=============== DEPENDENCIES ===============|>
 local Trove = require(ReplicatedStorage.Packages.trove)
 
+--# <|=============== DEPENDENCIES ===============|>
+local LootableItem = {}
+LootableItem.__index = LootableItem
 
-local Item = {}
-Item.__index = Item
 
-
-function Item.new(instance: MeshPart | Part, config: table)
-    local self = setmetatable({}, Item)
+function LootableItem.new(instance: MeshPart | Part, config: table)
+    print(config.Tags)
+    local self = setmetatable({}, LootableItem)
     self.Trove = Trove.new()
 
     self.Instance = instance
+
+    self.ProximityPrompt        = Instance.new("ProximityPrompt")
+    self.ProximityPrompt.Parent = self.Instance
+
     self.Trove:Add(self.Instance)
 
-    self.OwnerValue = Instance.new("ObjectValue")
+    self.OwnerValue        = Instance.new("ObjectValue")
     self.OwnerValue.Name   = "Owner"
     self.OwnerValue.Parent = self.Instance
 
@@ -32,10 +37,17 @@ function Item.new(instance: MeshPart | Part, config: table)
     return self
 end
 
+function LootableItem:Start()
+    self.ProximityPrompt.Triggered:Connect(function(player)
+        self.OwnerValue.Value = player
+        self:Destroy()
+    end)
 
-function Item:Destroy()
-    
+end
+
+function LootableItem:Destroy()
+    self.Trove:Clean()
 end
 
 
-return Item
+return LootableItem

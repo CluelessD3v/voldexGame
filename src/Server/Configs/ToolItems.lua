@@ -3,7 +3,7 @@ return {
         
         ClassicSword = {
             Instance = workspace.Swords.ClassicSword,
-            tags = {"ToolItem", "Sword"},
+            Tags = {"ToolItem", "Sword"},
         },
 
     },
