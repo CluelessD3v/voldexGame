@@ -107,7 +107,7 @@ Players.PlayerAdded:Connect(function(player:Player)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
         hPlayerInventory:TrackWeaponBeingEquipped(character)  
         hPlayerInventory:TrackWeaponBeingUnEquipped(character)
-        
+
     end)
 
 
@@ -115,7 +115,9 @@ Players.PlayerAdded:Connect(function(player:Player)
         hPlayerCombat.StartCombatMode:FireClient(player, weapon)
     end)
 
-    -- hPlayerCombat.ExitCombatMode:FireClient(player)
+    hPlayerInventory.WeaponUnEquipped.Event:Connect(function(_, weapon)
+        hPlayerCombat.ExitCombatMode:FireClient(player, weapon)
+    end)
 end)
 
 
