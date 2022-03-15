@@ -82,5 +82,12 @@ function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
     end)
 end
 
+function PlayerInventory:GetCharacterCurrentWeapon(character: Model)
+    for _, child in ipairs(character:GetChildren()) do
+        if CollectionService:HasTag(child, "Weapon") then
+            return child
+        end
+    end
+end
 
 return PlayerInventory.new()
