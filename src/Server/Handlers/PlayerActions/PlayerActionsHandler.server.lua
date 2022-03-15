@@ -95,8 +95,6 @@ Players.PlayerAdded:Connect(function(player:Player)
     stats.Name = "stats"
     
     tPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
-    
-
     hPlayerData:BuildPlayerDataObject(player, tPlayerDataSchema)
 
     print(hPlayerData.PlayerDataObjects)

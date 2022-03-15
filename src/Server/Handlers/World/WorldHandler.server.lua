@@ -12,12 +12,27 @@ local eLootableItem: ModuleScript = require(Entities.LootableItem)
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItems)
 
-for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    for type, itemData in pairs(tLootableItems) do
+--- <|=============== PRIVATE FUNCTIONS ===============|>
+
+--* Aux function to construct new LootableItem Entities from a list
+local function ConstructLootableItemEntityFromList(lootableItem, lootableItemsList)
+    for type, itemData in pairs(lootableItemsList) do
         if CollectionService:HasTag(lootableItem, type) then
             local newLootableItem =  eLootableItem.new(lootableItem, itemData[lootableItem.Name])
             newLootableItem:Start()
         end
     end
+end
 
+--# Listen for new LootableItem tagged instances being
+--# spawned & check for already existing ones to create
+--# new LootableItems Entities
+
+
+CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
+    ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
+end)
+
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
 end
