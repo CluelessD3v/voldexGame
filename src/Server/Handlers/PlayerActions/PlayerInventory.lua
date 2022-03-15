@@ -33,15 +33,17 @@ end
 --* Does a simple 1:1 "conversion" from part/mesh part to a tool, the given looted name MUST match the itemTypeData name field
 --* Else the function will not even consider the item
 
-function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, itemTypeData: table)
-    itemTypeData.Attributes       = itemTypeData.Attributes or {}
-    itemTypeData.ToolInstanceTags = itemTypeData.ToolInstanceTags or {}
+function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, toolEquivalentObject: table)
+    toolEquivalentObject.Attributes       = toolEquivalentObject.Attributes or {}
+    toolEquivalentObject.ToolInstanceTags = toolEquivalentObject.ToolInstanceTags or {}
 
-    if theLootedItem.Name == itemTypeData.Name then
-        local newItem: Tool = itemTypeData.ToolInstance:Clone()
-        for attName, attVal in pairs(itemTypeData.Attributes) do
+    if theLootedItem.Name == toolEquivalentObject.Name then
+        local newItem: Tool = toolEquivalentObject.ToolInstance:Clone()
+
+        for attName, attVal in pairs(toolEquivalentObject.Attributes) do
             newItem:SetAttribute(attName, attVal)
         end
+        
         newItem.Parent = player.Backpack
         return 
     end
