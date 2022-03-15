@@ -81,4 +81,4 @@ function PlayerCombatClient:SwitchState(newState: ModuleScript)
 end
 
 
-return PlayerCombatClient
+return PlayerCombatClient.new()
