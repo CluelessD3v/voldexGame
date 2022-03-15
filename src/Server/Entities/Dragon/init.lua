@@ -32,8 +32,13 @@ function Dragon.new(instance: Model, config: table)
     self.Trove    = Trove.new()
 
     self.Instance = instance
-    self.Trove:Add(self.Instance)
+
+    self.Instance.Humanoid.WalkSpeed = 8
     
+    self.Trove:Add(self.Instance)
+    self.Animations = instance.Animations:GetChildren() --*//Look into moving this to handler level 
+    
+
     --# Type Interface
     self.DetectionAgro = config.DetectionAgro or 60
     self.SpawnLocation = config.SpawnLocation or workspace.Baseplate
