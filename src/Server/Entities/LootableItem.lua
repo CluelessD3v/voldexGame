@@ -30,7 +30,7 @@ function LootableItem.new(instance: MeshPart | Part, config: table)
         self.Instance:SetAttribute(attName, attVal)
     end
 
-    for _, tag in pairs(config.Tags) do
+    for _, tag in pairs(config.LootableInstanceTags) do
         CollectionService:AddTag(self.Instance, tag)
     end
 
