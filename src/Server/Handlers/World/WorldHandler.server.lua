@@ -87,7 +87,7 @@ Lair2.Parent = workspace
 
 --# Each time the player dies he will be sent to the lobby.
 Players.PlayerAdded:Connect(function(player)
-    player.RespawnLocation = workspace.Lobby.SpawnLocation
+    -- player.RespawnLocation = workspace.Lobby.SpawnLocation
     player.CharacterAdded:Connect(function(character)
     
     end)

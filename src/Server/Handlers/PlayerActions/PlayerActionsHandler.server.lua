@@ -45,7 +45,7 @@ end
 
 local function CallBuildItemIntoPlayerBackpackOnOwnerSet(ownerValue, lootableItem, itemDataTable)
     ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
+        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
     end)
 end
 
@@ -88,6 +88,7 @@ end
 --+ <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 
 Players.PlayerAdded:Connect(function(player:Player)
+    player.RespawnLocation = workspace.SpawnLocation
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
     
@@ -104,21 +105,32 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-        hPlayerInventory:TrackIfCharacterEquippedWeapon(character)
+        hPlayerInventory:TrackWeaponBeingEquipped(character)  
+        hPlayerInventory:TrackWeaponBeingUnEquipped(character)
+
     end)
 
 
-    hPlayerInventory.WeaponEquipped.Event:Connect(function(character, weapon)
-        print(character, weapon)
+    hPlayerInventory.WeaponEquipped.Event:Connect(function(_, weapon)
+        hPlayerCombat.StartCombatMode:FireClient(player, weapon)
     end)
 
-    hPlayerCombat.StartCombatMode:FireClient(player)
-    task.wait(3)
-    hPlayerCombat.ExitCombatMode:FireClient(player)
+    hPlayerInventory.WeaponUnEquipped.Event:Connect(function(_, weapon)
+        hPlayerCombat.ExitCombatMode:FireClient(player, weapon)
+    end)
 end)
 
 
 
+
+hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
+    for _, validTag in ipairs(hPlayerCombat.ValidTargetTags) do
+        if CollectionService:HasTag(mob, validTag) then
+            local equippedWeapon = hPlayerInventory:GetCharacterCurrentWeapon(player.Character)
+            mob.Humanoid.Health -= equippedWeapon:GetAttribute("Damage")
+        end
+    end
+end)
 
 
 

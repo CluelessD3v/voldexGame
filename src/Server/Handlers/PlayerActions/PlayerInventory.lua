@@ -21,6 +21,11 @@ function PlayerInventory.new()
     self.WeaponEquipped = Instance.new("BindableEvent")
     self.WeaponEquipped.Name = "WeaponEquipped"
     self.WeaponEquipped.Parent = script
+
+    self.WeaponUnEquipped = Instance.new("BindableEvent")
+    self.WeaponUnEquipped.Name = "WeaponUnEquipped"
+    self.WeaponUnEquipped.Parent = script
+
     return self
 end
 
@@ -28,12 +33,17 @@ end
 --* Does a simple 1:1 "conversion" from part/mesh part to a tool, the given looted name MUST match the itemTypeData name field
 --* Else the function will not even consider the item
 
-function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, itemTypeData: table)
-    itemTypeData.Attributes       = itemTypeData.Attributes or {}
-    itemTypeData.ToolInstanceTags = itemTypeData.ToolInstanceTags or {}
+function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, toolEquivalentObject: table)
+    toolEquivalentObject.Attributes       = toolEquivalentObject.Attributes or {}
+    toolEquivalentObject.ToolInstanceTags = toolEquivalentObject.ToolInstanceTags or {}
 
-    if theLootedItem.Name == itemTypeData.Name then
-        local newItem: Tool = itemTypeData.ToolInstance:Clone()
+    if theLootedItem.Name == toolEquivalentObject.Name then
+        local newItem: Tool = toolEquivalentObject.ToolInstance:Clone()
+
+        for attName, attVal in pairs(toolEquivalentObject.Attributes) do
+            newItem:SetAttribute(attName, attVal)
+        end
+        
         newItem.Parent = player.Backpack
         return 
     end
@@ -42,11 +52,11 @@ end
 
 
 --[[
-    itemTypeData Interface,
-    These are the fields the itemTypeData table should have to be able to do a conversion,
+    toolEquivalentObject Interface,
+    These are the fields the toolEquivalentObject table should have to be able to do a conversion,
     fields marked with a ? are optional:
 
-    Name              : string         = Non unique identifier to match the looted item with the itemTypeData,
+    Name              : string         = Non unique identifier to match the looted item with the toolEquivalentObject,
     ToolInstanc       : Tool           = Instance reference that the function will clone to the player backpack,
     LootableInstance?: Part | MeshPart = Instance reference that will serve as the "lootable" instance in the workspace
                                          Useful to build a LootableItemEntity!
@@ -57,9 +67,9 @@ end
                                       (LootableItemEntity related)
 ]]--
 
---* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is added to the given character
+--* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is ADDED to the given character
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
-function PlayerInventory:TrackIfCharacterEquippedWeapon(character: Model)
+function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
     character.ChildAdded:Connect(function(child)
         if CollectionService:HasTag(child, "Weapon") then
             self.WeaponEquipped:Fire(character, child)
@@ -67,6 +77,24 @@ function PlayerInventory:TrackIfCharacterEquippedWeapon(character: Model)
     end)
 end
 
+--* Fires the WeaponUnEquipped bindable event when a child with the "Weapon" tag is REMOVED from the given character
+--* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
+function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
+    character.ChildRemoved:Connect(function(child)
+        if CollectionService:HasTag(child, "Weapon") then
+            self.WeaponUnEquipped:Fire(character, child)
+        end
+    end)
+end
 
+--* Returns the first child it finds that has the "Weapon" tag
+--* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
+function PlayerInventory:GetCharacterCurrentWeapon(character: Model)
+    for _, child in ipairs(character:GetChildren()) do
+        if CollectionService:HasTag(child, "Weapon") then
+            return child
+        end
+    end
+end
 
 return PlayerInventory.new()

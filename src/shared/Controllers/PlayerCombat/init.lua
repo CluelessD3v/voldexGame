@@ -13,7 +13,6 @@
 ]]
 
 --# <|=============== SERVICES ===============|>
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
@@ -29,12 +28,20 @@ PlayerCombatClient.__index = PlayerCombatClient
 function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
     
-    self.Host  = Players.LocalPlayer
+    self.EquippedWeapon = nil
     self.Trove = Trove.new()
 
     self.StartCombatMode = eventsNameSpace:WaitForChild("StartCombatMode")
     self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
-    
+    self.DamageMob       = eventsNameSpace:WaitForChild("DamageMob")
+
+    self.ComboCount = 0
+
+    --# Objecst with these tags can be damaged
+    self.ValidTargetTags = {  
+        "Dragon"
+    }
+
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
@@ -49,7 +56,8 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
-function PlayerCombatClient:Start()
+function PlayerCombatClient:Start(equippedWeapon)
+    self.EquippedWeapon = equippedWeapon
     self:SwitchState(self.States.Idle)
 end
 

@@ -8,8 +8,9 @@ local cPlayerCombat = require(Controllers:FindFirstChild("PlayerCombat", true))
 local Players = game:GetService("Players")
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
-    cPlayerCombat.StartCombatMode.OnClientEvent:Connect(function()
-        cPlayerCombat:Start()
+
+    cPlayerCombat.StartCombatMode.OnClientEvent:Connect(function(equippedWeapon)
+        cPlayerCombat:Start(equippedWeapon)
     end)    
 
     cPlayerCombat.ExitCombatMode.OnClientEvent:Connect(function()
