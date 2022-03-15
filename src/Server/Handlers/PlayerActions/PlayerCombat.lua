@@ -28,6 +28,11 @@ function PlayerCombat.new()
     self.ExitCombatMode        = Instance.new("RemoteEvent")
     self.ExitCombatMode.Name   = "ExitCombatMode"
     self.ExitCombatMode.Parent = EventsNameSpace
+
+
+    self.DamageMob        = Instance.new("RemoteEvent")
+    self.DamageMob.Name   = "DamageMob"
+    self.DamageMob.Parent = EventsNameSpace
     return self
 end
 
