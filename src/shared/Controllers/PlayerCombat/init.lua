@@ -13,7 +13,6 @@
 ]]
 
 --# <|=============== SERVICES ===============|>
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
@@ -29,7 +28,6 @@ PlayerCombatClient.__index = PlayerCombatClient
 function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
     
-    self.Host  = Players.LocalPlayer
     self.EquippedWeapon = nil
     self.Trove = Trove.new()
 

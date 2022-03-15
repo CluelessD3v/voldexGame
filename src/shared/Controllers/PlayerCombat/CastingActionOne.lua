@@ -1,3 +1,5 @@
+local Players = game:GetService("Players")
+
 local CastingActionOne = {}
 CastingActionOne.__index = CastingActionOne
 
@@ -16,7 +18,9 @@ function CastingActionOne:Start()
     self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(theTouchedPart)
         print(theTouchedPart)
     end))
-    
+
+
+
     self.Context:SwitchState(self.Context.States.Idle)
 end
 
