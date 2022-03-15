@@ -22,27 +22,25 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 local Dragon = {}
 Dragon.__index = Dragon
 
-function Dragon.new(instance: Model, config: table)
+function Dragon.new(instance: Model, dragonObject: table)
     local self = setmetatable({}, Dragon)
 
-    if not config then 
-        config = {}
+    if not dragonObject then 
+        dragonObject = {}
         warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
     end
     self.Trove    = Trove.new()
 
     self.Instance = instance
-    self.StateChanged = Instance.new("BindableEvent")
-    
-    self.Instance.Humanoid.WalkSpeed = 8
-
     self.Trove:Add(self.Instance)
-    
 
-    --# Type Interface
-    self.DetectionAgro   = config.DetectionAgro or 60
-    self.SpawnLocation   = config.SpawnLocation or workspace.Baseplate
-    self.ValidTargetTags = config.ValidTargetTags or {"DragonTarget"}
+    self.StateChanged = Instance.new("BindableEvent")
+    self.Instance.Humanoid.WalkSpeed = 8
+    
+    --# Concrete Dragon Entity Object
+    self.DetectionAgro   = dragonObject.DetectionAgro or 60
+    self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
+    self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
     --# States
     self.States = {
