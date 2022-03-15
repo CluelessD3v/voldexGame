@@ -105,7 +105,7 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-        hPlayerInventory:TrackIfCharacterEquippedWeapon(character)  
+        hPlayerInventory:TrackWeaponBeingEquipped(character)  
     end)
 
 

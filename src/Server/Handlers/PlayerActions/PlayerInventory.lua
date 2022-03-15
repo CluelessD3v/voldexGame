@@ -59,7 +59,7 @@ end
 
 --* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is added to the given character
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
-function PlayerInventory:TrackIfCharacterEquippedWeapon(character: Model)
+function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
     character.ChildAdded:Connect(function(child)
         if CollectionService:HasTag(child, "Weapon") then
             self.WeaponEquipped:Fire(character, child)
