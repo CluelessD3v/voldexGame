@@ -27,7 +27,14 @@ function CastingActionOne:Start()
     local animator = humanoid.Animator
     local animationsList = self.Context.EquippedWeapon.Animations:GetChildren()
 
-    local animationTrack: AnimationTrack = animator:LoadAnimation(animationsList[2])
+    self.Context.ComboCount += 1
+    
+    if self.Context.ComboCount > #animationsList then
+        self.Context.ComboCount = 1
+    end
+
+
+    local animationTrack: AnimationTrack = animator:LoadAnimation(animationsList[self.Context.ComboCount])
     animationTrack:Play()
 
     self.Context:SwitchState(self.Context.States.Idle)

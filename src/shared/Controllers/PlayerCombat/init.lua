@@ -33,7 +33,9 @@ function PlayerCombatClient.new()
 
     self.StartCombatMode = eventsNameSpace:WaitForChild("StartCombatMode")
     self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
-    
+
+    self.ComboCount = 0
+
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
