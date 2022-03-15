@@ -33,18 +33,29 @@ local tLootableItems    = require(Configs.LootableItems)
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
+
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    print(lootableItem)
     for type, itemData in pairs(tLootableItems) do
         if CollectionService:HasTag(lootableItem, type) then
             local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-            print(OwnerValue)
             OwnerValue.Changed:Connect(function(player: Player)
                 hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
             end)
         end
     end
 end
+
+
+CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
+    for type, itemData in pairs(tLootableItems) do
+        if CollectionService:HasTag(lootableItem, type) then
+            local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+            OwnerValue.Changed:Connect(function(player: Player)
+                hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
+            end)
+        end
+    end
+end)
 
 
 Players.PlayerAdded:Connect(function(player:Player)
