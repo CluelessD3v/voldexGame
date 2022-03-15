@@ -37,7 +37,7 @@ function PlayerCombatClient.new()
     self.ComboCount = 0
 
     --# Objecst with these tags can be damaged
-    self.ValidTargetTags{  
+    self.ValidTargetTags = {  
         "Dragon"
     }
 

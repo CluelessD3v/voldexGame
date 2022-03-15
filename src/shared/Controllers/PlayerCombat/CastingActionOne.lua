@@ -19,7 +19,15 @@ end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 function CastingActionOne:Start()
+    local debounce = false
     self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(theTouchedPart)
+        if debounce then 
+            return
+        end
+
+        debounce = true
+        
+        print(theTouchedPart)
         if CollectionService:HasTag(theTouchedPart.Parent, "Dragon") then
             local humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
 
