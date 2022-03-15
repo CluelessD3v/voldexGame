@@ -88,6 +88,7 @@ end
 --+ <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 
 Players.PlayerAdded:Connect(function(player:Player)
+    player.RespawnLocation = workspace.SpawnLocation
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
     
@@ -104,17 +105,15 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-        hPlayerInventory:TrackIfCharacterEquippedWeapon(character)
+        hPlayerInventory:TrackIfCharacterEquippedWeapon(character)  
     end)
 
 
-    hPlayerInventory.WeaponEquipped.Event:Connect(function(character, weapon)
-        print(character, weapon)
+    hPlayerInventory.WeaponEquipped.Event:Connect(function(_, weapon)
+        hPlayerCombat.StartCombatMode:FireClient(player, weapon)
     end)
 
-    hPlayerCombat.StartCombatMode:FireClient(player)
-    task.wait(3)
-    hPlayerCombat.ExitCombatMode:FireClient(player)
+    -- hPlayerCombat.ExitCombatMode:FireClient(player)
 end)
 
 
