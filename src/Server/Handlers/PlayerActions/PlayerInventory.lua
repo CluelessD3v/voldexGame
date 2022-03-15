@@ -52,11 +52,11 @@ end
 
 
 --[[
-    itemTypeData Interface,
-    These are the fields the itemTypeData table should have to be able to do a conversion,
+    toolEquivalentObject Interface,
+    These are the fields the toolEquivalentObject table should have to be able to do a conversion,
     fields marked with a ? are optional:
 
-    Name              : string         = Non unique identifier to match the looted item with the itemTypeData,
+    Name              : string         = Non unique identifier to match the looted item with the toolEquivalentObject,
     ToolInstanc       : Tool           = Instance reference that the function will clone to the player backpack,
     LootableInstance?: Part | MeshPart = Instance reference that will serve as the "lootable" instance in the workspace
                                          Useful to build a LootableItemEntity!

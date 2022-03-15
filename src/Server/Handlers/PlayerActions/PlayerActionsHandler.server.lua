@@ -126,7 +126,8 @@ end)
 hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
     for _, validTag in ipairs(hPlayerCombat.ValidTargetTags) do
         if CollectionService:HasTag(mob, validTag) then
-            mob.Humanoid.Health -= 10
+            local equippedWeapon = hPlayerInventory:GetCharacterCurrentWeapon(player.Character)
+            mob.Humanoid.Health -= equippedWeapon:GetAttribute("Damage")
         end
     end
 end)
