@@ -20,22 +20,24 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 function CastingActionOne:Start()
     local debounce = false
-    self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(theTouchedPart)
+    self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(touchedPart)
         if debounce then 
             return
         end
 
         debounce = true
         
-        print(theTouchedPart)
-        if CollectionService:HasTag(theTouchedPart.Parent, "Dragon") then
-            local humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
+        --*//TODO look for a way to damage multiple humanoids
+        --* probably inserting touched ones to a table and checking if they are there?
 
-            if humanoid then
-                print(humanoid)
+        for _, validTag in ipairs(self.Context.ValidTargetTags) do
+            if CollectionService:HasTag(touchedPart.Parent, validTag) then
+                local humanoid = touchedPart.Parent:FindFirstChild("Humanoid")
+                if humanoid then
+                    print(humanoid)
+                end
             end
         end
-
     end))
 
     local humanoid = Players.LocalPlayer.Character.Humanoid
