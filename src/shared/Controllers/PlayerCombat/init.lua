@@ -33,6 +33,7 @@ function PlayerCombatClient.new()
 
     self.StartCombatMode = eventsNameSpace:WaitForChild("StartCombatMode")
     self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
+    self.DamageMob       = eventsNameSpace:WaitForChild("DamageMob")
 
     self.ComboCount = 0
 
