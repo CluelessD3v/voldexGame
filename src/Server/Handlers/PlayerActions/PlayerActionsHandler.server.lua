@@ -45,7 +45,7 @@ end
 
 local function CallBuildItemIntoPlayerBackpackOnOwnerSet(ownerValue, lootableItem, itemDataTable)
     ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
+        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
     end)
 end
 
