@@ -33,30 +33,62 @@ local tLootableItems    = require(Configs.LootableItems)
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
+---* Aux function to see if the given LootableItem belongs to the given lootableItemsList
+---* Check documentation for LootableItem Entity interface info 
 
-for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    for type, itemData in pairs(tLootableItems) do
-        if CollectionService:HasTag(lootableItem, type) then
-            local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-            OwnerValue.Changed:Connect(function(player: Player)
-                hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
-            end)
+local function GetItemDataForGivenLootableItemFromList(lootableItem, lootableItemsList)
+    for typeOfItemKey, itemData in pairs(lootableItemsList) do
+        if CollectionService:HasTag(lootableItem, typeOfItemKey) then
+            return itemData
         end
     end
+    warn("Given Lootable Item does not has a tag that matches given Lootables table key")
+    return nil
 end
 
+local function CallBuildItemIntoPlayerBackpackOnOwnerSet(ownerValue, lootableItem, itemDataTable)
+    ownerValue.Changed:Connect(function(player: Player)
+        hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
+    end)
+end
+
+--+ <|=============== LOOTABLE ITEMS INTERACTION ===============|>
+
+--# Listen for new LootableItems being tagged &
+--# Check for already existing ones, for each of them
+--# listen for their Owner ObjectValue value property
+--# Changing so the Item can be built into the backpack
+--# If the OwnerValue does not exist build a new LootableEntity
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    for type, itemData in pairs(tLootableItems) do
-        if CollectionService:HasTag(lootableItem, type) then
-            local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-            OwnerValue.Changed:Connect(function(player: Player)
-                hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
-            end)
-        end
+    local itemDataTable = GetItemDataForGivenLootableItemFromList(lootableItem, tLootableItems)
+    
+    local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+    if OwnerValue then
+        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        return
+    else
+        local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
+        newLootableItem:Start()
+        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        return
     end
 end)
 
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    local itemDataTable = GetItemDataForGivenLootableItemFromList(lootableItem, tLootableItems)
+    
+    local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+    if OwnerValue then
+        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+    else
+        local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
+        newLootableItem:Start()
+        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+    end
+end
+
+--+ <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
