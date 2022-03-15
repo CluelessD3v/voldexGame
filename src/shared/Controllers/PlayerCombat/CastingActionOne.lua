@@ -23,6 +23,10 @@ function CastingActionOne:Start()
         print(theTouchedPart)
     end))
 
+    local humanoid = Players.LocalPlayer.Character.Humanoid
+    local animator = humanoid.Animator
+
+    print(humanoid, animator)
 
 
     self.Context:SwitchState(self.Context.States.Idle)
