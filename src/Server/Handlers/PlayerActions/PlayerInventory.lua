@@ -82,6 +82,8 @@ function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
     end)
 end
 
+--* Returns the first child it finds that has the "Weapon" tag
+--* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
 function PlayerInventory:GetCharacterCurrentWeapon(character: Model)
     for _, child in ipairs(character:GetChildren()) do
         if CollectionService:HasTag(child, "Weapon") then
