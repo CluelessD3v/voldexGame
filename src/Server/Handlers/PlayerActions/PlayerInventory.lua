@@ -62,7 +62,7 @@ end
                                       (LootableItemEntity related)
 ]]--
 
---* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is added to the given character
+--* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is ADDED to the given character
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
 function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
     character.ChildAdded:Connect(function(child)
@@ -72,10 +72,12 @@ function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
     end)
 end
 
+--* Fires the WeaponUnEquipped bindable event when a child with the "Weapon" tag is REMOVED from the given character
+--* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
 function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
     character.ChildRemoved:Connect(function(child)
         if CollectionService:HasTag(child, "Weapon") then
-            print(child)
+            self.WeaponUnEquipped:Fire(character, child)
         end
     end)
 end
