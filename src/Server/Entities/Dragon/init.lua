@@ -37,6 +37,9 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.StateChanged = Instance.new("BindableEvent")
     self.Instance.Humanoid.WalkSpeed = 8
     
+    --# DragonEntity Attributes
+    self.Instance:SetAttribute("CurrentState", "None")
+
     --# Concrete Dragon Entity Object
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
