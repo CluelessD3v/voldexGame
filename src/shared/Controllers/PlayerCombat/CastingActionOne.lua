@@ -25,10 +25,10 @@ function CastingActionOne:Start()
 
     local humanoid = Players.LocalPlayer.Character.Humanoid
     local animator = humanoid.Animator
-    
     local animationsList = self.Context.EquippedWeapon.Animations:GetChildren()
 
-    print(animationsList)
+    local animationTrack: AnimationTrack = animator:LoadAnimation(animationsList[2])
+    animationTrack:Play()
 
     self.Context:SwitchState(self.Context.States.Idle)
 end
