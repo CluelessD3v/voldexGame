@@ -82,9 +82,11 @@ Lair2.Parent = workspace
 
 
 --+ <|=============== DRAGON MOBS Handling ===============|>
+
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
     newDragon:Start()
+    
 end
 
 

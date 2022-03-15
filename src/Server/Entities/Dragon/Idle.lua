@@ -16,7 +16,6 @@ function Idle.new(context: table)
     self.Name    = "Idle"
     self.Context = context
     self.Trove   = context.Trove:Extend()
-    self.IdelAnimationTrack = nil
 
     return self
 end
@@ -28,11 +27,6 @@ function Idle:Start()
     --# Poll every frame to see if a valid instance
     --# Entered the detection radius, did it entered?
     --# Great! Then start chasing it.
- 
-    local animator: Animator = self.Context.Instance.Humanoid.Animator
-    
-    self.IdleAnimTrack = animator:LoadAnimation(self.Context.Animations.Idle)
-    self.IdleAnimTrack:Play()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         if self.Context:TaggedInstanceEnteredAgro() then
@@ -43,7 +37,6 @@ function Idle:Start()
 end
 
 function Idle:Exit()
-    self.IdleAnimTrack:Stop()
     self.Trove:Clean()
     return    
 end

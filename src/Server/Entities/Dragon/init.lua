@@ -41,8 +41,8 @@ function Dragon.new(instance: Model, config: table)
     
 
     --# Type Interface
-    self.DetectionAgro = config.DetectionAgro or 60
-    self.SpawnLocation = config.SpawnLocation or workspace.Baseplate
+    self.DetectionAgro   = config.DetectionAgro or 60
+    self.SpawnLocation   = config.SpawnLocation or workspace.Baseplate
     self.ValidTargetTags = config.ValidTargetTags or {"DragonTarget"}
 
     --# States
