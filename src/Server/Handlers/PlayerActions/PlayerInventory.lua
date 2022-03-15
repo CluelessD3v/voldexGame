@@ -39,6 +39,9 @@ function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedIt
 
     if theLootedItem.Name == itemTypeData.Name then
         local newItem: Tool = itemTypeData.ToolInstance:Clone()
+        for attName, attVal in pairs(itemTypeData.Attributes) do
+            newItem:SetAttribute(attName, attVal)
+        end
         newItem.Parent = player.Backpack
         return 
     end
