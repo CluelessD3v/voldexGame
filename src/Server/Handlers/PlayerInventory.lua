@@ -1,9 +1,26 @@
+
+
+--# <|=============== SERVICES ===============|>
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+
+--? <|=============== CONSTRUCTOR ===============|>
+local eventsNamespace = ReplicatedStorage.Events.PlayerInventory
+
 local PlayerInventory = {}
 PlayerInventory.__index = PlayerInventory
 
 
 function PlayerInventory.new()
     local self = setmetatable({}, PlayerInventory)
+
+    
+    --# Adding remote events to namespace in Replicated Storage
+    self.WeaponEquipped = Instance.new("RemoteEvent")
+    self.WeaponEquipped.Name = "WeaponEquipped"
+    self.WeaponEquipped.Parent = eventsNamespace
+
+
     return self
 end
 

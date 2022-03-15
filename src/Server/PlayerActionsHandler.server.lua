@@ -51,6 +51,8 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     end
 end
 
+
+
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
