@@ -6,6 +6,7 @@ function CastingActionOne.new(context)
     local self = setmetatable({}, CastingActionOne)
     self.Name = "CastingActionOne"
     self.Context = context
+    self.Trove = context.Trove:Extend()
     return self
 end
 
