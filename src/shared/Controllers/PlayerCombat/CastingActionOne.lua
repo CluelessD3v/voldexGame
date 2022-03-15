@@ -1,5 +1,8 @@
+--# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 
+
+--? <|=============== CONSTRUCTOR ===============|>
 local CastingActionOne = {}
 CastingActionOne.__index = CastingActionOne
 
@@ -14,6 +17,7 @@ function CastingActionOne.new(context)
     return self
 end
 
+--+ <|=============== PUBLIC FUNCTIONS ===============|>
 function CastingActionOne:Start()
     self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(theTouchedPart)
         print(theTouchedPart)
