@@ -34,9 +34,9 @@ function Dragon.new(instance: Model, config: table)
     self.Instance = instance
 
     self.Instance.Humanoid.WalkSpeed = 8
-    
+
     self.Trove:Add(self.Instance)
-    self.Animations = instance.Animations:GetChildren() --*//Look into moving this to handler level 
+    self.Animations = instance.Animations --*//Look into moving this to handler level 
     
 
     --# Type Interface
