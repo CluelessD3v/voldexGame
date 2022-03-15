@@ -25,6 +25,9 @@ local function ConstructLootableItemEntityFromList(lootableItem, lootableItemsLi
     end
 end
 
+
+--+ <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
+
 --# Listen for new LootableItem tagged instances being
 --# spawned & check for already existing ones to create
 --# new LootableItems Entities
@@ -37,15 +40,55 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
 end
 
+--+ <|=============== LEVEL CONSTRUCTION ===============|>
+local function BuildLair()
+    local Lair: Model    = workspace.Lair:Clone()
+
+    local SouthHallway: Part = workspace.Hallway:Clone()
+    SouthHallway.Name = "SouthHallway"
+    SouthHallway.Parent = Lair
+
+    local shOffset = Lair.PrimaryPart.Size.Z * .5 + SouthHallway.Size.Z * .5
+    local shTargetCF = Lair:GetPivot() * CFrame.new(0,0, shOffset)
+    SouthHallway:PivotTo(shTargetCF)
+
+    
+    local NorthHallway: Model = workspace.Hallway:Clone()
+    NorthHallway.Name = "NorthHallway"
+    NorthHallway.Parent = Lair
+
+    local nhOffset = Lair.PrimaryPart.Size.Z * -.5 + NorthHallway.Size.Z * -.5
+    local nhTargerCF = Lair:GetPivot() * CFrame.new(0, 0 , nhOffset)
+    NorthHallway:PivotTo(nhTargerCF)
+
+
+    return Lair
+end
+
+local Lair1 = BuildLair()
+Lair1:PivotTo(CFrame.new(0, 100, 0))
+Lair1.Parent = workspace
+
+local Lobby: Model = workspace.Lobby
+local lbOffset = Lair1.SouthHallway.Size.Z * .5 + Lobby.PrimaryPart.Size.Z * .5
+local lbTargetCF = Lair1.SouthHallway:GetPivot() * CFrame.new(0, 0, lbOffset)
+Lobby:PivotTo(lbTargetCF)
+
+local Lair2 = BuildLair()
+local l2Offset = Lair1.NorthHallway.Size.Z * -.5 + Lair2.PrimaryPart.Size.Z * - .5 + Lair2.SouthHallway.Size.Z * -.5
+local l2TargetCF = Lair1.NorthHallway:GetPivot() * CFrame.new(0, 0, l2Offset)
+Lair2:PivotTo(l2TargetCF)
+Lair2.Parent = workspace
+
+
+
+
+--+ <|=============== PLAYER HANDLING ===============|>
 
 --# Each time the player dies he will be sent to the lobby.
-
 Players.PlayerAdded:Connect(function(player)
     player.RespawnLocation = workspace.Lobby.SpawnLocation
-    print(player.RespawnLocation)
-    
     player.CharacterAdded:Connect(function(character)
-    
     
     end)
 
