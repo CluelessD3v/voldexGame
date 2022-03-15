@@ -81,7 +81,7 @@ Lair2:PivotTo(l2TargetCF)
 Lair2.Parent = workspace
 
 
---+ <|=============== DRAGON MOBS INITIALIZATION ===============|>
+--+ <|=============== DRAGON MOBS Handling ===============|>
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
     newDragon:Start()

@@ -32,7 +32,8 @@ function Dragon.new(instance: Model, config: table)
     self.Trove    = Trove.new()
 
     self.Instance = instance
-
+    self.StateChanged = Instance.new("BindableEvent")
+    
     self.Instance.Humanoid.WalkSpeed = 8
 
     self.Trove:Add(self.Instance)
