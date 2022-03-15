@@ -123,6 +123,10 @@ end)
 
 
 
+hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
+    print(mob)
+end)
+
 
 
 -- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
