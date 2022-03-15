@@ -30,6 +30,7 @@ function PlayerCombatClient.new()
     local self = setmetatable({}, PlayerCombatClient)
     
     self.Host  = Players.LocalPlayer
+    self.EquippedWeapon = nil
     self.Trove = Trove.new()
 
     self.StartCombatMode = eventsNameSpace:WaitForChild("StartCombatMode")
@@ -49,7 +50,8 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
-function PlayerCombatClient:Start()
+function PlayerCombatClient:Start(equippedWeapon)
+    self.EquippedWeapon = equippedWeapon
     self:SwitchState(self.States.Idle)
 end
 
