@@ -50,13 +50,7 @@ end
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
 function PlayerCombatClient:Start()
-    self.Trove:Add(self.StartCombatMode.OnClientEvent:Connect(function()
-        self:SwitchState(self.States.Idle)
-    end))
-
-    self.Trove:Add(self.ExitCombatMode.OnClientEvent:Connect(function()
-        self:Exit()
-    end))
+    self:SwitchState(self.States.Idle)
 end
 
 --* Exits from the combat system
