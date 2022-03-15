@@ -36,6 +36,11 @@ function PlayerCombatClient.new()
 
     self.ComboCount = 0
 
+    --# Objecst with these tags can be damaged
+    self.ValidTargetTags{  
+        "Dragon"
+    }
+
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
