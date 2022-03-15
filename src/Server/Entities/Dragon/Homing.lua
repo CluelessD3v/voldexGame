@@ -25,6 +25,7 @@ function Homing.new(context: table)
     self.Context = context
     self.Trove = context.Trove:Extend()
 
+    self.HomingAnimationTrack = nil
     return self
 end
 
@@ -37,6 +38,8 @@ function Homing:Start()
     
 
     local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
+    
+
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
