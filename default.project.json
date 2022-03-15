@@ -30,7 +30,8 @@
 
   "ServerStorage": {
     "$className": "ServerStorage",
-    "$path": "src/Storage"
+    "$path": "src/Storage",
+    "$ignoreUnknownInstances": true
   },
 
 
