@@ -14,9 +14,11 @@ local ServerStorage          = game:GetService("ServerStorage")
 --# <|=============== Dependencies ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
-local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
-local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
-local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
+local hWorld = Handlers.World.WorldHandler  --* Mediator Handler
+
+local hPlayerData: ModuleScript      = require(Handlers.PlayerActions.PlayerData)
+local hPlayerCombat: ModuleScript    = require(Handlers.PlayerActions.PlayerCombat)
+local hPlayerInventory: ModuleScript = require(Handlers.PlayerActions.PlayerInventory)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -29,28 +31,20 @@ local Configs = ServerScriptService.Configs
 local tPlayerDataSchema = require(Configs.PlayerDataSchema)
 local tLootableItems    = require(Configs.LootableItems)
 
-for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-
-    for type, itemData in pairs(tLootableItems) do
-        if CollectionService:HasTag(lootableItem, type) then
-            local newLootableItem =  eLootableItem.new(lootableItem, itemData[lootableItem.Name])
-            newLootableItem:Start()
-        end
-    end
-
-end
-
+--- <|=============== PRIVATE FUNCTIONS ===============|>
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    print(lootableItem)
     for type, itemData in pairs(tLootableItems) do
         if CollectionService:HasTag(lootableItem, type) then
-            lootableItem.Owner.Changed:Connect(function(player: Player)
+            local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+            print(OwnerValue)
+            OwnerValue.Changed:Connect(function(player: Player)
                 hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
             end)
         end
     end
 end
-
 
 
 Players.PlayerAdded:Connect(function(player:Player)
