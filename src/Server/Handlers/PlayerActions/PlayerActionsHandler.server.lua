@@ -7,14 +7,11 @@
 local Players                = game:GetService("Players")
 local CollectionService      = game:GetService("CollectionService")
 local ServerScriptService    = game:GetService("ServerScriptService")
-local ProximityPromptService = game:GetService("ProximityPromptService")
-local Workspace = game:GetService("Workspace")
-local ServerStorage          = game:GetService("ServerStorage")
+
 
 --# <|=============== Dependencies ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
-local hWorld = Handlers.World.WorldHandler  --* Mediator Handler
 
 local hPlayerData: ModuleScript      = require(Handlers.PlayerActions.PlayerData)
 local hPlayerCombat: ModuleScript    = require(Handlers.PlayerActions.PlayerCombat)
