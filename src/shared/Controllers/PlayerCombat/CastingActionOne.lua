@@ -10,6 +10,9 @@ function CastingActionOne.new(context)
 end
 
 function CastingActionOne:Start()
+    self.Context.EquippedWeapon.Handle.Touched:Connect(function(theTouchedPart)
+        print(theTouchedPart)
+    end)
     self.Context:SwitchState(self.Context.States.Idle)
 end
 
