@@ -26,7 +26,7 @@ function CastingActionOne:Start()
         end
 
         debounce = true
-        
+
         --*//TODO look for a way to damage multiple humanoids
         --* probably inserting touched ones to a table and checking if they are there?
 
@@ -34,7 +34,7 @@ function CastingActionOne:Start()
             if CollectionService:HasTag(touchedPart.Parent, validTag) then
                 local humanoid = touchedPart.Parent:FindFirstChild("Humanoid")
                 if humanoid then
-                    print(humanoid)
+                    self.Context.DamageMob:FireServer()
                 end
             end
         end
