@@ -37,7 +37,6 @@ function Dragon.new(instance: Model, config: table)
     self.Instance.Humanoid.WalkSpeed = 8
 
     self.Trove:Add(self.Instance)
-    self.Animations = instance.Animations --*//Look into moving this to handler level 
     
 
     --# Type Interface
@@ -68,6 +67,7 @@ end
 
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
+
 --* Checks if an instance with a valid target tag entered the spawn location detection radius
 function Dragon:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
