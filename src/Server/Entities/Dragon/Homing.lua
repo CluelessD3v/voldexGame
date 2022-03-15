@@ -38,7 +38,8 @@ function Homing:Start()
     
 
     local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
-    
+    local animator: Animator = self.Context.Instance.Humanoid.Animator
+
 
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
