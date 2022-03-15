@@ -39,8 +39,8 @@ function Homing:Start()
 
     local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
     local animator: Animator = self.Context.Instance.Humanoid.Animator
-
-
+    self.HomingAnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
+    self.HomingAnimationTrack:Play()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
@@ -64,6 +64,7 @@ function Homing:Start()
 end
 
 function Homing:Exit()
+    self.HomingAnimationTrack:Stop()
     self.Trove:Clean()
 end
 
