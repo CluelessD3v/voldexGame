@@ -20,7 +20,6 @@ local hPlayerInventory: ModuleScript = require(Handlers.PlayerActions.PlayerInve
 -- Entities
 local Entities = ServerScriptService.Entities
 -- local eGoldCoin: ModuleScript     = require(Entities.GoldCoin)
--- local eDragon: ModuleScript       = require(Entities.Dragon)
 local eLootableItem: ModuleScript = require(Entities.LootableItem)
 
 -- Configs
@@ -131,10 +130,3 @@ hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
         end
     end
 end)
-
-
-
--- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
---     local newDragon = eDragon.new(dragon)
---     newDragon:Start()
--- end

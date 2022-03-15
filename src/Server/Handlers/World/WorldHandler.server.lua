@@ -81,10 +81,16 @@ Lair2:PivotTo(l2TargetCF)
 Lair2.Parent = workspace
 
 
+--+ <|=============== DRAGON MOBS INITIALIZATION ===============|>
+for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
+    local newDragon = eDragon.new(dragon)
+    newDragon:Start()
+end
+
+
 
 
 --+ <|=============== PLAYER HANDLING ===============|>
-
 --# Each time the player dies he will be sent to the lobby.
 Players.PlayerAdded:Connect(function(player)
     -- player.RespawnLocation = workspace.Lobby.SpawnLocation
