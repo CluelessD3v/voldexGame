@@ -28,6 +28,11 @@
       }
   },
 
+  "ServerStorage": {
+    "$className": "ServerStorage",
+    "$path": "src/Storage"
+  },
+
 
     "Workspace": {
       "$properties": {

@@ -4,15 +4,18 @@
 ]]
 
 --# <|=============== Services ===============|>
-local Players             = game:GetService("Players")
-local CollectionService   = game:GetService("CollectionService")
-local ServerScriptService = game:GetService("ServerScriptService")
+local Players                = game:GetService("Players")
+local CollectionService      = game:GetService("CollectionService")
+local ServerScriptService    = game:GetService("ServerScriptService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local ServerStorage          = game:GetService("ServerStorage")
 
 --# <|=============== Dependencies ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
-local hPlayerData: ModuleScript   = require(Handlers.PlayerData)
-local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
+local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
+local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
+local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
 
 -- Entities
 -- local Entities = ServerScriptService.Entities
@@ -22,7 +25,13 @@ local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
 -- Configs
 local Configs = ServerScriptService.Configs
 local tPlayerDataSchema  = require(Configs.PlayerDataSchema)
+local tItems = require(Configs.Items)
 
+for _, item: Part | MeshPart in ipairs(CollectionService:GetTagged("Lootable")) do
+    item.Owner.Changed:Connect(function(player: Player)
+        hPlayerInventory:BuildItemIntoPlayerBackpack(player, item, tItems[item:GetAttribute("TypeOfItem")])
+    end)
+end
 
 Players.PlayerAdded:Connect(function(player:Player)
     local stats: Folder = Instance.new("Folder")
@@ -43,13 +52,14 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-        
     end)
 
     hPlayerCombat.StartCombatMode:FireClient(player)
     task.wait(3)
     hPlayerCombat.ExitCombatMode:FireClient(player)
 end)
+
+
 
 
 -- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
