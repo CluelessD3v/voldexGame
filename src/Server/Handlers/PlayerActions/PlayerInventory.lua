@@ -21,6 +21,11 @@ function PlayerInventory.new()
     self.WeaponEquipped = Instance.new("BindableEvent")
     self.WeaponEquipped.Name = "WeaponEquipped"
     self.WeaponEquipped.Parent = script
+
+    self.WeaponUnEquipped = Instance.new("BindableEvent")
+    self.WeaponUnEquipped.Name = "WeaponUnEquipped"
+    self.WeaponUnEquipped.Parent = script
+
     return self
 end
 
