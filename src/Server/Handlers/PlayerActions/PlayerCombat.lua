@@ -33,6 +33,11 @@ function PlayerCombat.new()
     self.DamageMob        = Instance.new("RemoteEvent")
     self.DamageMob.Name   = "DamageMob"
     self.DamageMob.Parent = EventsNameSpace
+
+    self.ValidTargetTags = {  
+        "Dragon"
+    }
+
     return self
 end
 

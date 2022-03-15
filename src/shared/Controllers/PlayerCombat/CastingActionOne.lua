@@ -33,7 +33,6 @@ function CastingActionOne:Start()
         for _, validTag in ipairs(self.Context.ValidTargetTags) do
             if CollectionService:HasTag(touchedPart.Parent, validTag) then
                 local humanoid = touchedPart.Parent:FindFirstChild("Humanoid")
-                print(humanoid.Parent)
                 if humanoid then
                     self.Context.DamageMob:FireServer(humanoid.Parent)
                 end

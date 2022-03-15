@@ -124,7 +124,11 @@ end)
 
 
 hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
-    print(mob)
+    for _, validTag in ipairs(hPlayerCombat.ValidTargetTags) do
+        if CollectionService:HasTag(mob, validTag) then
+            mob.Humanoid.Health -= 10
+        end
+    end
 end)
 
 
