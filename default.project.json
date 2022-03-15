@@ -28,6 +28,12 @@
       }
   },
 
+  "ServerStorage": {
+    "$className": "ServerStorage",
+    "$path": "src/Storage",
+    "$ignoreUnknownInstances": true
+  },
+
 
     "Workspace": {
       "$properties": {

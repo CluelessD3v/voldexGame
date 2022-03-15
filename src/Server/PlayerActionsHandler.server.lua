@@ -4,24 +4,53 @@
 ]]
 
 --# <|=============== Services ===============|>
-local Players             = game:GetService("Players")
-local CollectionService   = game:GetService("CollectionService")
-local ServerScriptService = game:GetService("ServerScriptService")
+local Players                = game:GetService("Players")
+local CollectionService      = game:GetService("CollectionService")
+local ServerScriptService    = game:GetService("ServerScriptService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local Workspace = game:GetService("Workspace")
+local ServerStorage          = game:GetService("ServerStorage")
 
 --# <|=============== Dependencies ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
-local hPlayerData: ModuleScript   = require(Handlers.PlayerData)
-local hPlayerCombat: ModuleScript = require(Handlers.PlayerCombat)
+local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
+local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
+local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
 
 -- Entities
 local Entities = ServerScriptService.Entities
-local eGoldCoin: ModuleScript = require(Entities.GoldCoin)
-local eDragon: ModuleScript   = require(Entities.Dragon)
+-- local eGoldCoin: ModuleScript     = require(Entities.GoldCoin)
+-- local eDragon: ModuleScript       = require(Entities.Dragon)
+local eLootableItem: ModuleScript = require(Entities.LootableItem)
 
 -- Configs
 local Configs = ServerScriptService.Configs
-local tPlayerDataSchema  = require(Configs.PlayerDataSchema)
+local tPlayerDataSchema = require(Configs.PlayerDataSchema)
+local tLootableItems    = require(Configs.LootableItems)
+
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+
+    for type, itemData in pairs(tLootableItems) do
+        if CollectionService:HasTag(lootableItem, type) then
+            local newLootableItem =  eLootableItem.new(lootableItem, itemData[lootableItem.Name])
+            newLootableItem:Start()
+        end
+    end
+
+end
+
+
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    for type, itemData in pairs(tLootableItems) do
+        if CollectionService:HasTag(lootableItem, type) then
+            lootableItem.Owner.Changed:Connect(function(player: Player)
+                hPlayerInventory:BuildItemIntoPlayerBackpack(player, lootableItem, itemData[lootableItem.Name])
+            end)
+        end
+    end
+end
+
 
 
 Players.PlayerAdded:Connect(function(player:Player)
@@ -43,7 +72,12 @@ Players.PlayerAdded:Connect(function(player:Player)
 
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
-    
+        hPlayerInventory:TrackIfCharacterEquippedWeapon(character)
+    end)
+
+
+    hPlayerInventory.WeaponEquipped.Event:Connect(function(character, weapon)
+        print(character, weapon)
     end)
 
     hPlayerCombat.StartCombatMode:FireClient(player)
@@ -52,7 +86,11 @@ Players.PlayerAdded:Connect(function(player:Player)
 end)
 
 
-for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
-    local newDragon = eDragon.new(dragon)
-    newDragon:Start()
-end
+
+
+
+
+-- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
+--     local newDragon = eDragon.new(dragon)
+--     newDragon:Start()
+-- end
