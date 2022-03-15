@@ -1,10 +1,12 @@
 return {
-    Swords = {
+    SwordType = {
         ClassicSword = {
-            Instance = workspace.Swords.ClassicSword,
-            Tags = {"LootableItem", "Sword"},
+            Name             = "ClassicSword",
+            LootableInstance = workspace.ClassicSword,
+            ToolInstance     = workspace.Swords.ClassicSword,
+            Tags             = {},
+            
             Attributes = {
-                TypeOfItem = "Sword",
                 Damage = 25
             },
         },

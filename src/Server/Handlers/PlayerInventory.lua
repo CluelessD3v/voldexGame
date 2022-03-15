@@ -7,15 +7,13 @@ function PlayerInventory.new()
     return self
 end
 
-function BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, fromItemList: table)
-    for _, item in pairs(fromItemList) do
-        if theLootedItem.Name == item.Name then
-            local newItem: Tool = item.Instance:Clone()
-            newItem.Parent = player.Backpack
-            return 
-        end
-    end
+function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, itemData: table)
 
+    if theLootedItem.Name == itemData.Name then
+        local newItem: Tool = itemData.ToolInstance:Clone()
+        newItem.Parent = player.Backpack
+        return 
+    end
     warn("The given looted item name does not match any in the given Item list! Failed to build Item")
 end
 
