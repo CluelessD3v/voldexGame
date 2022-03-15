@@ -67,6 +67,13 @@ function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
     end)
 end
 
+function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
+    character.ChildRemoved:Connect(function(child)
+        if CollectionService:HasTag(child, "Weapon") then
+            print(child)
+        end
+    end)
+end
 
 
 return PlayerInventory.new()
