@@ -8,7 +8,6 @@ function PlayerInventory.new()
 end
 
 function PlayerInventory:BuildItemIntoPlayerBackpack(player: Player, theLootedItem: Part | MeshPart, itemData: table)
-
     if theLootedItem.Name == itemData.Name then
         local newItem: Tool = itemData.ToolInstance:Clone()
         newItem.Parent = player.Backpack
