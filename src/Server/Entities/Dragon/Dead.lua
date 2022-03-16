@@ -31,8 +31,10 @@ function Dead:Start()
                 2
             )
 
-            local transparencyTween = TweenService:Create(child, tweenInfo, {Transparency = 1})
+            local transparencyTween: Tween = TweenService:Create(child, tweenInfo, {Transparency = 1})
             transparencyTween:Play()
+            transparencyTween.Completed:Wait()
+            self.Context:Destroy()
         end
     end
 
