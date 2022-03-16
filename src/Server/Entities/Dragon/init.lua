@@ -96,27 +96,10 @@ function Dragon:TaggedInstanceEnteredAgro()
 
             if CheckIfInstanceIsInsideRadius(self.SpawnLocation, taggedInstance, self.DetectionAgro) then
                 self.CurrentTarget = target
-                return target
+                return true
             else
                 self.CurrentTarget = nil
-                return nil
-            end
-        end
-    end
-end
-
-
-function Dragon:TaggedInstanceEnteredAttackAgro()
-    for _, validTag in ipairs(self.ValidTargetTags) do
-        for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
-            local target: Part = taggedInstance
-
-            if CheckIfInstanceIsInsideRadius(self.Instance.Head, taggedInstance, self.AttackAgro) then
-                self.CurrentTarget = target
-                return target
-            else
-                self.CurrentTarget = nil
-                return nil
+                return false
             end
         end
     end
