@@ -4,6 +4,11 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Players             = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
+-- Handlers
+local Handlers = ServerScriptService.Handlers
+local hLootHandler = Handlers.LootHandler
+
+-- Entities
 local Entities = ServerScriptService.Entities
 local eGoldCoin: ModuleScript     = require(Entities.GoldCoinEntity)
 local eDragon: ModuleScript       = require(Entities.DragonEntity)
@@ -125,6 +130,8 @@ end
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
         print(lootContainer, "Was destroyed")
+
+
     end)
 end
 
