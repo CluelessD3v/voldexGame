@@ -66,6 +66,12 @@ function Dragon.new(instance: Model, dragonObject: table)
     }
 
     self.CurrentState = nil
+
+    self.Instance.Humanoid.Died:Connect(function()
+        self:SwitchState(self.States.Died)
+    end)
+
+
     return self
 end
 
