@@ -13,9 +13,9 @@ local ServerScriptService    = game:GetService("ServerScriptService")
 -- Handlers
 local Handlers = ServerScriptService.Handlers
 
-local hPlayerData: ModuleScript      = require(Handlers.PlayerActions.PlayerData)
-local hPlayerCombat: ModuleScript    = require(Handlers.PlayerActions.PlayerCombat)
-local hPlayerInventory: ModuleScript = require(Handlers.PlayerActions.PlayerInventory)
+local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
+local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
+local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
 
 -- Entities
 local Entities = ServerScriptService.Entities
