@@ -14,6 +14,7 @@ function CastingActionOne.new(context)
     self.Context = context
     self.Trove = context.Trove:Extend()
 
+    self.AnimationTrack = nil
     return self
 end
 
@@ -27,8 +28,7 @@ function CastingActionOne:Start()
 
         debounce = true
 
-        --*//TODO look for a way to damage multiple humanoids
-        --* probably inserting touched ones to a table and checking if they are there?
+
 
         for _, validTag in ipairs(self.Context.ValidTargetTags) do
             if CollectionService:HasTag(touchedPart.Parent, validTag) then
@@ -51,18 +51,19 @@ function CastingActionOne:Start()
     end
 
 
-    local animationTrack: AnimationTrack = animator:LoadAnimation(animationsList[self.Context.ComboCount])
-    animationTrack:Play()
-    --*//TODO do a speed adjustment to make animations more responsive, in fact, look into speeding them realtive to combo count
+    self.AnimationTrack = animator:LoadAnimation(animationsList[self.Context.ComboCount])
+    self.AnimationTrack:Play()
     
     
-    animationTrack.Stopped:Wait()
+    self.AnimationTrack.Stopped:Wait()
     self.Context:SwitchState(self.Context.States.Idle)
 end
 
 
 
 function CastingActionOne:Exit()
+    print("exited")
+    self.AnimationTrack:Stop()
     self.Trove:Clean()
     return
 end
