@@ -22,6 +22,7 @@ end
 
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
+
 function Idle:Start()
     --# Poll every frame to see if a valid instance
     --# Entered the detection radius, did it entered?

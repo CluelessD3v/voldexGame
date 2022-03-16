@@ -7,15 +7,18 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 
+--# <|=============== DEPENDENCIES ===============|>
+local MapToInstance = require(ReplicatedStorage:FindFirstChild("MapToInstance", true))
+
 --? <|=============== CONSTRUCTOR ===============|>
 local eventsNamespace = ReplicatedStorage.Events.PlayerInventory
 
-local PlayerInventory = {}
-PlayerInventory.__index = PlayerInventory
+local PlayerInventoryHandler = {}
+PlayerInventoryHandler.__index = PlayerInventoryHandler
 
 
-function PlayerInventory.new()
-    local self = setmetatable({}, PlayerInventory)
+function PlayerInventoryHandler.new()
+    local self = setmetatable({}, PlayerInventoryHandler)
     
     --# Adding Script bindable event for others to listen for
     self.WeaponEquipped = Instance.new("BindableEvent")
@@ -33,21 +36,15 @@ end
 --* Does a simple 1:1 "conversion" from part/mesh part to a tool, the given looted name MUST match the itemTypeData name field
 --* Else the function will not even consider the item
 
-function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, toolEquivalentObject: table)
-    toolEquivalentObject.Attributes       = toolEquivalentObject.Attributes or {}
-    toolEquivalentObject.ToolInstanceTags = toolEquivalentObject.ToolInstanceTags or {}
-
-    if theLootedItem.Name == toolEquivalentObject.Name then
-        local newItem: Tool = toolEquivalentObject.ToolInstance:Clone()
-
-        for attName, attVal in pairs(toolEquivalentObject.Attributes) do
-            newItem:SetAttribute(attName, attVal)
-        end
+function PlayerInventoryHandler:BuildItemIntoBackpack(player: Player, lootedItemData: table)
+    if lootedItemData.ToolItem ~= nil then
+        local newTool: Tool = lootedItemData.ToolItem.Instance:Clone()
+        MapToInstance(newTool, lootedItemData.ToolItem)
         
-        newItem.Parent = player.Backpack
+        newTool.Parent = player.Backpack
         return 
     end
-    warn("The given looted item name does not match any in the given Item list! Failed to build Item")
+    warn("The given LootedItemData table does not have a ToolItem field")
 end
 
 
@@ -69,7 +66,7 @@ end
 
 --* Fires the WeaponEquipped bindable event when a child with the "Weapon" tag is ADDED to the given character
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
-function PlayerInventory:TrackWeaponBeingEquipped(character: Model)
+function PlayerInventoryHandler:TrackWeaponBeingEquipped(character: Model)
     character.ChildAdded:Connect(function(child)
         if CollectionService:HasTag(child, "Weapon") then
             self.WeaponEquipped:Fire(character, child)
@@ -79,7 +76,7 @@ end
 
 --* Fires the WeaponUnEquipped bindable event when a child with the "Weapon" tag is REMOVED from the given character
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
-function PlayerInventory:TrackWeaponBeingUnEquipped(character: Model)
+function PlayerInventoryHandler:TrackWeaponBeingUnEquipped(character: Model)
     character.ChildRemoved:Connect(function(child)
         if CollectionService:HasTag(child, "Weapon") then
             self.WeaponUnEquipped:Fire(character, child)
@@ -89,7 +86,7 @@ end
 
 --* Returns the first child it finds that has the "Weapon" tag
 --* Note that is does not need to be a tool necesarilly, it just needs the "Weapon tag"
-function PlayerInventory:GetCharacterCurrentWeapon(character: Model)
+function PlayerInventoryHandler:GetCharacterCurrentWeapon(character: Model)
     for _, child in ipairs(character:GetChildren()) do
         if CollectionService:HasTag(child, "Weapon") then
             return child
@@ -97,4 +94,4 @@ function PlayerInventory:GetCharacterCurrentWeapon(character: Model)
     end
 end
 
-return PlayerInventory.new()
+return PlayerInventoryHandler.new()
