@@ -91,6 +91,21 @@ function Dragon:TaggedInstanceEnteredAgro()
     end
 end
 
+
+function Dragon:TaggedInstanceEnteredAttackAgro()
+    for _, validTag in ipairs(self.ValidTargetTags) do
+        for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
+            local target: Part = taggedInstance
+
+            if (target:GetPivot().Position - self.Instance.Head).Magnitude <= self.AttackRadius then
+                return true, taggedInstance
+            else
+                return false
+            end
+        end
+    end
+end
+
 --* Switches Dragon concrete states
 function Dragon:SwitchState(newState: table)
     --# Does the Current state object exist? Great
