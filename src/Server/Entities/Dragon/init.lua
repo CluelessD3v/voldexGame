@@ -47,6 +47,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
+    self.AttackRadius    = dragonObject.AttackRadius or 15
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
     self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
@@ -55,6 +56,7 @@ function Dragon.new(instance: Model, dragonObject: table)
         Idle          = require(script.Idle),
         ChasingPlayer = require(script.ChasingPlayer),
         Homing        = require(script.Homing),
+        Attacking     = require(script.Attacking),
     }
 
     self.CurrentState = nil
