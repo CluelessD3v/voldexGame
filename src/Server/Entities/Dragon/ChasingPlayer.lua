@@ -39,9 +39,10 @@ function ChasingPlayer:Start()
             self.Context:SwitchState(self.Context.States.Homing)
         end
 
-
-        if (self.Context.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
-            self.Context:SwitchState(self.Context.States.Attacking)
+        if self.Context.CurrentTarget then
+            if (self.Context.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
+                self.Context:SwitchState(self.Context.States.Attacking)
+            end
         end
         
     end))
