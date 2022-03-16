@@ -13,9 +13,9 @@ local ServerScriptService    = game:GetService("ServerScriptService")
 -- Handlers
 local Handlers = ServerScriptService.Handlers
 
-local hPlayerData: ModuleScript      = require(Handlers.PlayerData)
-local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombat)
-local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
+local hPlayerData: ModuleScript      = require(Handlers.PlayerDataHandler)
+local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombatHandler)
+local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventoryHandler)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -24,8 +24,8 @@ local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs
-local tPlayerDataSchema = require(Configs.PlayerDataSchema)
-local tLootableItems    = require(Configs.LootableItems)
+local tPlayerDataSchema = require(Configs.PlayerDataSchemaConfig)
+local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
