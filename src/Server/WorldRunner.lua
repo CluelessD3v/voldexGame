@@ -5,9 +5,9 @@ local Players             = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
 local Entities = ServerScriptService.Entities
-local eGoldCoin: ModuleScript     = require(Entities.GoldCoin)
-local eDragon: ModuleScript       = require(Entities.Dragon)
-local eLootableItem: ModuleScript = require(Entities.LootableItem)
+local eGoldCoin: ModuleScript     = require(Entities.GoldCoinEntity)
+local eDragon: ModuleScript       = require(Entities.DragonEntity)
+local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs

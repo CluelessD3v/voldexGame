@@ -20,7 +20,7 @@ local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventory)
 -- Entities
 local Entities = ServerScriptService.Entities
 -- local eGoldCoin: ModuleScript     = require(Entities.GoldCoin)
-local eLootableItem: ModuleScript = require(Entities.LootableItem)
+local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs

@@ -19,11 +19,11 @@ local CollectionService = game:GetService("CollectionService")
 local Trove = require(ReplicatedStorage.Packages.trove)
 
 --? <|=============== CONSTRUCTOR ===============|>
-local Dragon = {}
-Dragon.__index = Dragon
+local DragonEntity = {}
+DragonEntity.__index = DragonEntity
 
-function Dragon.new(instance: Model, dragonObject: table)
-    local self = setmetatable({}, Dragon)
+function DragonEntity.new(instance: Model, dragonObject: table)
+    local self = setmetatable({}, DragonEntity)
 
     if not dragonObject then 
         dragonObject = {}
@@ -76,11 +76,11 @@ function Dragon.new(instance: Model, dragonObject: table)
     return self
 end
 
-function Dragon:Start()
+function DragonEntity:Start()
     self:SwitchState(self.States.Idle)
 end
 
-function Dragon:Destroy()
+function DragonEntity:Destroy()
     if self.AnimationTrack then
         self.AnimationTrack:Stop()
     end
@@ -100,7 +100,7 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* Checks if an instance with a valid target tag entered the spawn location detection radius
-function Dragon:TaggedInstanceEnteredAgro()
+function DragonEntity:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
@@ -117,7 +117,7 @@ function Dragon:TaggedInstanceEnteredAgro()
 end
 
 --* Switches Dragon concrete states
-function Dragon:SwitchState(newState: table)
+function DragonEntity:SwitchState(newState: table)
     --# Does the Current state object exist? Great
     --# transition out of said current state, set 
     --# new state as current & start it, else default to idle
@@ -138,4 +138,4 @@ function Dragon:SwitchState(newState: table)
 
 end
 
-return Dragon
+return DragonEntity

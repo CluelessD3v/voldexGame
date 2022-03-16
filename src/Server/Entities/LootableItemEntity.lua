@@ -7,13 +7,13 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 local MapToInstance = require(ReplicatedStorage:FindFirstChild("MapToInstance", true))
 
 --# <|=============== DEPENDENCIES ===============|>
-local LootableItem = {}
-LootableItem.__index = LootableItem
+local LootableItemEntity = {}
+LootableItemEntity.__index = LootableItemEntity
 
 
-function LootableItem.new(data: table)
+function LootableItemEntity.new(data: table)
     print(data.Tags)
-    local self = setmetatable({}, LootableItem)
+    local self = setmetatable({}, LootableItemEntity)
     self.Trove = Trove.new()
 
     self.Instance = data.Instance
@@ -26,7 +26,7 @@ function LootableItem.new(data: table)
     return self
 end
 
-function LootableItem:Start()
+function LootableItemEntity:Start()
     self.ProximityPrompt.Triggered:Connect(function(player)
         self.Instance.Owner.Value = player
         self:Destroy()
@@ -34,9 +34,9 @@ function LootableItem:Start()
 
 end
 
-function LootableItem:Destroy()
+function LootableItemEntity:Destroy()
     self.Trove:Clean()
 end
 
 
-return LootableItem
+return LootableItemEntity

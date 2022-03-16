@@ -8,14 +8,11 @@ local Players           = game:GetService("Players")
 local CollectionService = game:GetService("CollectionService")
 
 --? <|=============== LIFE CYCLE METHODS ===============|>
-local GoldCoin = {
+local GoldCoinEntity = {}
+GoldCoinEntity.__index = GoldCoinEntity
 
-    Tag = "GoldCoin"
-}
-GoldCoin.__index = GoldCoin
-
-function GoldCoin.new(instance: Model)
-    local self = setmetatable({}, GoldCoin)
+function GoldCoinEntity.new(instance: Model)
+    local self = setmetatable({}, GoldCoinEntity)
 
     if instance.PrimaryPart == nil then
         warn("Component construction failed, Instance must have a primary part, or instance is not a model")
@@ -28,7 +25,7 @@ function GoldCoin.new(instance: Model)
     return self
 end
 
-function GoldCoin:Init()
+function GoldCoinEntity:Init()
     print("Init")
     self.RootPart.Touched:Connect(function(theTouchedPart) 
         local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)
@@ -40,7 +37,7 @@ function GoldCoin:Init()
 
 end
 
-function GoldCoin:Destroy()
+function GoldCoinEntity:Destroy()
     print("Destroying")
     self.Instance:Destroy()
 end
@@ -48,4 +45,4 @@ end
 
 
 
-return GoldCoin
+return GoldCoinEntity
