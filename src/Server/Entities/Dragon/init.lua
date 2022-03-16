@@ -5,7 +5,7 @@
     the spawn location instead of the dragon instance itself, this is simply to avoid
     doing 2 distance checking ops(How far from the player, how far from the  spawn)
     
-    DragonEntity type interface:
+    Concrecte Dragon interface:
     - Detection Agro: how far the dragon spawn location can detect a player
     - SpawnLocation: The place the dragon would spawn at
     - ValidTargetTags: Tags the dragon will actively look to determine if he should chase an instance
@@ -22,31 +22,57 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 local Dragon = {}
 Dragon.__index = Dragon
 
-function Dragon.new(instance: Model, config: table)
+function Dragon.new(instance: Model, dragonObject: table)
     local self = setmetatable({}, Dragon)
 
-    if not config then 
-        config = {}
+    if not dragonObject then 
+        dragonObject = {}
         warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
     end
-    self.Trove    = Trove.new()
 
+    self.Trove    = Trove.new()
     self.Instance = instance
+
     self.Trove:Add(self.Instance)
+
+    self.Instance.Humanoid.WalkSpeed = 8
+    self.Instance.Humanoid.BreakJointsOnDeath = false
+    self.Instance.Humanoid.HipHeight = 2.17
+
+    --# DragonEntity class properties
+    self.CurrentTarget  = nil
+    self.AnimationTrack = nil
+
+    --# DragonEntity class events
+    self.StateChanged        = Instance.new("BindableEvent")
+    self.StateChanged.Name   = "StateChanged"
+    self.StateChanged.Parent = self.Instance
+
     
-    --# Type Interface
-    self.DetectionAgro = config.DetectionAgro or 60
-    self.SpawnLocation = config.SpawnLocation or workspace.Baseplate
-    self.ValidTargetTags = config.ValidTargetTags or {"DragonTarget"}
+    --# DragonEntity Class Attributes
+    self.Instance:SetAttribute("CurrentState", "someState")
+    
+    --# Mapping Concrete Dragon Object fields to new entity
+    self.DetectionAgro   = dragonObject.DetectionAgro or 60
+    self.AttackAgro      = dragonObject.AttackAgro or 15
+    self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
+    self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
     --# States
     self.States = {
         Idle          = require(script.Idle),
         ChasingPlayer = require(script.ChasingPlayer),
         Homing        = require(script.Homing),
+        Attacking     = require(script.Attacking),
+        Dead          = require(script.Dead),
     }
 
     self.CurrentState = nil
+
+    self.Instance.Humanoid.Died:Connect(function()
+        self:SwitchState(self.States.Dead)
+    end)
+
     return self
 end
 
@@ -55,22 +81,35 @@ function Dragon:Start()
 end
 
 function Dragon:Destroy()
+    if self.AnimationTrack then
+        self.AnimationTrack:Stop()
+    end
+    
     self.Trove:Clean()
 end
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
-
+local function CheckIfInstanceIsInsideRadius(origin:PVInstance, instance: PVInstance, radius: number)
+    if (origin:GetPivot().Position - instance:GetPivot().Position).Magnitude <= radius then
+        return true
+    else
+        return false
+    end
+end           
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
+
 --* Checks if an instance with a valid target tag entered the spawn location detection radius
 function Dragon:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
-            if (target:GetPivot().Position - self.SpawnLocation.Position).Magnitude <= self.DetectionAgro then
-                return true, taggedInstance
+            if CheckIfInstanceIsInsideRadius(self.SpawnLocation, taggedInstance, self.DetectionAgro) then
+                self.CurrentTarget = target
+                return true
             else
+                self.CurrentTarget = nil
                 return false
             end
         end
@@ -85,8 +124,11 @@ function Dragon:SwitchState(newState: table)
 
     if self.CurrentState then
         self.CurrentState:Exit()
+
         self.CurrentState = newState.new(self)
-        print(self.CurrentState.Name)
+        self.Instance:SetAttribute("CurrentState", self.CurrentState.Name)
+        self.Instance.StateChanged:Fire(self.CurrentState.Name)
+
         self.CurrentState:Start()
         return
     end
