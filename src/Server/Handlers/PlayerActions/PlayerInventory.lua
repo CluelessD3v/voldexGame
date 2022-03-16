@@ -7,6 +7,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 
+--# <|=============== DEPENDENCIES ===============|>
+local MapToInstance = require(ReplicatedStorage:FindFirstChild("MapToInstance", true))
 --? <|=============== CONSTRUCTOR ===============|>
 local eventsNamespace = ReplicatedStorage.Events.PlayerInventory
 
@@ -33,20 +35,8 @@ end
 --* Does a simple 1:1 "conversion" from part/mesh part to a tool, the given looted name MUST match the itemTypeData name field
 --* Else the function will not even consider the item
 
-function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, toolEquivalentObject: table)
-    toolEquivalentObject.Attributes       = toolEquivalentObject.Attributes or {}
-    toolEquivalentObject.ToolInstanceTags = toolEquivalentObject.ToolInstanceTags or {}
-
-    if theLootedItem.Name == toolEquivalentObject.Name then
-        local newItem: Tool = toolEquivalentObject.ToolInstance:Clone()
-
-        for attName, attVal in pairs(toolEquivalentObject.Attributes) do
-            newItem:SetAttribute(attName, attVal)
-        end
-        
-        newItem.Parent = player.Backpack
-        return 
-    end
+function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, lootedItemData: table)
+    print(lootedItemData)
     warn("The given looted item name does not match any in the given Item list! Failed to build Item")
 end
 
