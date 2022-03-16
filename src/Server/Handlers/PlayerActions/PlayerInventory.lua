@@ -9,6 +9,7 @@ local CollectionService = game:GetService("CollectionService")
 
 --# <|=============== DEPENDENCIES ===============|>
 local MapToInstance = require(ReplicatedStorage:FindFirstChild("MapToInstance", true))
+
 --? <|=============== CONSTRUCTOR ===============|>
 local eventsNamespace = ReplicatedStorage.Events.PlayerInventory
 
@@ -36,8 +37,14 @@ end
 --* Else the function will not even consider the item
 
 function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, lootedItemData: table)
-    print(lootedItemData)
-    warn("The given looted item name does not match any in the given Item list! Failed to build Item")
+    if lootedItemData.ToolItem ~= nil then
+        local newTool: Tool = lootedItemData.ToolItem.Instance:Clone()
+        MapToInstance(newTool, lootedItemData.ToolItem)
+        
+        newTool.Parent = player.Backpack
+        return 
+    end
+    warn("The given LootedItemData table does not have a ToolItem field")
 end
 
 
