@@ -31,11 +31,16 @@ local tLootableItems    = require(Configs.LootableItems)
 
 ---* Aux function to see if the given LootableItem belongs to the given lootableItemsList
 ---* Check documentation for LootableItem Entity interface info 
+local function GetLootableItemData(lootableItem, lootableItemsList)
+    
+    for itemType, itemsTypeTable in pairs(lootableItemsList) do
+        if CollectionService:HasTag(lootableItem, itemType) then
 
-local function GetItemDataForGivenLootableItemFromList(lootableItem, lootableItemsList)
-    for typeOfItemKey, itemData in pairs(lootableItemsList) do
-        if CollectionService:HasTag(lootableItem, typeOfItemKey) then
-            return itemData
+            for itemName, itemData in pairs(itemsTypeTable) do
+                if lootableItem.Name == itemName then
+                    return itemData
+                end
+            end
         end
     end
     warn("Given Lootable Item does not has a tag that matches given Lootables table key")
@@ -57,7 +62,7 @@ end
 --# If the OwnerValue does not exist build a new LootableEntity
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    local itemDataTable = GetItemDataForGivenLootableItemFromList(lootableItem, tLootableItems)
+    local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
     local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     if OwnerValue then
@@ -72,7 +77,7 @@ CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootab
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    local itemDataTable = GetItemDataForGivenLootableItemFromList(lootableItem, tLootableItems)
+    local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
     local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     if OwnerValue then
