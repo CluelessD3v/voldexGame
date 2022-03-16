@@ -97,7 +97,7 @@ function Dragon:TaggedInstanceEnteredAttackAgro()
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
-            if (target:GetPivot().Position - self.Instance.Head).Magnitude <= self.AttackAgro then
+            if (target:GetPivot().Position - self.Instance.Head.Position).Magnitude <= self.AttackAgro then
                 return true, taggedInstance
             else
                 return false

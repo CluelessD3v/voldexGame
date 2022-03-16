@@ -14,7 +14,7 @@ function Attacking.new(context: table)
 end
 
 function Attacking:Start()
-
+    print("entered attack")
 end
 
 function Attacking:Exit()

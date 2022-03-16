@@ -33,12 +33,20 @@ function ChasingPlayer:Start()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         local didEnterDetectionAgro, taggedInstance =  self.Context:TaggedInstanceEnteredAgro()
-        
+        local didEnterAtkAgro = self.Context:TaggedInstanceEnteredAttackAgro()
+
+
         if didEnterDetectionAgro then
             dragonHumanoid:MoveTo(taggedInstance:GetPivot().Position)
         else
             self.Context:SwitchState(self.Context.States.Homing)
         end
+
+
+        if didEnterAtkAgro then
+            self.Context:SwitchState(self.Context.States.Attacking)
+        end
+
         
         
     end))
