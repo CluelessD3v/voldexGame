@@ -28,7 +28,7 @@ end
 
 function LootableItem:Start()
     self.ProximityPrompt.Triggered:Connect(function(player)
-        self.OwnerValue.Value = player
+        self.Instance.Owner.Value = player
         self:Destroy()
     end)
 
