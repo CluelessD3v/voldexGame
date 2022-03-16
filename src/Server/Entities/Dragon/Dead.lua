@@ -1,3 +1,7 @@
+--# <|=============== SERVICES ===============|>
+local TweenService = game:GetService("TweenService")
+
+--? <|=============== CONSTRUCTOR ===============|>
 local Dead = {}
 Dead.__index = Dead
 
@@ -16,6 +20,18 @@ function Dead:Start()
     for _, child in ipairs(self.Context.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
             child.Anchored = true
+
+            local tweenInfo = TweenInfo.new(
+                3,
+                Enum.EasingStyle.Sine,
+                Enum.EasingDirection.Out,
+                0,
+                false,
+                2
+            )
+
+            local transparencyTween = TweenService:Create(child, tweenInfo, {Transparency = 1})
+            transparencyTween:Play()
         end
     end
 
