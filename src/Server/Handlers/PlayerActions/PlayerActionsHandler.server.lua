@@ -63,7 +63,7 @@ CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootab
     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     
     ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable)
+        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
     end)    
 end)
 
@@ -75,7 +75,7 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     
     ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable)
+        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
     end)    
 end
 

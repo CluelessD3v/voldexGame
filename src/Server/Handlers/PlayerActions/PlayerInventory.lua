@@ -36,7 +36,7 @@ end
 --* Does a simple 1:1 "conversion" from part/mesh part to a tool, the given looted name MUST match the itemTypeData name field
 --* Else the function will not even consider the item
 
-function PlayerInventory:BuildItemIntoBackpack(player: Player, theLootedItem: Part | MeshPart, lootedItemData: table)
+function PlayerInventory:BuildItemIntoBackpack(player: Player, lootedItemData: table)
     if lootedItemData.ToolItem ~= nil then
         local newTool: Tool = lootedItemData.ToolItem.Instance:Clone()
         MapToInstance(newTool, lootedItemData.ToolItem)
