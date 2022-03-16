@@ -49,7 +49,7 @@ function Homing:Start()
             dragonHumanoid:MoveTo(self.Context.SpawnLocation.Position, self.Context.SpawnLocation)
 
             self.Trove:Add(dragonHumanoid.MoveToFinished:Connect(function(reachedSpawn)
-                if reachedSpawn then
+                if reachedSpawn or not reachedSpawn then
                     self.Context:SwitchState(self.Context.States.Idle)
                 end
             end))

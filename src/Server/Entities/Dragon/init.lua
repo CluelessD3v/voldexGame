@@ -35,11 +35,16 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.Trove:Add(self.Instance)
 
     self.StateChanged = Instance.new("BindableEvent")
+    self.StateChanged.Name = "StateChanged"
+    self.StateChanged.Parent = self.Instance
+
     self.Instance.Humanoid.WalkSpeed = 8
     
     --# DragonEntity Attributes
-    self.Instance:SetAttribute("CurrentState", "None")
-
+    self.Instance:SetAttribute("CurrentState", "someState")
+    print(self.Instance:GetAttributes())
+    print(self.Instance)
+    
     --# Concrete Dragon Entity Object
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
@@ -92,8 +97,11 @@ function Dragon:SwitchState(newState: table)
 
     if self.CurrentState then
         self.CurrentState:Exit()
+
         self.CurrentState = newState.new(self)
-        print(self.CurrentState.Name)
+        self.Instance:SetAttribute("CurrentState", self.CurrentState.Name)
+        self.Instance.StateChanged:Fire(self.CurrentState.Name)
+
         self.CurrentState:Start()
         return
     end
