@@ -83,9 +83,11 @@ function Dragon:TaggedInstanceEnteredAgro()
             local target: Part = taggedInstance
 
             if (target:GetPivot().Position - self.SpawnLocation.Position).Magnitude <= self.DetectionAgro then
-                return true, taggedInstance
+                self.CurrentTarget = target
+                return target
             else
-                return false
+                self.CurrentTarget = nil
+                return nil
             end
         end
     end
