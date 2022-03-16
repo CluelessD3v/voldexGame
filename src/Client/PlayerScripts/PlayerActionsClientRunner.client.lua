@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --# <|=============== DEPENDENCIES ===============|>
 -- Controllers
 local Controllers  = ReplicatedStorage.Controllers
-local cPlayerCombat = require(Controllers:FindFirstChild("PlayerCombat", true))
+local cPlayerCombat = require(Controllers:FindFirstChild("PlayerCombatController", true))
 
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")

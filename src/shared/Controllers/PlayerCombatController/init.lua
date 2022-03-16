@@ -21,12 +21,12 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 --? <|=============== CONSTRUCTOR ===============|>
 local eventsNameSpace   = ReplicatedStorage.Events.PlayerCombat 
 
-local PlayerCombatClient = {}
-PlayerCombatClient.__index = PlayerCombatClient
+local PlayerCombatController = {}
+PlayerCombatController.__index = PlayerCombatController
 
 
-function PlayerCombatClient.new()
-    local self = setmetatable({}, PlayerCombatClient)
+function PlayerCombatController.new()
+    local self = setmetatable({}, PlayerCombatController)
     
     self.EquippedWeapon = nil
     self.Trove = Trove.new()
@@ -56,20 +56,20 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
-function PlayerCombatClient:Start(equippedWeapon)
+function PlayerCombatController:Start(equippedWeapon)
     self.EquippedWeapon = equippedWeapon
     self:SwitchState(self.States.Idle)
 end
 
 --* Exits from the combat system
-function PlayerCombatClient:Exit()
+function PlayerCombatController:Exit()
     self.CurrentState:Exit()
     self.Trove:Clean()
 end
 
 --* Context Interface function that allows Required Concrete states to transition Between each other 
 
-function PlayerCombatClient:SwitchState(newState: ModuleScript)
+function PlayerCombatController:SwitchState(newState: ModuleScript)
     --# Does the Current state object exist? Great
     --# transition out of said current state, set 
     --# new state as current & start it, else default to idle
@@ -87,4 +87,4 @@ function PlayerCombatClient:SwitchState(newState: ModuleScript)
 end
 
 
-return PlayerCombatClient.new()
+return PlayerCombatController.new()
