@@ -34,16 +34,20 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.Instance = instance
     self.Trove:Add(self.Instance)
 
+    self.Instance.Humanoid.WalkSpeed = 8
+
+    --# DragonEntity class properties
+    self.CurrentTarget   = nil
+
+    --# DragonEntity class events
     self.StateChanged = Instance.new("BindableEvent")
     self.StateChanged.Name = "StateChanged"
     self.StateChanged.Parent = self.Instance
-    self.CurrentTarget   = nil
 
-    self.Instance.Humanoid.WalkSpeed = 8
     
-    --# DragonEntity Attributes
+    --# DragonEntity Class Attributes
     self.Instance:SetAttribute("CurrentState", "someState")
-
+    self.Health:SetAttribute("Health", 100)
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60

@@ -43,8 +43,6 @@ function ChasingPlayer:Start()
         if self.Context:TaggedInstanceEnteredAttackAgro() then
             self.Context:SwitchState(self.Context.States.Attacking)
         end
-
-        
         
     end))
 end
