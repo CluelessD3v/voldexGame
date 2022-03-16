@@ -4,6 +4,12 @@ return {
             DisplayItem = {
                 Name       = "ClassicSword",
                 Instance   = workspace.ClassicSword,
+                Attributes = {
+                    Damage = 25
+                },
+                ObjectValue = {
+                    Owner = Instance.new("ObjectValue")
+                }
             },
 
             ToolItem = {
