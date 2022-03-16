@@ -11,30 +11,18 @@ local LootableItem = {}
 LootableItem.__index = LootableItem
 
 
-function LootableItem.new(instance: MeshPart | Part, config: table)
-    print(config.Tags)
+function LootableItem.new(data: table)
+    print(data.Tags)
     local self = setmetatable({}, LootableItem)
     self.Trove = Trove.new()
 
-    self.Instance = instance
+    self.Instance = data.Instance
+    self.Trove:Add(self.Instance)
 
     self.ProximityPrompt        = Instance.new("ProximityPrompt")
     self.ProximityPrompt.Parent = self.Instance
 
-    self.Trove:Add(self.Instance)
-
-    self.OwnerValue        = Instance.new("ObjectValue")
-    self.OwnerValue.Name   = "Owner"
-    self.OwnerValue.Parent = self.Instance
-
-    for attName, attVal in pairs(config.Attributes) do
-        self.Instance:SetAttribute(attName, attVal)
-    end
-
-    for _, tag in pairs(config.LootableInstanceTags) do
-        CollectionService:AddTag(self.Instance, tag)
-    end
-
+    MapToInstance(self.Instance, data)
     return self
 end
 

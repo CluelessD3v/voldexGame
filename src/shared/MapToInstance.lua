@@ -36,9 +36,11 @@ return function (anInstance: PVInstance, aFieldMap: table)
         CollectionService:AddTag(anInstance, tag)
     end
 
-    for name, objectValue in pairs(objectValues) do
-        objectValue.Name = name
-        objectValue.Parent = Instance
+    for _, objectValue in pairs(objectValues) do
+        local newObjectValue = Instance.new(objectValue.Type)
+        newObjectValue.Name = objectValue.Name
+        newObjectValue.Value = objectValue.Value
+        newObjectValue.Parent = Instance
     end
 
     return anInstance
