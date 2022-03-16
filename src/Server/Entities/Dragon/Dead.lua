@@ -31,7 +31,7 @@ function Dead:Start()
             local transparencyTween: Tween = TweenService:Create(child, tweenInfo, {Transparency = 1})
             transparencyTween:Play()
             
-            task.delay(5, function()
+            task.delay(3, function()
                 self.Context:Destroy()
             end)
         end
