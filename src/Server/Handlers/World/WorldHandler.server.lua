@@ -88,20 +88,25 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
     newDragon:Start()
     local animator: Animator = newDragon.Instance.Humanoid.Animator
-	local animationTrack: AnimationTrack = animator:LoadAnimation(animations.Idle)
+	newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
 	
 	newDragon.StateChanged.Event:Connect(function(newState)
 		print(newState)
 		
 		if newState == "Homing" or newState == "ChasingPlayer"then
-			animationTrack:Stop()
-            animationTrack = animator:LoadAnimation(animations.Walk)
-            animationTrack:Play()
+			newDragon.AnimationTrack:Stop()
+            newDragon.AnimationTrack = animator:LoadAnimation(animations.Walk)
+            newDragon.AnimationTrack:Play()
             
 		elseif newState == "Idle" then
-			animationTrack:Stop()
-			animationTrack = animator:LoadAnimation(animations.Idle)
-			animationTrack:Play()
+			newDragon.AnimationTrack:Stop()
+			newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
+			newDragon.AnimationTrack:Play()
+
+        elseif newState == "Dead" then
+            newDragon.AnimationTrack:Stop()
+            newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
+            newDragon.AnimationTrack:Play()
         end
 
     end)
