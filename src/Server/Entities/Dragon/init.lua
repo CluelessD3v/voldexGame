@@ -5,7 +5,7 @@
     the spawn location instead of the dragon instance itself, this is simply to avoid
     doing 2 distance checking ops(How far from the player, how far from the  spawn)
     
-    DragonEntity type interface:
+    Concrecte Dragon interface:
     - Detection Agro: how far the dragon spawn location can detect a player
     - SpawnLocation: The place the dragon would spawn at
     - ValidTargetTags: Tags the dragon will actively look to determine if he should chase an instance
@@ -45,7 +45,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     print(self.Instance:GetAttributes())
     print(self.Instance)
     
-    --# Concrete Dragon Entity Object
+    --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
     self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
