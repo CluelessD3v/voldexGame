@@ -19,8 +19,9 @@ end
 function Dead:Start()
     for _, child in ipairs(self.Context.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
-            child.Anchored = true
-
+            child.Anchored   = true
+            child.CanCollide = false
+            
             local tweenInfo = TweenInfo.new(
                 3,
                 Enum.EasingStyle.Sine,
