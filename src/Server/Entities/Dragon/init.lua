@@ -78,7 +78,13 @@ function Dragon:Destroy()
 end
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
-
+local function CheckIfInstanceIsInsideRadius(origin:PVInstance, instance: PVInstance, radius: number)
+    if (instance:GetPivot().Position - instance:GetPivot().Position).Magnitude <= radius then
+        return true
+    else
+        return false
+    end
+end           
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
