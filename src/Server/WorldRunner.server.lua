@@ -117,11 +117,21 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
         end
 
     end)
+    task.wait(1)
+    dragon.Humanoid.Health = 0
 end
 
---# <|=============== LISTENING FOR LOOTCONTAINER ENTITIES ===============|>
-CollectionService:GetInstanceRemovedSignal("LootContainer"):Connect(function(instance)
-    print(instance, "Was destroyed")
+--# <|=============== LOOT CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
+    lootContainer.Destroying:Connect(function()
+        print(lootContainer, "Was destroyed")
+    end)
+end
+
+CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
+    lootContainer.Destroying:Connect(function()
+        print(lootContainer, "Was destroyed")
+    end)
 end)
 
 --# <|=============== PLAYER HANDLING ===============|>
