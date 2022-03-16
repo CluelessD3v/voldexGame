@@ -14,11 +14,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --? <|=============== CONSTRUCTOR ===============|>
 local EventsNameSpace: Folder = ReplicatedStorage.Events.PlayerCombat
 
-local PlayerCombat = {}
-PlayerCombat.__index = PlayerCombat
+local PlayerCombatHandler = {}
+PlayerCombatHandler.__index = PlayerCombatHandler
 
-function PlayerCombat.new()
-    local self = setmetatable({}, PlayerCombat)
+function PlayerCombatHandler.new()
+    local self = setmetatable({}, PlayerCombatHandler)
 
     --# Adding remote events to namespace in Replicated Storage
     self.StartCombatMode        = Instance.new("RemoteEvent")
@@ -43,4 +43,4 @@ end
 
 
 
-return PlayerCombat.new()
+return PlayerCombatHandler.new()
