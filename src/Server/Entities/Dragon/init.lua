@@ -42,8 +42,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     
     --# DragonEntity Attributes
     self.Instance:SetAttribute("CurrentState", "someState")
-    print(self.Instance:GetAttributes())
-    print(self.Instance)
+
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
