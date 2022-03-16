@@ -17,14 +17,34 @@ local tLootableItems    = require(Configs.LootableItems)
 
 --* Aux function to construct new LootableItem Entities from a list
 local function ConstructLootableItemEntityFromList(lootableItem, lootableItemsList)
-    for type, itemData in pairs(lootableItemsList) do
-        if CollectionService:HasTag(lootableItem, type) then
-            local newLootableItem =  eLootableItem.new(lootableItem, itemData[lootableItem.Name])
-            newLootableItem:Start()
+    for itemType, itemsTypeTable in pairs(lootableItemsList) do
+        if CollectionService:HasTag(lootableItem, itemType) then
+            for itemName, itemData in pairs(itemsTypeTable) do
+                if lootableItem.Name == itemName then
+                    print(itemData)
+                    return itemData
+                end
+            end
         end
     end
 end
 
+local function GetLootableItemData(lootableItem, lootableItemsList)
+    for itemType, itemsTypeTable in pairs(lootableItemsList) do
+        if CollectionService:HasTag(lootableItem, itemType) then
+
+            for itemName, itemData in pairs(itemsTypeTable) do
+                if lootableItem.Name == itemName then
+                    print(itemData)
+                    return itemData
+                end
+            end
+        end
+    end
+
+    warn("Given Lootable Item does not has a tag that matches given Lootables table key")
+    return nil
+end
 
 --# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
 
@@ -40,7 +60,7 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
 end
 
---+ <|=============== LEVEL CONSTRUCTION ===============|>
+--# <|=============== LEVEL CONSTRUCTION ===============|>
 local function BuildLair()
     local Lair: Model    = workspace.Lair:Clone()
 
