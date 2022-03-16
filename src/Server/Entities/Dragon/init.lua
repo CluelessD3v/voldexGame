@@ -36,6 +36,8 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.Trove:Add(self.Instance)
 
     self.Instance.Humanoid.WalkSpeed = 8
+    self.Instance.Humanoid.BreakJointsOnDeath = false
+    self.Instance.Humanoid.HipHeight = 2.17
 
     --# DragonEntity class properties
     self.CurrentTarget   = nil
