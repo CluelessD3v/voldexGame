@@ -73,9 +73,6 @@ function Dragon.new(instance: Model, dragonObject: table)
         self:SwitchState(self.States.Dead)
     end)
 
-    -- task.wait(3)
-    -- self.Instance.Humanoid.Health = 0
-
     return self
 end
 

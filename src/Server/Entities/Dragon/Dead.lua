@@ -19,14 +19,13 @@ end
 function Dead:Start()
     for _, child in ipairs(self.Context.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
-            
             local tweenInfo = TweenInfo.new(
-                3,
+                1.5,
                 Enum.EasingStyle.Sine,
                 Enum.EasingDirection.Out,
                 0,
                 false,
-                2
+                0 
             )
 
             local transparencyTween: Tween = TweenService:Create(child, tweenInfo, {Transparency = 1})
