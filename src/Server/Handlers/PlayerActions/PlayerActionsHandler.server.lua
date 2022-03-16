@@ -29,10 +29,11 @@ local tLootableItems    = require(Configs.LootableItems)
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
----* Aux function to see if the given LootableItem belongs to the given lootableItemsList
----* Check documentation for LootableItem Entity interface info 
+--* Aux function for lootable item data handling. Checks if the given item has an "item category" tag, 
+--* if true then it will return the first value it finds that matches the given lootableItem name.
+--* (a FindFirstChild operation, basically)
+
 local function GetLootableItemData(lootableItem, lootableItemsList)
-    
     for itemType, itemsTypeTable in pairs(lootableItemsList) do
         if CollectionService:HasTag(lootableItem, itemType) then
 
@@ -43,6 +44,7 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
             end
         end
     end
+
     warn("Given Lootable Item does not has a tag that matches given Lootables table key")
     return nil
 end
