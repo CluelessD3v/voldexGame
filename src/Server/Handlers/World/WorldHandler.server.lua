@@ -16,23 +16,9 @@ local tLootableItems    = require(Configs.LootableItems)
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
 --* Aux function to construct new LootableItem Entities from a list
-local function ConstructLootableItemEntityFromList(lootableItem, lootableItemsList)
-    for itemType, itemsTypeTable in pairs(lootableItemsList) do
-        if CollectionService:HasTag(lootableItem, itemType) then
-            for itemName, itemData in pairs(itemsTypeTable) do
-                if lootableItem.Name == itemName then
-                    print(itemData)
-                    return itemData
-                end
-            end
-        end
-    end
-end
-
 local function GetLootableItemData(lootableItem, lootableItemsList)
-    for itemType, itemsTypeTable in pairs(lootableItemsList) do
-        if CollectionService:HasTag(lootableItem, itemType) then
-
+    for itemTypeName, itemsTypeTable in pairs(lootableItemsList) do
+        if CollectionService:HasTag(lootableItem, itemTypeName) then
             for itemName, itemData in pairs(itemsTypeTable) do
                 if lootableItem.Name == itemName then
                     print(itemData)
@@ -41,9 +27,6 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
             end
         end
     end
-
-    warn("Given Lootable Item does not has a tag that matches given Lootables table key")
-    return nil
 end
 
 --# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
@@ -53,11 +36,15 @@ end
 --# new LootableItems Entities
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
+    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local newLootableItem = eLootableItem.new(lootableItemData.DisplayItem)
+    newLootableItem:Start()
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    ConstructLootableItemEntityFromList(lootableItem, tLootableItems)
+    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local newLootableItem = eLootableItem.new(lootableItemData.DisplayItem)
+    newLootableItem:Start()
 end
 
 --# <|=============== LEVEL CONSTRUCTION ===============|>
