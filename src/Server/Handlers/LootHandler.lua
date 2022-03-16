@@ -19,7 +19,7 @@ local function CalculateMaxWeight(aTable)
 end
 
 
-
+--+ <|=============== PUBLIC FUNCTIONS ===============|>
 function LootHandler:GetItemByWeight(itemList)
     -- Choose a random number between 0 and the max weight
     local MaxWeight = CalculateMaxWeight(itemList)

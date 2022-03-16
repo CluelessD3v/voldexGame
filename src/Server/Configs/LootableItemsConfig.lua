@@ -12,7 +12,9 @@ return {
                         Type = "ObjectValue",
                         
                     }
-                }
+                },
+
+                Weight = 100
             },
 
             ToolItem = {
