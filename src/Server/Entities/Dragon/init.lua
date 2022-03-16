@@ -72,7 +72,6 @@ function Dragon.new(instance: Model, dragonObject: table)
         self:SwitchState(self.States.Dead)
     end)
 
-
     return self
 end
 
