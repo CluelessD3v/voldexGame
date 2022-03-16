@@ -88,6 +88,11 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
     newDragon:Start()
 
+
+    dragon.StateChanged.Event:Connect(function(newState)
+        print(newState)
+    end)
+
 end
 
 
