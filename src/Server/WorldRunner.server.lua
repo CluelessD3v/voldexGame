@@ -11,7 +11,7 @@ local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs
-local tLootableItems    = require(Configs.LootableItems)
+local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
