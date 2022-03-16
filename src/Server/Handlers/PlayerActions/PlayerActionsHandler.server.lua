@@ -49,12 +49,6 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
     return nil
 end
 
-local function CallBuiltItemIntoBackpack(ownerValue, lootableItem, itemDataTable)
-    ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
-    end)
-end
-
 --+ <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
 --# Listen for new LootableItems being tagged &
@@ -66,29 +60,21 @@ end
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
-    local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-    if OwnerValue then
-        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
-        return
-    else
-        local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
-        newLootableItem:Start()
-        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
-        return
-    end
+    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+    
+    ownerValue.Changed:Connect(function(player: Player)
+        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
+    end)    
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
-    local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-    if OwnerValue then
-        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
-    else
-        local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
-        newLootableItem:Start()
-        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
-    end
+    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+    
+    ownerValue.Changed:Connect(function(player: Player)
+        hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
+    end)    
 end
 
 --+ <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
