@@ -39,9 +39,8 @@ function Homing:Start()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
-        local didEnter =  self.Context:TaggedInstanceEnteredAgro()
 
-        if didEnter then
+        if self.Context:TaggedInstanceEnteredAgro() then
             self.Context:SwitchState(self.Context.States.ChasingPlayer)
         
         else
