@@ -30,8 +30,8 @@ local tLootableItems    = require(Configs.LootableItems)
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 
 --* Aux function for lootable item data handling. Checks if the given item has an "item category" tag, 
---* if true then it will return the first value it finds that matches the given lootableItem name.
---* (a FindFirstChild operation, basically)
+--* if true then it will return the first value it finds that matches the given lootableItem name
+--* (basically, if it has the item type tag, FindFirstKey)
 
 local function GetLootableItemData(lootableItem, lootableItemsList)
     for itemType, itemsTypeTable in pairs(lootableItemsList) do
@@ -49,7 +49,7 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
     return nil
 end
 
-local function CallBuildItemIntoPlayerBackpackOnOwnerSet(ownerValue, lootableItem, itemDataTable)
+local function CallBuiltItemIntoBackpack(ownerValue, lootableItem, itemDataTable)
     ownerValue.Changed:Connect(function(player: Player)
         hPlayerInventory:BuildItemIntoBackpack(player, lootableItem, itemDataTable[lootableItem.Name])
     end)
@@ -68,12 +68,12 @@ CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootab
     
     local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     if OwnerValue then
-        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
         return
     else
         local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
         newLootableItem:Start()
-        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
         return
     end
 end)
@@ -83,11 +83,11 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     
     local OwnerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     if OwnerValue then
-        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
     else
         local newLootableItem =  eLootableItem.new(lootableItem, itemDataTable[lootableItem.Name])
         newLootableItem:Start()
-        CallBuildItemIntoPlayerBackpackOnOwnerSet(OwnerValue, lootableItem, itemDataTable)
+        CallBuiltItemIntoBackpack(OwnerValue, lootableItem, itemDataTable)
     end
 end
 
