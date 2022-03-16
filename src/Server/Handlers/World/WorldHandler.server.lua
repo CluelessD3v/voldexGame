@@ -26,7 +26,7 @@ local function ConstructLootableItemEntityFromList(lootableItem, lootableItemsLi
 end
 
 
---+ <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
+--# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
 
 --# Listen for new LootableItem tagged instances being
 --# spawned & check for already existing ones to create
@@ -81,7 +81,7 @@ Lair2:PivotTo(l2TargetCF)
 Lair2.Parent = workspace
 
 
---+ <|=============== DRAGON MOBS Handling ===============|>
+--# <|=============== DRAGON MOBS Handling ===============|>
 
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local animations = dragon.Animations
@@ -117,7 +117,7 @@ CollectionService:GetInstanceRemovedSignal("LootContainer"):Connect(function(ins
     print(instance, "Was destroyed")
 end)
 
---+ <|=============== PLAYER HANDLING ===============|>
+--# <|=============== PLAYER HANDLING ===============|>
 --# Each time the player dies he will be sent to the lobby.
 Players.PlayerAdded:Connect(function(player)
     -- player.RespawnLocation = workspace.Lobby.SpawnLocation
