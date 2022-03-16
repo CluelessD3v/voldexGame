@@ -84,6 +84,10 @@ function Dragon:Start()
 end
 
 function Dragon:Destroy()
+    if self.AnimationTrack then
+        self.AnimationTrack:Stop()
+    end
+    
     self.Trove:Clean()
 end
 
