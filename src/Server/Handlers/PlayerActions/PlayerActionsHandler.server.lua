@@ -51,11 +51,9 @@ end
 
 --+ <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
---# Listen for new LootableItems being tagged &
---# Check for already existing ones, for each of them
---# listen for their Owner ObjectValue value property
---# Changing so the Item can be built into the backpack
---# If the OwnerValue does not exist build a new LootableEntity
+--# Listen for LootableItems Owner ObjectValue changing, if it exist.
+--#  if it changes Get LootableItem data from config and call
+--#  PlayerInventory handler BuildItemIntoBackpack
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
