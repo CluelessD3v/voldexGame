@@ -36,11 +36,11 @@ return function (anInstance: PVInstance, aFieldMap: table)
         CollectionService:AddTag(anInstance, tag)
     end
 
-    for _, objectValue in pairs(objectValues) do
-        local newObjectValue = Instance.new(objectValue.Type)
-        newObjectValue.Name = objectValue.Name
-        newObjectValue.Value = objectValue.Value
-        newObjectValue.Parent = Instance
+    for key, objectValue in pairs(objectValues) do
+        local newObjectValue        = Instance.new(objectValue.Type) or error("Object value must have a type field!")
+              newObjectValue.Name   = objectValue.Name or key
+              newObjectValue.Value  = objectValue.Value or nil
+              newObjectValue.Parent = Instance or error("Object value must have a parent field!")
     end
 
     return anInstance
