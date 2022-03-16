@@ -19,8 +19,6 @@ end
 function Dead:Start()
     for _, child in ipairs(self.Context.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
-            child.Anchored   = true
-            child.CanCollide = false
             
             local tweenInfo = TweenInfo.new(
                 3,
@@ -33,8 +31,10 @@ function Dead:Start()
 
             local transparencyTween: Tween = TweenService:Create(child, tweenInfo, {Transparency = 1})
             transparencyTween:Play()
-            transparencyTween.Completed:Wait()
-            self.Context:Destroy()
+            
+            task.delay(5, function()
+                self.Context:Destroy()
+            end)
         end
     end
 
