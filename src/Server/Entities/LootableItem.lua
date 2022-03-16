@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
 local Trove = require(ReplicatedStorage.Packages.trove)
+local MapToInstance = require(ReplicatedStorage:FindFirstChild("MapToInstance", true))
 
 --# <|=============== DEPENDENCIES ===============|>
 local LootableItem = {}
