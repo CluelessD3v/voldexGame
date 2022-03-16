@@ -37,6 +37,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.StateChanged = Instance.new("BindableEvent")
     self.StateChanged.Name = "StateChanged"
     self.StateChanged.Parent = self.Instance
+    self.CurrentTarget   = nil
 
     self.Instance.Humanoid.WalkSpeed = 8
     
@@ -46,7 +47,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
-    self.AttackAgro    = dragonObject.AttackAgro or 15
+    self.AttackAgro      = dragonObject.AttackAgro or 15
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
     self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
@@ -97,9 +98,11 @@ function Dragon:TaggedInstanceEnteredAttackAgro()
             local target: Part = taggedInstance
 
             if (target:GetPivot().Position - self.Instance.Head.Position).Magnitude <= self.AttackAgro then
-                return true, taggedInstance
+                self.CurrentTarget = target
+                return target
             else
-                return false
+                self.CurrentTarget = nil
+                return nil
             end
         end
     end
