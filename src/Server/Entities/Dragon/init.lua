@@ -29,9 +29,10 @@ function Dragon.new(instance: Model, dragonObject: table)
         dragonObject = {}
         warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
     end
-    self.Trove    = Trove.new()
 
+    self.Trove    = Trove.new()
     self.Instance = instance
+
     self.Trove:Add(self.Instance)
 
     self.Instance.Humanoid.WalkSpeed = 8
@@ -40,9 +41,13 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.CurrentTarget   = nil
 
     --# DragonEntity class events
-    self.StateChanged = Instance.new("BindableEvent")
-    self.StateChanged.Name = "StateChanged"
+    self.StateChanged        = Instance.new("BindableEvent")
+    self.StateChanged.Name   = "StateChanged"
     self.StateChanged.Parent = self.Instance
+
+    self.Died                = Instance.new("BindableEvent")
+    self.Died.Name           = "Died"
+    self.Died.Parent         = self.Instance
 
     
     --# DragonEntity Class Attributes
