@@ -143,10 +143,15 @@ end
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
+        local lastCF: CFrame = lootContainer:GetPivot()
         print(lootContainer, "Was destroyed")
         
-        local o = hLootHandler:GetItemByWeight(localLootableItemsDict)
-        print(o.DisplayItem)
+        local selectedItem = hLootHandler:GetItemByWeight(localLootableItemsDict)
+        local newDisplayItem = selectedItem.DisplayItem.Instance:Clone()
+        CollectionService:AddTag(newDisplayItem, "LootableItem")
+        
+        newDisplayItem.Position = lastCF.Position
+        newDisplayItem.Parent = workspace
     end)
 end
 
