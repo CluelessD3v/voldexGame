@@ -52,7 +52,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     
     --# DragonEntity Class Attributes
     self.Instance:SetAttribute("CurrentState", "someState")
-    self.Health:SetAttribute("Health", 100)
+    self.Instance:SetAttribute("Health", 100)
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
@@ -69,6 +69,13 @@ function Dragon.new(instance: Model, dragonObject: table)
     }
 
     self.CurrentState = nil
+
+
+    self.Instance:GetAttributeChangedSignal("Health"):Connect(function(v)
+        print("changed to", v)
+    end)
+
+    self.Instance:SetAttribute("Health", 99)
     return self
 end
 
