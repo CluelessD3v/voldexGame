@@ -127,24 +127,25 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
 end
 
 --# <|=============== LOOT CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+--# Caching all concrete LootableItems configs into a single table,
+--# This is so we only have to get all our configs once, so every time
+--# A lootableItem needs to be spawned, it fetches from this flat dictionary instead.
+
+local localLootableItemsDict = {}
+
+for _, objectTypeList in pairs(tLootableItems) do
+    for objectName, typeObject in pairs(objectTypeList) do
+        localLootableItemsDict[objectName] = typeObject
+    end
+end
+
+
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
         print(lootContainer, "Was destroyed")
         
-        -- Just creat a new table, loop through tab loop though the v of tab. Use table.insert(newTab, v2)
-
-        local lootableItems = {}
-
-        -- loop through the types
-        print(tLootableItems)
-        for _, objectTypeList in pairs(tLootableItems) do
-            for objectName, typeObject in pairs(objectTypeList) do
-                lootableItems[objectName] = typeObject
-            end
-        end
-
-        print(lootableItems)
-        local o = hLootHandler:GetItemByWeight(lootableItems)
+        local o = hLootHandler:GetItemByWeight(localLootableItemsDict)
         print(o.DisplayItem)
     end)
 end
@@ -152,6 +153,9 @@ end
 CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
     lootContainer.Destroying:Connect(function()
         print(lootContainer, "Was destroyed")
+        
+        local o = hLootHandler:GetItemByWeight(localLootableItemsDict)
+        print(o.DisplayItem)
     end)
 end)
 
