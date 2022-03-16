@@ -47,7 +47,7 @@ function Dragon.new(instance: Model, dragonObject: table)
     
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
-    self.AttackRadius    = dragonObject.AttackRadius or 15
+    self.AttackAgro    = dragonObject.AttackAgro or 15
     self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
     self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
@@ -97,7 +97,7 @@ function Dragon:TaggedInstanceEnteredAttackAgro()
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
-            if (target:GetPivot().Position - self.Instance.Head).Magnitude <= self.AttackRadius then
+            if (target:GetPivot().Position - self.Instance.Head).Magnitude <= self.AttackAgro then
                 return true, taggedInstance
             else
                 return false
