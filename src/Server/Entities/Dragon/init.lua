@@ -40,7 +40,8 @@ function Dragon.new(instance: Model, dragonObject: table)
     self.Instance.Humanoid.HipHeight = 2.17
 
     --# DragonEntity class properties
-    self.CurrentTarget   = nil
+    self.CurrentTarget  = nil
+    self.AnimationTrack = nil
 
     --# DragonEntity class events
     self.StateChanged        = Instance.new("BindableEvent")
