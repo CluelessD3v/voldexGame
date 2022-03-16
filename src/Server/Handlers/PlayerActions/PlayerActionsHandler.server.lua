@@ -81,7 +81,7 @@ end
 
 --# <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 Players.PlayerAdded:Connect(function(player:Player)
-    player.PlayerSpawnLocation = workspace.SpawnLocation
+    player.RespawnLocation = workspace.PlayerSpawnLocation
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
     
