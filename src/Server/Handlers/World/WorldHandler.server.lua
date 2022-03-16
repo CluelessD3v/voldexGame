@@ -110,11 +110,12 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
         end
 
     end)
-
 end
 
-
-
+--# <|=============== LISTENING FOR LOOTCONTAINER ENTITIES ===============|>
+CollectionService:GetInstanceRemovedSignal("LootContainer"):Connect(function(instance)
+    print(instance, "Was destroyed")
+end)
 
 --+ <|=============== PLAYER HANDLING ===============|>
 --# Each time the player dies he will be sent to the lobby.

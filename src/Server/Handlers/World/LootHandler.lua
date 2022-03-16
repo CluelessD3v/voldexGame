@@ -1,6 +1,6 @@
+--? <|=============== CONSTRUCTOR ===============|>
 local LootHandler = {}
 LootHandler.__index = LootHandler
-
 
 function LootHandler.new()
     local self = setmetatable({}, LootHandler)
