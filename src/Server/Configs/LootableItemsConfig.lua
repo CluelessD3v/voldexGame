@@ -1,6 +1,7 @@
 return {
     SwordType = {
         ClassicSword = {
+            Weight = 100,
             DisplayItem = {
                 Name       = "ClassicSword",
                 Instance   = workspace.ClassicSword,
@@ -13,8 +14,6 @@ return {
                         
                     }
                 },
-
-                Weight = 100
             },
 
             ToolItem = {
@@ -27,6 +26,6 @@ return {
         },
 
 
-    },
 
+    },
 }

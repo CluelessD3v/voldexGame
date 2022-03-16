@@ -6,7 +6,7 @@ local Players             = game:GetService("Players")
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
-local hLootHandler = Handlers.LootHandler
+local hLootHandler = require(Handlers.LootHandler)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -130,8 +130,22 @@ end
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
         print(lootContainer, "Was destroyed")
+        
+        -- Just creat a new table, loop through tab loop though the v of tab. Use table.insert(newTab, v2)
 
+        local lootableItems = {}
 
+        -- loop through the types
+        print(tLootableItems)
+        for _, objectTypeList in pairs(tLootableItems) do
+            for objectName, typeObject in pairs(objectTypeList) do
+                lootableItems[objectName] = typeObject
+            end
+        end
+
+        print(lootableItems)
+        local o = hLootHandler:GetItemByWeight(lootableItems)
+        print(o.DisplayItem)
     end)
 end
 
@@ -150,3 +164,4 @@ Players.PlayerAdded:Connect(function(player)
     end)
 
 end)
+
