@@ -63,12 +63,13 @@ function Dragon.new(instance: Model, dragonObject: table)
         ChasingPlayer = require(script.ChasingPlayer),
         Homing        = require(script.Homing),
         Attacking     = require(script.Attacking),
+        Dead          = require(script.Dead),
     }
 
     self.CurrentState = nil
 
     self.Instance.Humanoid.Died:Connect(function()
-        self:SwitchState(self.States.Died)
+        self:SwitchState(self.States.Dead)
     end)
 
 
