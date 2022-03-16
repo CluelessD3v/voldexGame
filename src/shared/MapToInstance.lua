@@ -40,7 +40,7 @@ return function (anInstance: PVInstance, aFieldMap: table)
         local newObjectValue        = Instance.new(objectValue.Type) or error("Object value must have a type field!")
               newObjectValue.Name   = objectValue.Name or key
               newObjectValue.Value  = objectValue.Value or nil
-              newObjectValue.Parent = Instance or error("Object value must have a parent field!")
+              newObjectValue.Parent = anInstance
     end
 
     return anInstance
