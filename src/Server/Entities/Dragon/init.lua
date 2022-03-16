@@ -79,7 +79,7 @@ end
 
 --- <|=============== PRIVATE FUNCTIONS ===============|>
 local function CheckIfInstanceIsInsideRadius(origin:PVInstance, instance: PVInstance, radius: number)
-    if (instance:GetPivot().Position - instance:GetPivot().Position).Magnitude <= radius then
+    if (origin:GetPivot().Position - instance:GetPivot().Position).Magnitude <= radius then
         return true
     else
         return false
@@ -94,7 +94,7 @@ function Dragon:TaggedInstanceEnteredAgro()
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
-            if (target:GetPivot().Position - self.SpawnLocation.Position).Magnitude <= self.DetectionAgro then
+            if CheckIfInstanceIsInsideRadius(self.SpawnLocation, taggedInstance, self.DetectionAgro) then
                 self.CurrentTarget = target
                 return target
             else
@@ -111,7 +111,7 @@ function Dragon:TaggedInstanceEnteredAttackAgro()
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
             local target: Part = taggedInstance
 
-            if (target:GetPivot().Position - self.Instance.Head.Position).Magnitude <= self.AttackAgro then
+            if CheckIfInstanceIsInsideRadius(self.Instance.Head, taggedInstance, self.AttackAgro) then
                 self.CurrentTarget = target
                 return target
             else
