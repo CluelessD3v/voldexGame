@@ -14,11 +14,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --? <|=============== CONSTRUCTOR ===============|>
 local EventsNameSpace: Folder = ReplicatedStorage.Events.PlayerCombat
 
-local PlayerCombat = {}
-PlayerCombat.__index = PlayerCombat
+local PlayerCombatHandler = {}
+PlayerCombatHandler.__index = PlayerCombatHandler
 
-function PlayerCombat.new()
-    local self = setmetatable({}, PlayerCombat)
+function PlayerCombatHandler.new()
+    local self = setmetatable({}, PlayerCombatHandler)
 
     --# Adding remote events to namespace in Replicated Storage
     self.StartCombatMode        = Instance.new("RemoteEvent")
@@ -28,9 +28,19 @@ function PlayerCombat.new()
     self.ExitCombatMode        = Instance.new("RemoteEvent")
     self.ExitCombatMode.Name   = "ExitCombatMode"
     self.ExitCombatMode.Parent = EventsNameSpace
+
+
+    self.DamageMob        = Instance.new("RemoteEvent")
+    self.DamageMob.Name   = "DamageMob"
+    self.DamageMob.Parent = EventsNameSpace
+
+    self.ValidTargetTags = {  
+        "Dragon"
+    }
+
     return self
 end
 
 
 
-return PlayerCombat.new()
+return PlayerCombatHandler.new()

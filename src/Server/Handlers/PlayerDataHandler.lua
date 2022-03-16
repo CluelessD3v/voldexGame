@@ -3,12 +3,12 @@
 ]]
 
 --? <|=============== CONSTRUCTOR ===============|>
-local PlayerData = {}
-PlayerData.__index = PlayerData
+local PlayerDataHandler = {}
+PlayerDataHandler.__index = PlayerDataHandler
 
 
-function PlayerData.new()
-    local self = setmetatable({}, PlayerData)
+function PlayerDataHandler.new()
+    local self = setmetatable({}, PlayerDataHandler)
     self.PlayerDataObjects = {}
     return self
 end
@@ -42,7 +42,7 @@ end
 
 --# Builds a data object for a player from the given MetaData and ObjectvVlue tables.
 --# Also Instances object values under the given parent for the system to track as player owned.
-function PlayerData:BuildPlayerDataObject(player, fromTable)
+function PlayerDataHandler:BuildPlayerDataObject(player, fromTable)
     
     table.insert(self.PlayerDataObjects, player.Name)
 
@@ -77,7 +77,7 @@ end
 
 -- Object value functions
 --* Overwrites value field from both PlayerDataObject ObjectValue and its physical instance in the game
-function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: any )
+function PlayerDataHandler:SetPlayerDataValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
     --# The PlayerDataObject Exists? Great!
@@ -102,7 +102,7 @@ function PlayerData:SetPlayerDataValue(player: Player, name: string, newValue: a
 end
 
 --* Returns ObjectValue table from PlayerDataObject, NOT THE PHYSICAL OBJECT VALUE INSTANCE
-function PlayerData:GetPlayerObjectValue(player: Player, name: string)
+function PlayerDataHandler:GetPlayerObjectValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
     --# Does the given PlayerDataObject Exists? Great!
@@ -128,7 +128,7 @@ end
 
 -- Metadata functions
 --* Overwrites value  from the given PlayerDataObject MetaData field
-function PlayerData:SetPlayerMetaValue(player: Player, name: string, newValue: any )
+function PlayerDataHandler:SetPlayerMetaValue(player: Player, name: string, newValue: any )
     local playerDataObject = self.PlayerDataObjects[player.Name]
 
     --# The given PlayerDataObject Exists? Great!
@@ -152,7 +152,7 @@ function PlayerData:SetPlayerMetaValue(player: Player, name: string, newValue: a
 end
 
 --* Returns Value from the given PlayerDataObject MetaData field
-function PlayerData:GetPlayerMetaValue(player: Player, name: string)
+function PlayerDataHandler:GetPlayerMetaValue(player: Player, name: string)
     local playerDataObject = self.PlayerDataObjects[player.Name]
     if playerDataObject then
         local metaDataValue: any = playerDataObject.MetaData[name]
@@ -170,4 +170,4 @@ function PlayerData:GetPlayerMetaValue(player: Player, name: string)
 end
 
 
-return PlayerData.new()
+return PlayerDataHandler.new()

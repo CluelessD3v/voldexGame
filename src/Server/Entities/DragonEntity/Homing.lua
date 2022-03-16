@@ -35,25 +35,23 @@ function Homing:Start()
     --# entered the detection radius, did it entered?
     --# Great! start chasing it, it left? Too bad, go back to spawn.
     
-
     local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
-        local didEnter =  self.Context:TaggedInstanceEnteredAgro()
 
-        if didEnter then
+        if self.Context:TaggedInstanceEnteredAgro() then
             self.Context:SwitchState(self.Context.States.ChasingPlayer)
         
         else
 
             dragonHumanoid:MoveTo(self.Context.SpawnLocation.Position, self.Context.SpawnLocation)
 
-            dragonHumanoid.MoveToFinished:Connect(function(reachedSpawn)
+            self.Trove:Add(dragonHumanoid.MoveToFinished:Connect(function(reachedSpawn)
                 if reachedSpawn or not reachedSpawn then
                     self.Context:SwitchState(self.Context.States.Idle)
                 end
-            end)
+            end))
         end
 
     end))
