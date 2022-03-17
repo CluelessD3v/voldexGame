@@ -88,15 +88,19 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
         end
     end)
 
-    
+
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
 local function ConstructLootableItem(lootableItem)
     local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
-    local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
-    newLootableItem:Start()
+   if lootableItemData then
+        local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
+        newLootableItem:Start()
+   else
+        warn("No LootableItemData was found!")
+   end
 end 
 
 

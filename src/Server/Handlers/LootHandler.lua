@@ -70,11 +70,15 @@ end
 ]]--
 
 function LootHandler:GetLootableItemConfigFromTable(lootableItem, lootableItemTable)
+    print(lootableItem, lootableItemTable, "")
+
     for itemTypeName, itemsTypeTable in pairs(lootableItemTable) do
         local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
         local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
 
         if hasItemTypeTag or itemTypeAtt == itemTypeName then  
+            print("hasItemTypeTag", hasItemTypeTag)
+            print("itemTypeAtt", itemTypeAtt)
             for itemName, itemData in pairs(itemsTypeTable) do
                 
                 local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
@@ -82,10 +86,18 @@ function LootHandler:GetLootableItemConfigFromTable(lootableItem, lootableItemTa
                 
                 if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
                     return itemData
-
                 end
             end
+
+            warn("Failed to get LootableItem:", lootableItem, "config data, could not verify ItemName!")
+            warn("try either: Tagging, setting an attribute to, or renaming ", lootableItem, "with valid Item name")
+
+        else
+            warn("Failed to get LootableItem:", lootableItem, "config data, could not verify ItemType!")
+            warn("try, Tagging or setting an Attribute to", lootableItem, "with valid ItemType name")
         end
+
+
     end
 end
 
