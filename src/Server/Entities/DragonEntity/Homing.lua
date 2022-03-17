@@ -31,7 +31,6 @@ end
 
 
 function Homing:Start()
-    self.Context.AnimationTrack:Stop()
     local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
     self.AnimationTrack:Play()
