@@ -1,6 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
+local Workspace = game:GetService("Workspace")
 local Players             = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
@@ -160,13 +161,4 @@ CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootC
     end)
 end)
 
---# <|=============== PLAYER HANDLING ===============|>
---# Each time the player dies he will be sent to the lobby.
-Players.PlayerAdded:Connect(function(player)
-    -- player.RespawnLocation = workspace.Lobby.SpawnLocation
-    player.CharacterAdded:Connect(function(character)
-    
-    end)
-
-end)
 

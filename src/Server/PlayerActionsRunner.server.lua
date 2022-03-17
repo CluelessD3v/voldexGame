@@ -88,7 +88,7 @@ end
 
 --# <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 Players.PlayerAdded:Connect(function(player:Player)
-    player.RespawnLocation = workspace.PlayerSpawnLocation
+    -- player.RespawnLocation = workspace.PlayerSpawnLocation
     local stats: Folder = Instance.new("Folder")
     stats.Name = "stats"
     
@@ -107,6 +107,10 @@ Players.PlayerAdded:Connect(function(player:Player)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
         hPlayerInventory:TrackWeaponBeingEquipped(character)  
         hPlayerInventory:TrackWeaponBeingUnEquipped(character)
+
+        local startingSword = workspace.Swords.ClassicSword:Clone()
+        startingSword.Name = "StartingSword"
+        startingSword.Parent = player.Backpack
 
     end)
 
