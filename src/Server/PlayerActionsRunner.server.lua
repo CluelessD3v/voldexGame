@@ -97,25 +97,17 @@ Players.PlayerAdded:Connect(function(player:Player)
     tPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
     hPlayerData:BuildPlayerDataObject(player, tPlayerDataSchema)
 
-    print(hPlayerData.PlayerDataObjects)
-
-    -- PlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 100)
-    -- print(PlayerDataHandler:GetPlayerObjectValue(player, "GoldCoins"))
-
-    -- -- PlayerDataHandler:SetPlayerMetaValue(player, "Inventory", {Name = "parapa"})
-    -- print(PlayerDataHandler:GetPlayerMetaValue(player, "Inventory"))
-
     player.CharacterAdded:Connect(function(character)
         CollectionService:AddTag(character, tPlayerDataSchema.MetaData.Tags.DragonTarget)
         hPlayerInventory:TrackWeaponBeingEquipped(character)  
         hPlayerInventory:TrackWeaponBeingUnEquipped(character)
 
+        --*//todo this could be handled by PlayerData
         local startingSword = workspace.Swords.ClassicSword:Clone()
         startingSword.Name = "StartingSword"
 
         MapToInstance(startingSword, tLootableItems.SwordType.ClassicSword.ToolItem)
         startingSword.Parent = player.Backpack
-
     end)
 
 
