@@ -39,7 +39,36 @@ function LootHandler:GetItemByWeight(itemList)
     end 
 end
 
---* Aux function to construct new LootableItem Entities from a list
+--[[
+    function for lootable item data handling. Checks if the given item has either:     
+    - Tag
+    - Attribute
+
+    that matches the "ItemType" key
+
+    Then it will go on to check which item it is data wise, by checking if the item has a:
+    - A tag
+    - An Attribute
+    - Even the Instance name
+
+    that matches with the "ItemName" Key, 
+    
+    table fields:
+
+    FooType = { -- Outer loop checks if it has an Att or Tag that matches the Type key
+        FooObject1 = {},
+        FooObject2 = {}, -- Nested Loop checks if the instance name 
+        FooObject3 = {}     or iehter an attribute or tag or match the ItemConfigName Key
+    },
+
+    BazType = {
+        BazObject1 = {},
+        BazObject2 = {},
+        BazObject3 = {},
+    }
+
+]]--
+
 function LootHandler:GetLootableItemConfigFromTable(lootableItem, lootableItemTable)
     for itemTypeName, itemsTypeTable in pairs(lootableItemTable) do
         local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
