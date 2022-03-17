@@ -55,7 +55,7 @@ function DragonEntity.new(instance: Model, dragonObject: table)
     --# Mapping Concrete Dragon Object fields to new entity
     self.DetectionAgro   = dragonObject.DetectionAgro or 60
     self.AttackAgro      = dragonObject.AttackAgro or 15
-    self.SpawnLocation   = dragonObject.SpawnLocation or workspace.Baseplate
+    self.SpawnLocation   = dragonObject.SpawnLocation or workspace.DragonSpawn
     self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
 
     --# States

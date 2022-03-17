@@ -4,26 +4,23 @@ return {
             Weight = 100,
             DisplayItem = {
                 Name       = "ClassicSword",
-                Instance   = workspace.ClassicSword,
+                Instance   = workspace.DisplayItems.ClassicSwordDisplay,
                 Attributes = {
-                    Damage = 25,
+                    Damage   = 25,
                     ItemType = "SwordType",
+                    Owner    = " "
                 },
                 Tags = {"SwordType", "LootableItem"},
-
-                ObjectValues = {
-                    Owner = {
-                        Type = "ObjectValue",
-                        
-                    }
-                },
             },
 
             ToolItem = {
                 Name       = "ClassicSword",
-                Instance   = workspace.Swords.ClassicSword,
+                Instance   = workspace.ToolItems.ClassicSword,
+                Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage = 25
+                    Damage   = 25,
+                    ItemType = "SwordType",
+                    ItemName = "ClassicSword",
                 }
             },
         },
