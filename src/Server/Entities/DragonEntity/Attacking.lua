@@ -7,6 +7,7 @@ function Attacking.new(context: table)
 
     self.Name = "Attacking"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove = context.Trove:Extend()
 
 

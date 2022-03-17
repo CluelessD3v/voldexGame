@@ -11,6 +11,7 @@ function Dead.new(context: table)
 
     self.Name = "Dead"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove = self.Context.Trove:Extend()
     
     return self

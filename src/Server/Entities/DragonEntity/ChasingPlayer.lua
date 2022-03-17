@@ -18,6 +18,7 @@ function ChasingPlayer.new(context: table)
 
     self.Name    = "ChasingPlayer"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove   = context.Trove:Extend()
 
     return self

@@ -23,6 +23,7 @@ function Homing.new(context: table)
     
     self.Name = "Homing"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove = context.Trove:Extend()
 
     return self
