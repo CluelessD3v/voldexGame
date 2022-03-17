@@ -33,9 +33,17 @@ local tLootableItems    = require(Configs.LootableItemsConfig)
 --# <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
 local function OnLootableOwnerSetBuildIntoBackpack(lootableItem)
-    lootableItem:GetAttributeChangedSignal("Owner"):Connect(function(player: Player)
-        local itemDataTable = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
-        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable.ToolItem)
+    lootableItem:GetAttributeChangedSignal("Owner"):Connect(function()
+
+        local itemDataTable:table = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
+        local owner: string       = lootableItem:GetAttribute("Owner")
+        
+        for _, player in ipairs(Players:GetPlayers()) do
+            if owner == player.Name then
+                print(player)
+                hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable.ToolItem)
+            end
+        end
     end)    
 end
 
