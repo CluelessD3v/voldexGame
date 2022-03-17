@@ -53,12 +53,12 @@ function CastingActionOne:Start()
 
     self.AnimationTrack = animator:LoadAnimation(animationsList[self.Context.ComboCount])
     self.AnimationTrack:Play()
+    self.AnimationTrack:AdjustSpeed(1.8) 
     
     
     self.AnimationTrack.Stopped:Wait()
     self.Context:SwitchState(self.Context.States.Idle)
 end
-
 
 
 function CastingActionOne:Exit()

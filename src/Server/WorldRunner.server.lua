@@ -86,12 +86,9 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
             newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
             newDragon.AnimationTrack:Play()
         end
-
     end)
 
     
-    -- task.wait(1)
-    -- dragon.Humanoid.Health = 0
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>

@@ -6,7 +6,7 @@ return {
                 Name       = "ClassicSword",
                 Instance   = workspace.ClassicSword,
                 Attributes = {
-                    Damage = 25,
+                    Damage   = 25,
                     ItemType = "SwordType",
                 },
                 Tags = {"SwordType", "LootableItem"},
@@ -22,8 +22,11 @@ return {
             ToolItem = {
                 Name       = "ClassicSword",
                 Instance   = workspace.Swords.ClassicSword,
+                Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage = 25
+                    Damage   = 25,
+                    ItemType = "SwordType",
+                    ItemName = "ClassicSword",
                 }
             },
         },

@@ -104,7 +104,6 @@ Players.PlayerAdded:Connect(function(player:Player)
 
         --*//todo this could be handled by PlayerData
         local startingSword = workspace.Swords.ClassicSword:Clone()
-        startingSword.Name = "StartingSword"
 
         MapToInstance(startingSword, tLootableItems.SwordType.ClassicSword.ToolItem)
         startingSword.Parent = player.Backpack
@@ -116,6 +115,7 @@ Players.PlayerAdded:Connect(function(player:Player)
     end)
 
     hPlayerInventory.WeaponUnEquipped.Event:Connect(function(_, weapon)
+        print("fired")
         hPlayerCombat.ExitCombatMode:FireClient(player, weapon)
     end)
 end)
