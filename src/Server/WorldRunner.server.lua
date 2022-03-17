@@ -108,31 +108,30 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     task.wait(1)
     dragon.Humanoid.Health = 0
 end
---# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
+--# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+local function ConstructLootableItem(lootableItem)
+    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local newLootableItem = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
+    newLootableItem:Start()
+end 
+
 
 --# Listen for new LootableItem tagged instances being
 --# spawned & check for already existing ones to create
 --# new LootableItems Entities
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    print(lootableItem)
-    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
-    local newLootableItem = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
-    newLootableItem:Start()
+    ConstructLootableItem(lootableItem)
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    print(lootableItem)
-    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
-    local newLootableItem = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
-    newLootableItem:Start()
+    ConstructLootableItem(lootableItem)    
 end
 
 
 
---# <|=============== LOOT CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
-
-
+--# <|=============== LOOT_CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
 --# Caching all concrete LootableItems configs into a single table,
 --# This is so we only have to get all our configs once, so every time
