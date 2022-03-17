@@ -18,32 +18,7 @@ local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
---- <|=============== PRIVATE FUNCTIONS ===============|>
-
---* Aux function to construct new LootableItem Entities from a list
-local function GetLootableItemData(lootableItem, lootableItemsList)
-    for itemTypeName, itemsTypeTable in pairs(lootableItemsList) do
-        local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
-        local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
-
-        if hasItemTypeTag or itemTypeAtt == itemTypeName then  
-            for itemName, itemData in pairs(itemsTypeTable) do
-                
-                local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
-                local itemNameAtt: string     = lootableItem:GetAttribute("ItemName")
-                
-                if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
-                    return itemData
-
-                end
-            end
-        end
-    end
-end
-
-
-
---# <|=============== LEVEL CONSTRUCTION ===============|>
+--# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 local function BuildLair()
     local Lair: Model    = workspace.Lair:Clone()
 
@@ -84,8 +59,7 @@ Lair2:PivotTo(l2TargetCF)
 Lair2.Parent = workspace
 
 
---# <|=============== DRAGON MOBS Handling ===============|>
-
+--# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local animations = dragon.Animations
     local newDragon = eDragon.new(dragon)
@@ -113,10 +87,34 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
         end
 
     end)
+
+    
     task.wait(1)
     dragon.Humanoid.Health = 0
 end
+
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+--* Aux function to construct new LootableItem Entities from a list
+local function GetLootableItemData(lootableItem, lootableItemsList)
+    for itemTypeName, itemsTypeTable in pairs(lootableItemsList) do
+        local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
+        local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
+
+        if hasItemTypeTag or itemTypeAtt == itemTypeName then  
+            for itemName, itemData in pairs(itemsTypeTable) do
+                
+                local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
+                local itemNameAtt: string     = lootableItem:GetAttribute("ItemName")
+                
+                if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
+                    return itemData
+
+                end
+            end
+        end
+    end
+end
 
 local function ConstructLootableItem(lootableItem)
     local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
