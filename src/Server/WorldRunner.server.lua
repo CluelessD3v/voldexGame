@@ -67,25 +67,25 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local animator: Animator = newDragon.Instance.Humanoid.Animator
 	newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
 	
-	newDragon.StateChanged.Event:Connect(function(newState)
-		print(newState)
+	-- newDragon.StateChanged.Event:Connect(function(newState)
+	-- 	print(newState)
 		
-		if newState == "Homing" or newState == "ChasingPlayer"then
-			newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Walk)
-            newDragon.AnimationTrack:Play()
+	-- 	if newState == "Homing" or newState == "ChasingPlayer"then
+	-- 		newDragon.AnimationTrack:Stop()
+    --         newDragon.AnimationTrack = animator:LoadAnimation(animations.Walk)
+    --         newDragon.AnimationTrack:Play()
             
-		elseif newState == "Idle" then
-			newDragon.AnimationTrack:Stop()
-			newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
-			newDragon.AnimationTrack:Play()
+	-- 	elseif newState == "Idle" then
+	-- 		newDragon.AnimationTrack:Stop()
+	-- 		newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
+	-- 		newDragon.AnimationTrack:Play()
 
-        elseif newState == "Dead" then
-            newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
-            newDragon.AnimationTrack:Play()
-        end
-    end)
+    --     elseif newState == "Dead" then
+    --         newDragon.AnimationTrack:Stop()
+    --         newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
+    --         newDragon.AnimationTrack:Play()
+    --     end
+    -- end)
 
     newDragon:Start()
 end
