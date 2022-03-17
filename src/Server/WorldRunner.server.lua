@@ -88,8 +88,6 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     end)
 
     newDragon:Start()
-
-
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>

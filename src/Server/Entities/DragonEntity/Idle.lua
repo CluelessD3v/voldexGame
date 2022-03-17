@@ -24,6 +24,10 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 function Idle:Start()
+    self.Context.AnimationTrack:Stop()
+    local animator = self.Context.Instance.Humanoid.Animator
+    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
+    self.AnimationTrack:Play()
     --# Poll every frame to see if a valid instance
     --# Entered the detection radius, did it entered?
     --# Great! Then start chasing it.

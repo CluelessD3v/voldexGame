@@ -42,6 +42,9 @@ function DragonEntity.new(instance: Model, dragonObject: table)
     --# DragonEntity class properties
     self.CurrentTarget  = nil
     self.AnimationTrack = nil
+    self.Animations = self.Instance.Animations
+
+    
 
     --# DragonEntity class events
     self.StateChanged        = Instance.new("BindableEvent")
@@ -66,12 +69,15 @@ function DragonEntity.new(instance: Model, dragonObject: table)
         Attacking     = require(script.Attacking),
         Dead          = require(script.Dead),
     }
-
     self.CurrentState = self.States.Idle.new(self)
 
     self.Instance.Humanoid.Died:Connect(function()
         self:SwitchState(self.States.Dead)
     end)
+
+
+    local animator = self.Instance.Humanoid.Animator
+    self.AnimationTrack = animator:LoadAnimation(self.Animations.Idle)
 
     return self
 end
