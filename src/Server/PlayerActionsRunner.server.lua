@@ -7,9 +7,11 @@
 local Players                = game:GetService("Players")
 local CollectionService      = game:GetService("CollectionService")
 local ServerScriptService    = game:GetService("ServerScriptService")
-
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --# <|=============== Dependencies ===============|>
+local MapToInstance = require(ReplicatedStorage.MapToInstance)
+
 -- Handlers
 local Handlers = ServerScriptService.Handlers
 
@@ -110,6 +112,8 @@ Players.PlayerAdded:Connect(function(player:Player)
 
         local startingSword = workspace.Swords.ClassicSword:Clone()
         startingSword.Name = "StartingSword"
+
+        MapToInstance(startingSword, tLootableItems.SwordType.ClassicSword.ToolItem)
         startingSword.Parent = player.Backpack
 
     end)
