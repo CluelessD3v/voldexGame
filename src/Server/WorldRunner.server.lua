@@ -90,8 +90,8 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     end)
 
     
-    task.wait(1)
-    dragon.Humanoid.Health = 0
+    -- task.wait(1)
+    -- dragon.Humanoid.Health = 0
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
