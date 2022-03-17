@@ -11,13 +11,6 @@ return {
                     Owner    = "None"
                 },
                 Tags = {"SwordType", "LootableItem"},
-
-                ObjectValues = {
-                    Owner = {
-                        Type = "ObjectValue",
-                        
-                    }
-                },
             },
 
             ToolItem = {

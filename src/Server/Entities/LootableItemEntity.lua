@@ -30,8 +30,7 @@ end
 function LootableItemEntity:Start()
     print("started")
     self.ProximityPrompt.Triggered:Connect(function(player)
-        print(player)
-        self.Instance.Owner.Value = player
+        self.Instance:SetAttribute("Owner", player.Name)
         self:Destroy()
     end)
 
