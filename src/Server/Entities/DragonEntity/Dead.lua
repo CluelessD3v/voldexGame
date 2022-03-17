@@ -8,7 +8,6 @@ Dead.__index = Dead
 
 function Dead.new(context: table)
     local self = setmetatable({}, Dead)
-
     self.Name = "Dead"
     self.Context = context
     self.Instance = self.Context.Instance
@@ -18,6 +17,7 @@ function Dead.new(context: table)
 end
 
 function Dead:Start()
+
     local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Death)
     self.AnimationTrack:Play()

@@ -15,11 +15,24 @@ function Attacking.new(context: table)
 end
 
 function Attacking:Start()
-    print("entered attack")
-    self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart.Position)
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+
+    print("entered attack from", self.Context.PreviousState.Name)
+
+    local animator = self.Instance.Humanoid.Animator
+    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.WingBeat)
+    self.AnimationTrack:Play()
+
+    self.AnimationTrack.Stopped:Wait()
+
+    self.Context:SwitchState(self.Context.States.ChasingPlayer)
+    
 end
 
 function Attacking:Exit()
+    self.AnimationTrack:Stop()
     self.Trove:Clean()
     return
 end

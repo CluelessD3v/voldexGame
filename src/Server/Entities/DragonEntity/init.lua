@@ -70,7 +70,7 @@ function DragonEntity.new(instance: Model, dragonObject: table)
         Dead          = require(script.Dead),
     }
     self.CurrentState = self.States.Idle.new(self)
-
+    self.PreviousState = nil
     self.Instance.Humanoid.Died:Connect(function()
         self:SwitchState(self.States.Dead)
     end)
@@ -128,9 +128,11 @@ function DragonEntity:SwitchState(newState: table)
     --# transition out of said current state, set 
     --# new state as current & start it, else default to idle
 
-    print(newState)
     self.CurrentState:Exit()
+    self.PreviousState = self.CurrentState
     self.CurrentState = newState.new(self)
+
+    print("Entered", self.CurrentState.Name, "from", self.PreviousState.Name )
 
     self.Instance:SetAttribute("CurrentState", self.CurrentState.Name)
     self.Instance.StateChanged:Fire(self.CurrentState.Name)

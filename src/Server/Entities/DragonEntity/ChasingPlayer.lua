@@ -25,6 +25,11 @@ function ChasingPlayer.new(context: table)
 end
 
 function ChasingPlayer:Start()
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+
+    
     local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
     self.AnimationTrack:Play()
@@ -44,6 +49,7 @@ function ChasingPlayer:Start()
         end
 
         if self.Context.CurrentTarget then
+            print("taget")
             if (self.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
                 self.Context:SwitchState(self.Context.States.Attacking)
             end

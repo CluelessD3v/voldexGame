@@ -64,6 +64,9 @@ Lair2.Parent = workspace
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
     newDragon:Start()
+
+    task.wait(2)
+    newDragon.Instance.Humanoid.Health =0
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
