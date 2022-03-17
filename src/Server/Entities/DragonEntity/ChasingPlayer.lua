@@ -25,7 +25,7 @@ function ChasingPlayer.new(context: table)
 end
 
 function ChasingPlayer:Start()
-    local animator = self.Context.Instance.Humanoid.Animator
+    local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
     self.AnimationTrack:Play()
 
@@ -33,7 +33,7 @@ function ChasingPlayer:Start()
     --# is still in the detection radius, still inside agro?
     --# Great! chase it, it left? Too bad, go back to spawn.
     
-    local dragonHumanoid = self.Context.Instance.Humanoid
+    local dragonHumanoid = self.Instance.Humanoid
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
@@ -44,7 +44,7 @@ function ChasingPlayer:Start()
         end
 
         if self.Context.CurrentTarget then
-            if (self.Context.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
+            if (self.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
                 self.Context:SwitchState(self.Context.States.Attacking)
             end
         end

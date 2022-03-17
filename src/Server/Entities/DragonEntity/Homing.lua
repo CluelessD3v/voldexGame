@@ -32,7 +32,7 @@ end
 
 function Homing:Start()
     self.Context.AnimationTrack:Stop()
-    local animator = self.Context.Instance.Humanoid.Animator
+    local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
     self.AnimationTrack:Play()
 
@@ -40,7 +40,7 @@ function Homing:Start()
     --# entered the detection radius, did it entered?
     --# Great! start chasing it, it left? Too bad, go back to spawn.
     
-    local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
+    local dragonHumanoid: Humanoid = self.Instance.Humanoid
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 

@@ -25,7 +25,7 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 function Idle:Start()
-    local animator = self.Context.Instance.Humanoid.Animator
+    local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
     self.AnimationTrack:Play()
 

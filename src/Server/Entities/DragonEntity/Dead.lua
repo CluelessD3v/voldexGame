@@ -18,7 +18,7 @@ function Dead.new(context: table)
 end
 
 function Dead:Start()
-    for _, child in ipairs(self.Context.Instance:GetChildren()) do
+    for _, child in ipairs(self.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
             local tweenInfo = TweenInfo.new(
                 1.5,

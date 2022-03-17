@@ -16,7 +16,7 @@ end
 
 function Attacking:Start()
     print("entered attack")
-    self.Context.Instance.Humanoid:MoveTo(self.Context.Instance.PrimaryPart.Position)
+    self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart.Position)
 end
 
 function Attacking:Exit()
