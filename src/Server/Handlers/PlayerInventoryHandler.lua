@@ -37,7 +37,7 @@ end
 --* Else the function will not even consider the item
 
 function PlayerInventoryHandler:BuildItemIntoBackpack(player: Player, lootedItemData: table)
-    if lootedItemData.ToolItem ~= nil then
+    if lootedItemData ~= nil then
         local newTool: Tool = lootedItemData.ToolItem.Instance:Clone()
         MapToInstance(newTool, lootedItemData.ToolItem)
         

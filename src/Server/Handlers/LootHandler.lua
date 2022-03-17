@@ -70,15 +70,12 @@ end
 ]]--
 
 function LootHandler:GetLootableItemConfigFromTable(lootableItem, lootableItemTable)
-    print(lootableItem, lootableItemTable, "")
 
     for itemTypeName, itemsTypeTable in pairs(lootableItemTable) do
         local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
         local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
 
         if hasItemTypeTag or itemTypeAtt == itemTypeName then  
-            print("hasItemTypeTag", hasItemTypeTag)
-            print("itemTypeAtt", itemTypeAtt)
             for itemName, itemData in pairs(itemsTypeTable) do
                 
                 local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)

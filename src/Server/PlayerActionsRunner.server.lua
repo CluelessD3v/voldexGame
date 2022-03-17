@@ -18,6 +18,7 @@ local Handlers = ServerScriptService.Handlers
 local hPlayerData: ModuleScript      = require(Handlers.PlayerDataHandler)
 local hPlayerCombat: ModuleScript    = require(Handlers.PlayerCombatHandler)
 local hPlayerInventory: ModuleScript = require(Handlers.PlayerInventoryHandler)
+local hLootHandler: ModuleScript    = require(Handlers.LootHandler)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -29,35 +30,12 @@ local Configs = ServerScriptService.Configs
 local tPlayerDataSchema = require(Configs.PlayerDataSchemaConfig)
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
---- <|=============== PRIVATE FUNCTIONS ===============|>
-
---* Aux function for lootable item data handling. Checks if the given item has an "item category" tag, 
---* if true then it will return the first value it finds that matches the given lootableItem name
---* (basically, if it has the item type tag, FindFirstKey)
-
-local function GetLootableItemData(lootableItem, lootableItemsList)
-    for itemType, itemsTypeTable in pairs(lootableItemsList) do
-        if CollectionService:HasTag(lootableItem, itemType) then
-
-            for itemName, itemData in pairs(itemsTypeTable) do
-                if lootableItem.Name == itemName then
-                    return itemData
-                end
-            end
-        end
-    end
-
-    warn("Given Lootable Item does not has a tag that matches given Lootables table key")
-    return nil
-end
-
 --# <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
 local function OnLootableOwnerSetBuildIntoBackpack(lootableItem)
     lootableItem:GetAttributeChangedSignal("Owner"):Connect(function(player: Player)
-        local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
-        print(itemDataTable)
-        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
+        local itemDataTable = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
+        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable.ToolItem)
     end)    
 end
 
