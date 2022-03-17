@@ -64,7 +64,6 @@ Lair2.Parent = workspace
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local animations = dragon.Animations
     local newDragon = eDragon.new(dragon)
-    newDragon:Start()
     local animator: Animator = newDragon.Instance.Humanoid.Animator
 	newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
 	
@@ -87,6 +86,8 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
             newDragon.AnimationTrack:Play()
         end
     end)
+
+    newDragon:Start()
 
 
 end
