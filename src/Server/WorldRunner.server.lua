@@ -23,15 +23,18 @@ local tLootableItems    = require(Configs.LootableItemsConfig)
 --* Aux function to construct new LootableItem Entities from a list
 local function GetLootableItemData(lootableItem, lootableItemsList)
     for itemTypeName, itemsTypeTable in pairs(lootableItemsList) do
-        
-        local hasItemTypeTag: boolean      = CollectionService:HasTag(lootableItem, itemTypeName)
-        local itemTypAtt: string = lootableItem:GetAttribute("ItemType")
+        local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
+        local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
 
-        if hasItemTypeTag or itemTypAtt == itemTypeName then  
-            print(itemTypAtt)
+        if hasItemTypeTag or itemTypeAtt == itemTypeName then  
             for itemName, itemData in pairs(itemsTypeTable) do
-                if lootableItem.Name == itemName then
+                
+                local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
+                local itemNameAtt: string     = lootableItem:GetAttribute("ItemName")
+                
+                if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
                     return itemData
+
                 end
             end
         end
@@ -164,7 +167,7 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer)
 
     newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
     CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.Type)
-    
+
     CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
