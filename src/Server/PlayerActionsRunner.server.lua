@@ -51,31 +51,40 @@ end
 
 --# <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
+local function OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
+    ownerValue.Changed:Connect(function(player: Player)
+        local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
+        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
+    end)    
+    
+end
+
+
 --# Listen for LootableItems Owner ObjectValue changing, if it exist.
 --#  if it changes Get LootableItem data from config and call
 --#  PlayerInventory handler BuildItemIntoBackpack
 
--- --# Listening for new instances being tagged
--- CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
---     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
-    
---     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-    
---     ownerValue.Changed:Connect(function(player: Player)
---         hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
---     end)    
--- end)
+--# Listening for new instances being tagged
+CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
+    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
 
--- --# iterating already existing ones
--- for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
---     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
-    
---     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-    
---     ownerValue.Changed:Connect(function(player: Player)
---         hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
---     end)    
--- end
+    if ownerValue then
+        OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
+    else
+        warn("No OwnerValue was found for LootableItem")
+    end
+end)
+
+--# iterating already existing ones
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+
+    if ownerValue then
+        OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
+    else
+        warn("No OwnerValue was found for LootableItem")
+    end
+end
 
 --# <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 Players.PlayerAdded:Connect(function(player:Player)
