@@ -53,12 +53,12 @@ end
 
 --# <|=============== LOOTABLE ITEMS INTERACTION ===============|>
 
-local function OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
-    ownerValue.Changed:Connect(function(player: Player)
+local function OnLootableOwnerSetBuildIntoBackpack(lootableItem)
+    lootableItem:GetAttributeChangedSignal("Owner"):Connect(function(player: Player)
         local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
+        print(itemDataTable)
         hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
     end)    
-    
 end
 
 
@@ -68,24 +68,13 @@ end
 
 --# Listening for new instances being tagged
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-
-    if ownerValue then
-        OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
-    else
-        warn("No OwnerValue was found for LootableItem")
-    end
+    OnLootableOwnerSetBuildIntoBackpack(lootableItem)
 end)
 
 --# iterating already existing ones
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
-
-    if ownerValue then
-        OnLootableOwnerSetBuildIntoBackpack(lootableItem, ownerValue)
-    else
-        warn("No OwnerValue was found for LootableItem")
-    end
+    OnLootableOwnerSetBuildIntoBackpack(lootableItem)
+    
 end
 
 --# <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
@@ -103,7 +92,7 @@ Players.PlayerAdded:Connect(function(player:Player)
         hPlayerInventory:TrackWeaponBeingUnEquipped(character)
 
         --*//todo this could be handled by PlayerData
-        local startingSword = workspace.Swords.ClassicSword:Clone()
+        local startingSword = workspace.ToolItems.ClassicSword:Clone()
 
         MapToInstance(startingSword, tLootableItems.SwordType.ClassicSword.ToolItem)
         startingSword.Parent = player.Backpack
