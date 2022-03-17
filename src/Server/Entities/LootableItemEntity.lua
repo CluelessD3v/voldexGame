@@ -12,8 +12,6 @@ LootableItemEntity.__index = LootableItemEntity
 
 
 function LootableItemEntity.new(instance, data: table)
-    print("new")
-    print(data)
     local self = setmetatable({}, LootableItemEntity)
     self.Trove = Trove.new()
 

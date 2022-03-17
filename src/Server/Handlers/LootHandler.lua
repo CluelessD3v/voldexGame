@@ -1,3 +1,6 @@
+--# <|=============== SERVICES ===============|>
+local CollectionService = game:GetService("CollectionService")
+
 --? <|=============== CONSTRUCTOR ===============|>
 local LootHandler = {}
 LootHandler.__index = LootHandler
@@ -36,5 +39,25 @@ function LootHandler:GetItemByWeight(itemList)
     end 
 end
 
+--* Aux function to construct new LootableItem Entities from a list
+function LootHandler:GetLootableItemConfigFromTable(lootableItem, lootableItemTable)
+    for itemTypeName, itemsTypeTable in pairs(lootableItemTable) do
+        local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
+        local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
+
+        if hasItemTypeTag or itemTypeAtt == itemTypeName then  
+            for itemName, itemData in pairs(itemsTypeTable) do
+                
+                local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
+                local itemNameAtt: string     = lootableItem:GetAttribute("ItemName")
+                
+                if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
+                    return itemData
+
+                end
+            end
+        end
+    end
+end
 
 return LootHandler.new()

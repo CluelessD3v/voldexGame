@@ -95,29 +95,8 @@ end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
---* Aux function to construct new LootableItem Entities from a list
-local function GetLootableItemData(lootableItem, lootableItemsList)
-    for itemTypeName, itemsTypeTable in pairs(lootableItemsList) do
-        local hasItemTypeTag: boolean = CollectionService:HasTag(lootableItem, itemTypeName)
-        local itemTypeAtt: string     = lootableItem:GetAttribute("ItemType")
-
-        if hasItemTypeTag or itemTypeAtt == itemTypeName then  
-            for itemName, itemData in pairs(itemsTypeTable) do
-                
-                local hasItemNameTag: boolean = CollectionService:HasTag(lootableItem, itemName)
-                local itemNameAtt: string     = lootableItem:GetAttribute("ItemName")
-                
-                if lootableItem.Name == itemName or hasItemNameTag or itemNameAtt == itemName then
-                    return itemData
-
-                end
-            end
-        end
-    end
-end
-
 local function ConstructLootableItem(lootableItem)
-    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
     local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
     newLootableItem:Start()
 end 
@@ -162,10 +141,9 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer)
     
     newDisplayItemInstance.Position = lastCF.Position
     newDisplayItemInstance.Parent = workspace
-
+    
     newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
-    CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.Type)
-
+    CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
     CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
