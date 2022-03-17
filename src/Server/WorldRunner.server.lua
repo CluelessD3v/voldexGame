@@ -145,7 +145,7 @@ for _, objectTypeList in pairs(tLootableItems) do
     end
 end
 
-local function CreateLootable(lootContainer)
+local function GetLootableItemByWeight(lootContainer)
     local lastCF: CFrame = lootContainer:GetPivot()
     print(lootContainer, "Was destroyed")
     
@@ -164,13 +164,13 @@ end
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
-        CreateLootable(lootContainer)
+        GetLootableItemByWeight(lootContainer)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
     lootContainer.Destroying:Connect(function()
-        CreateLootable(lootContainer)
+        GetLootableItemByWeight(lootContainer)
     end)
 end)
 
