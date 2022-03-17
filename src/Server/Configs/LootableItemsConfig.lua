@@ -6,8 +6,11 @@ return {
                 Name       = "ClassicSword",
                 Instance   = workspace.ClassicSword,
                 Attributes = {
-                    Damage = 25
+                    Damage = 25,
+                    Type = "SwordType",
                 },
+                Tags = {"SwordType", "LootableItem"},
+
                 ObjectValues = {
                     Owner = {
                         Type = "ObjectValue",
@@ -24,8 +27,5 @@ return {
                 }
             },
         },
-
-
-
     },
 }

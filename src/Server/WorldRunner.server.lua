@@ -26,7 +26,6 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
         if CollectionService:HasTag(lootableItem, itemTypeName) then
             for itemName, itemData in pairs(itemsTypeTable) do
                 if lootableItem.Name == itemName then
-                    print(itemData)
                     return itemData
                 end
             end
@@ -34,23 +33,7 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
     end
 end
 
---# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
 
---# Listen for new LootableItem tagged instances being
---# spawned & check for already existing ones to create
---# new LootableItems Entities
-
-CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
-    local newLootableItem = eLootableItem.new(lootableItemData.DisplayItem)
-    newLootableItem:Start()
-end)
-
-for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
-    local newLootableItem = eLootableItem.new(lootableItemData.DisplayItem)
-    newLootableItem:Start()
-end
 
 --# <|=============== LEVEL CONSTRUCTION ===============|>
 local function BuildLair()
@@ -125,8 +108,31 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     task.wait(1)
     dragon.Humanoid.Health = 0
 end
+--# <|=============== LOOTABLE ITEM ENTITIES CONSTRUCTION ===============|>
+
+--# Listen for new LootableItem tagged instances being
+--# spawned & check for already existing ones to create
+--# new LootableItems Entities
+
+CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
+    print(lootableItem)
+    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local newLootableItem = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
+    newLootableItem:Start()
+end)
+
+for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+    print(lootableItem)
+    local lootableItemData = GetLootableItemData(lootableItem, tLootableItems)
+    local newLootableItem = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
+    newLootableItem:Start()
+end
+
+
 
 --# <|=============== LOOT CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+
 
 --# Caching all concrete LootableItems configs into a single table,
 --# This is so we only have to get all our configs once, so every time
@@ -140,27 +146,32 @@ for _, objectTypeList in pairs(tLootableItems) do
     end
 end
 
+local function CreateLootable(lootContainer)
+    local lastCF: CFrame = lootContainer:GetPivot()
+    print(lootContainer, "Was destroyed")
+    
+    local selectedItemConfig = hLootHandler:GetItemByWeight(localLootableItemsDict)
+    local displayItemConfig = selectedItemConfig.DisplayItem
+    
+    local newDisplayItemInstance = displayItemConfig.Instance:Clone()
+    
+    newDisplayItemInstance.Position = lastCF.Position
+    newDisplayItemInstance.Parent = workspace
+
+    CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.Type)
+    CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
+end
+
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
-        local lastCF: CFrame = lootContainer:GetPivot()
-        print(lootContainer, "Was destroyed")
-        
-        local selectedItem = hLootHandler:GetItemByWeight(localLootableItemsDict)
-        local newDisplayItem = selectedItem.DisplayItem.Instance:Clone()
-        CollectionService:AddTag(newDisplayItem, "LootableItem")
-        
-        newDisplayItem.Position = lastCF.Position
-        newDisplayItem.Parent = workspace
+        CreateLootable(lootContainer)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
     lootContainer.Destroying:Connect(function()
-        print(lootContainer, "Was destroyed")
-        
-        local o = hLootHandler:GetItemByWeight(localLootableItemsDict)
-        print(o.DisplayItem)
+        CreateLootable(lootContainer)
     end)
 end)
 

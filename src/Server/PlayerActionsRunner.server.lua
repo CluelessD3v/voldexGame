@@ -39,7 +39,6 @@ local function GetLootableItemData(lootableItem, lootableItemsList)
 
             for itemName, itemData in pairs(itemsTypeTable) do
                 if lootableItem.Name == itemName then
-                    print(itemData)
                     return itemData
                 end
             end
@@ -56,28 +55,27 @@ end
 --#  if it changes Get LootableItem data from config and call
 --#  PlayerInventory handler BuildItemIntoBackpack
 
---# Listening for new instances being tagged
-CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
+-- --# Listening for new instances being tagged
+-- CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
+--     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
-    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+--     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     
-    ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
-    end)    
-end)
+--     ownerValue.Changed:Connect(function(player: Player)
+--         hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
+--     end)    
+-- end)
 
---# iterating already existing ones
-for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
-    print(itemDataTable)
+-- --# iterating already existing ones
+-- for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
+--     local itemDataTable = GetLootableItemData(lootableItem, tLootableItems)
     
-    local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
+--     local ownerValue : ObjectValue = lootableItem:WaitForChild("Owner")
     
-    ownerValue.Changed:Connect(function(player: Player)
-        hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
-    end)    
-end
+--     ownerValue.Changed:Connect(function(player: Player)
+--         hPlayerInventory:BuildItemIntoBackpack(player, itemDataTable)
+--     end)    
+-- end
 
 --# <|=============== PLAYER INVENTORY & COMBAT ACTIONS ===============|>
 Players.PlayerAdded:Connect(function(player:Player)
