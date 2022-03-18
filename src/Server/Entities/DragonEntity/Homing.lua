@@ -34,10 +34,8 @@ function Homing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end)
-    
-    local animator = self.Instance.Humanoid.Animator
-    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
-    self.AnimationTrack:Play()
+
+    self.Context.AnimationTracks.Walk:Play()
 
     --# Poll every frame to see if a valid instance
     --# entered the detection radius, did it entered?
@@ -66,7 +64,7 @@ function Homing:Start()
 end
 
 function Homing:Exit()
-    self.Context.AnimationTrack:Stop()
+    self.Context.AnimationTracks.Walk:Stop()
     self.Trove:Clean()
 end
 

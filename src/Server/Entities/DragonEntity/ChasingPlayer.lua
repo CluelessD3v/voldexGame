@@ -29,10 +29,8 @@ function ChasingPlayer:Start()
         self:Exit()
     end)
 
-    
-    local animator = self.Instance.Humanoid.Animator
-    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
-    self.AnimationTrack:Play()
+    self.Context.AnimationTracks.Walk:Play()
+
 
     --# Poll every frame to see if a valid instance
     --# is still in the detection radius, still inside agro?
@@ -59,7 +57,7 @@ function ChasingPlayer:Start()
 end
 
 function ChasingPlayer:Exit()
-    self.Context.AnimationTrack:Stop()
+    self.Context.AnimationTracks.Walk:Play()
     self.Trove:Clean()    
     return
 end

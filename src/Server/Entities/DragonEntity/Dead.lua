@@ -17,10 +17,8 @@ function Dead.new(context: table)
 end
 
 function Dead:Start()
+    self.Context.AnimationTracks.Death:Play()
 
-    local animator = self.Instance.Humanoid.Animator
-    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Death)
-    self.AnimationTrack:Play()
     for _, child in ipairs(self.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
             local tweenInfo = TweenInfo.new(
@@ -44,6 +42,7 @@ function Dead:Start()
 end
 
 function Dead:Exit()
+    self.Context.AnimationTracks.Death:Stop()
     self.Trove:Clean()
 end
 
