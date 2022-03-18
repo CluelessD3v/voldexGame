@@ -78,6 +78,8 @@ function DragonEntity.new(instance: Model, dragonObject: table)
         Homing          = require(script.Homing),
         PreparingAttack = require(script.PreparingAttack),
         Dead            = require(script.Dead),
+        FireBreathing   = require(script.FireBreathing),
+        WingBeating     = require(script.WingBeating),
     }
     self.CurrentState = self.States.Idle.new(self)
     self.PreviousState = nil

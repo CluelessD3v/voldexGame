@@ -16,8 +16,6 @@ function WingBeating:Start()
 
 end
 
-
-
 function WingBeating:Exit()
     self.Trove:Clean()
 end
