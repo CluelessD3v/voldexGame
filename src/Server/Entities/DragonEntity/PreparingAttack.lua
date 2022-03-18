@@ -22,17 +22,23 @@ function PreparingAttack:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end)
-    
-    self.Context.AnimationTracks.WingBeat:Play()
-    self.Context.AnimationTracks.WingBeat.Stopped:Wait()
-    
+
+    print("entered attack")
+
+    self.Context.AnimationTracks.Idle:Play()
+    self.Context.AnimationTracks.Idle:AdjustSpeed(4)
+
+    self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart:GetPivot().Position)
+
+    task.wait(5)
 
     self.Context:SwitchState(self.Context.States.ChasingPlayer)
     
 end
 
 function PreparingAttack:Exit()
-    self.Context.AnimationTracks.WingBeat:Stop()
+    self.Context.AnimationTracks.Idle:Stop()
+
     self.Trove:Clean()
     return
 end
