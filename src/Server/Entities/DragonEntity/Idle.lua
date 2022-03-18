@@ -15,6 +15,7 @@ function Idle.new(context: table)
     
     self.Name    = "Idle"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove   = context.Trove:Extend()
 
     return self
@@ -24,6 +25,12 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 function Idle:Start()
+    -- local animator = self.Instance.Humanoid.Animator
+    -- self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
+    -- self.AnimationTrack:Play()
+
+    self.Context.AnimationTracks.Idle:Play()
+
     --# Poll every frame to see if a valid instance
     --# Entered the detection radius, did it entered?
     --# Great! Then start chasing it.
@@ -37,6 +44,7 @@ function Idle:Start()
 end
 
 function Idle:Exit()
+    self.Context.AnimationTracks.Idle:Stop()
     self.Trove:Clean()
     return    
 end

@@ -23,6 +23,7 @@ function Homing.new(context: table)
     
     self.Name = "Homing"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove = context.Trove:Extend()
 
     return self
@@ -30,12 +31,17 @@ end
 
 
 function Homing:Start()
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+
+    self.Context.AnimationTracks.Walk:Play()
 
     --# Poll every frame to see if a valid instance
     --# entered the detection radius, did it entered?
     --# Great! start chasing it, it left? Too bad, go back to spawn.
     
-    local dragonHumanoid: Humanoid = self.Context.Instance.Humanoid
+    local dragonHumanoid: Humanoid = self.Instance.Humanoid
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
 
@@ -58,6 +64,7 @@ function Homing:Start()
 end
 
 function Homing:Exit()
+    self.Context.AnimationTracks.Walk:Stop()
     self.Trove:Clean()
 end
 

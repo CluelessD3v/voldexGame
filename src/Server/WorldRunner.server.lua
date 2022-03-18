@@ -62,32 +62,12 @@ Lair2.Parent = workspace
 
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
-    local animations = dragon.Animations
     local newDragon = eDragon.new(dragon)
+
+    
     newDragon:Start()
-    local animator: Animator = newDragon.Instance.Humanoid.Animator
-	newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
-	
-	newDragon.StateChanged.Event:Connect(function(newState)
-		print(newState)
-		
-		if newState == "Homing" or newState == "ChasingPlayer"then
-			newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Walk)
-            newDragon.AnimationTrack:Play()
-            
-		elseif newState == "Idle" then
-			newDragon.AnimationTrack:Stop()
-			newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
-			newDragon.AnimationTrack:Play()
 
-        elseif newState == "Dead" then
-            newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
-            newDragon.AnimationTrack:Play()
-        end
-    end)
-
+    newDragon:SwitchState(newDragon.States.PreparingAttack)
 
 end
 
