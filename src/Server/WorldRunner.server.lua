@@ -36,8 +36,8 @@ currLevel.Parent = workspace
 playerEnteredCurrLevel.Event:Connect(function()
     
     -- Close level here
-        currLevel.SouthDoor.Transparency = 0
-        currLevel.SouthDoor.CanCollide = true
+    currLevel.SouthDoor.Transparency = 0
+    currLevel.SouthDoor.CanCollide = true
 
     -- spawn dragon here
     local dragonMesh                  = workspace.FrostDragon:Clone()
@@ -55,6 +55,9 @@ playerEnteredCurrLevel.Event:Connect(function()
 
     -- start battle
 
+    local newDragonEntity = eDragon.new(dragonMesh)
+    newDragonEntity.SpawnLocation = currLevel.MobSpawn
+    newDragonEntity:Start()
     print("Fired")
 end)
 
