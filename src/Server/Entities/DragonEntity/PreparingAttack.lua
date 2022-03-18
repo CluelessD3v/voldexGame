@@ -30,9 +30,14 @@ function PreparingAttack:Start()
 
     self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart:GetPivot().Position)
 
-    task.wait(5)
 
-    self.Context:SwitchState(self.Context.States.ChasingPlayer)
+
+    self.Trove:Add(RunService.Heartbeat:Connect(function()
+        if not self.Context:TaggedInstanceEnteredAttackAgro() then
+            self.Context:SwitchState(self.Context.States.ChasingPlayer)
+        end
+    end))
+
     
 end
 
