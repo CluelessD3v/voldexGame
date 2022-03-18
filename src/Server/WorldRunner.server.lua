@@ -19,7 +19,7 @@ local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>\
-
+local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 
 local lobby  = workspace.Lobby
 
@@ -33,10 +33,20 @@ local itsNorthHallwayHalfSize = prevLevelNorthHallway.Size.Z/-2
 currLevel:PivotTo(theFrontOfThePrevMap  +  Vector3.new(0, 0, itsNorthHallwayHalfSize))
 currLevel.Parent = workspace
 
+playerEnteredCurrLevel.Event:Connect(function()
+    
+    -- Close level here
+    -- spawn dragon  and
+    -- start battle
+
+    print("Fired")
+end)
+
+playerEnteredCurrLevel:Fire()
+
 
 -- local function BuildLair()
 --     local Lair: Model    = workspace.Lair:Clone()
-
 --     local SouthHallway: Part = workspace.Hallway:Clone()
 --     SouthHallway.Name = "SouthHallway"
 --     SouthHallway.Parent = Lair
@@ -78,8 +88,8 @@ currLevel.Parent = workspace
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
 
-    newDragon:Start()
-    newDragon:SwitchState(newDragon.States.PreparingAttack)
+    -- newDragon:Start()
+    -- newDragon:SwitchState(newDragon.States.PreparingAttack)
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
