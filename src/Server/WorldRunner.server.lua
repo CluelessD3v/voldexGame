@@ -42,12 +42,16 @@ playerEnteredCurrLevel.Event:Connect(function()
     -- spawn dragon here
     local dragonMesh = workspace.FrostDragon:Clone()
     dragonMesh.Name = "FrostDragon1"
-    -- dragonMesh:PivotTo(currLevel.MobSpawn:GetPivot() + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0))
-    dragonMesh.PrimaryPart.CFrame = CFrame.lookAt(currLevel.MobSpawn:GetPivot().Position + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0), currLevel.SouthDoor.Position)
+    
+    -- local dragonB
+    -- local spawnAt = currLevel.MobSpawn:GetPivot().Position 
+    -- local lookingAt = currLevel.SouthDoor:GetPivot().Position
+    
+    dragonMesh:PivotTo(CFrame.lookAt(currLevel.MobSpawn:GetPivot().Position + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0), currLevel.SouthDoor.Position))
     CollectionService:AddTag(dragonMesh, "LootContainer")
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
-    
+
     -- start battle
 
     print("Fired")
