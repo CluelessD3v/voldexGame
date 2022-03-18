@@ -128,6 +128,23 @@ function DragonEntity:TaggedInstanceEnteredAgro()
     end
 end
 
+--* Checks if an instance with a valid target tag entered the Dragon attack detection radius
+function DragonEntity:TaggedInstanceEnteredAttackAgro()
+    for _, validTag in ipairs(self.ValidTargetTags) do
+        for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
+            local target: Part = taggedInstance
+
+            if CheckIfInstanceIsInsideRadius(self.Instance.PrimaryPart, taggedInstance, self.AttackAgro) then
+                self.CurrentTarget = target
+                return true
+            else
+                self.CurrentTarget = nil
+                return false
+            end
+        end
+    end
+end
+
 --* Switches Dragon concrete states
 function DragonEntity:SwitchState(newState: table)
     --# Does the Current state object exist? Great

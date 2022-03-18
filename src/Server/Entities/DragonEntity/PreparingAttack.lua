@@ -1,3 +1,7 @@
+--# <|=============== SERVICES ===============|>
+local RunService = game:GetService("RunService")
+
+
 local PreparingAttack = {}
 PreparingAttack.__index = PreparingAttack
 
@@ -21,6 +25,8 @@ function PreparingAttack:Start()
     
     self.Context.AnimationTracks.WingBeat:Play()
     self.Context.AnimationTracks.WingBeat.Stopped:Wait()
+    
+
     self.Context:SwitchState(self.Context.States.ChasingPlayer)
     
 end
