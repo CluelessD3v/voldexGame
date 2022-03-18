@@ -41,8 +41,18 @@ function DragonEntity.new(instance: Model, dragonObject: table)
 
     --# DragonEntity class properties
     self.CurrentTarget  = nil
-    self.AnimationTrack = nil
-    self.Animations = self.Instance.Animations
+    self.AnimationTracks = nil
+    self.AnimationTracks = {}
+
+    local animsFolder = self.Instance.Animations
+    local animator = self.Instance.Humanoid.Animator
+    for _, animation in pairs (animsFolder:GetChildren()) do
+        print(animation)
+        self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
+    end
+
+    print(self.AnimationTracks)
+    -- self.Animations = self.Instance.Animations
 
     
 
@@ -74,10 +84,6 @@ function DragonEntity.new(instance: Model, dragonObject: table)
     self.Instance.Humanoid.Died:Connect(function()
         self:SwitchState(self.States.Dead)
     end)
-
-
-    local animator = self.Instance.Humanoid.Animator
-    self.AnimationTrack = animator:LoadAnimation(self.Animations.Idle)
 
     return self
 end

@@ -25,9 +25,11 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 function Idle:Start()
-    local animator = self.Instance.Humanoid.Animator
-    self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
-    self.AnimationTrack:Play()
+    -- local animator = self.Instance.Humanoid.Animator
+    -- self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
+    -- self.AnimationTrack:Play()
+
+    self.Context.AnimationTracks.Idle:Play()
 
     --# Poll every frame to see if a valid instance
     --# Entered the detection radius, did it entered?
@@ -42,7 +44,7 @@ function Idle:Start()
 end
 
 function Idle:Exit()
-    self.Context.AnimationTrack:Stop()
+    self.Context.AnimationTracks.Idle:Stop()
     self.Trove:Clean()
     return    
 end

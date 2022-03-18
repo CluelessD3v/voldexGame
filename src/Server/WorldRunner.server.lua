@@ -63,10 +63,12 @@ Lair2.Parent = workspace
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
+    
+    
     newDragon:Start()
 
-    task.wait(2)
-    newDragon.Instance.Humanoid.Health =0
+    -- newDragon:SwitchState(newDragon.States.Attacking)
+
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
