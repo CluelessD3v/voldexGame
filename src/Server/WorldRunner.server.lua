@@ -20,16 +20,17 @@ local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>\
 
-local prevLevel = nil
 
-local lobby             = workspace.Lobby
-local lobbyNorthHallway = lobby.NorthHallway
+local lobby  = workspace.Lobby
 
-local currLevel               = workspace.Lair:Clone()
-local theFrontOfThePrevMap    = lobby:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  lobby:GetExtentsSize().Z/-2))
-local itsNorthHallwayHalfSize = lobbyNorthHallway.Size.Z/-2
+local prevLevel             = lobby
+local prevLevelNorthHallway = prevLevel.NorthHallway
+local currLevel             = workspace.Lair:Clone()
 
-currLevel:PivotTo(theFrontOfThePrevMap  +  itsNorthHallwayHalfSize)
+local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
+local itsNorthHallwayHalfSize = prevLevelNorthHallway.Size.Z/-2
+
+currLevel:PivotTo(theFrontOfThePrevMap  +  Vector3.new(0, 0, itsNorthHallwayHalfSize))
 currLevel.Parent = workspace
 
 
