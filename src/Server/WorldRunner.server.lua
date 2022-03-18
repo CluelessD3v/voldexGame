@@ -12,61 +12,59 @@ local Entities = ServerScriptService.Entities
 local eGoldCoin: ModuleScript     = require(Entities.GoldCoinEntity)
 local eDragon: ModuleScript       = require(Entities.DragonEntity)
 local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
+local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
-local function BuildLair()
-    local Lair: Model    = workspace.Lair:Clone()
+-- local function BuildLair()
+--     local Lair: Model    = workspace.Lair:Clone()
 
-    local SouthHallway: Part = workspace.Hallway:Clone()
-    SouthHallway.Name = "SouthHallway"
-    SouthHallway.Parent = Lair
+--     local SouthHallway: Part = workspace.Hallway:Clone()
+--     SouthHallway.Name = "SouthHallway"
+--     SouthHallway.Parent = Lair
 
-    local shOffset = Lair.PrimaryPart.Size.Z * .5 + SouthHallway.Size.Z * .5
-    local shTargetCF = Lair:GetPivot() * CFrame.new(0,0, shOffset)
-    SouthHallway:PivotTo(shTargetCF)
+--     local shOffset = Lair.PrimaryPart.Size.Z * .5 + SouthHallway.Size.Z * .5
+--     local shTargetCF = Lair:GetPivot() * CFrame.new(0,0, shOffset)
+--     SouthHallway:PivotTo(shTargetCF)
 
     
-    local NorthHallway: Model = workspace.Hallway:Clone()
-    NorthHallway.Name = "NorthHallway"
-    NorthHallway.Parent = Lair
+--     local NorthHallway: Model = workspace.Hallway:Clone()
+--     NorthHallway.Name = "NorthHallway"
+--     NorthHallway.Parent = Lair
 
-    local nhOffset = Lair.PrimaryPart.Size.Z * -.5 + NorthHallway.Size.Z * -.5
-    local nhTargerCF = Lair:GetPivot() * CFrame.new(0, 0 , nhOffset)
-    NorthHallway:PivotTo(nhTargerCF)
+--     local nhOffset = Lair.PrimaryPart.Size.Z * -.5 + NorthHallway.Size.Z * -.5
+--     local nhTargerCF = Lair:GetPivot() * CFrame.new(0, 0 , nhOffset)
+--     NorthHallway:PivotTo(nhTargerCF)
 
 
-    return Lair
-end
+--     return Lair
+-- end
 
-local Lair1 = BuildLair()
-Lair1:PivotTo(CFrame.new(0, 100, 0))
-Lair1.Parent = workspace
+-- local Lair1 = BuildLair()
+-- Lair1:PivotTo(CFrame.new(0, 100, 0))
+-- Lair1.Parent = workspace
 
-local Lobby: Model = workspace.Lobby
-local lbOffset = Lair1.SouthHallway.Size.Z * .5 + Lobby.PrimaryPart.Size.Z * .5
-local lbTargetCF = Lair1.SouthHallway:GetPivot() * CFrame.new(0, 0, lbOffset)
-Lobby:PivotTo(lbTargetCF)
+-- local Lobby: Model = workspace.Lobby
+-- local lbOffset = Lair1.SouthHallway.Size.Z * .5 + Lobby.PrimaryPart.Size.Z * .5
+-- local lbTargetCF = Lair1.SouthHallway:GetPivot() * CFrame.new(0, 0, lbOffset)
+-- Lobby:PivotTo(lbTargetCF)
 
-local Lair2 = BuildLair()
-local l2Offset = Lair1.NorthHallway.Size.Z * -.5 + Lair2.PrimaryPart.Size.Z * - .5 + Lair2.SouthHallway.Size.Z * -.5
-local l2TargetCF = Lair1.NorthHallway:GetPivot() * CFrame.new(0, 0, l2Offset)
-Lair2:PivotTo(l2TargetCF)
-Lair2.Parent = workspace
+-- local Lair2 = BuildLair()
+-- local l2Offset = Lair1.NorthHallway.Size.Z * -.5 + Lair2.PrimaryPart.Size.Z * - .5 + Lair2.SouthHallway.Size.Z * -.5
+-- local l2TargetCF = Lair1.NorthHallway:GetPivot() * CFrame.new(0, 0, l2Offset)
+-- Lair2:PivotTo(l2TargetCF)
+-- Lair2.Parent = workspace
 
 
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     local newDragon = eDragon.new(dragon)
 
-    
     newDragon:Start()
-
     newDragon:SwitchState(newDragon.States.PreparingAttack)
-
 end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
