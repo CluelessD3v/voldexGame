@@ -29,8 +29,12 @@ function ChasingPlayer:Start()
         self:Exit()
     end)
 
+    self.Instance.Humanoid.WalkSpeed = 14
+    print(self.Context.AnimationTracks.Walk.Speed)
     self.Context.AnimationTracks.Walk:Play()
-
+    self.Context.AnimationTracks.Walk:AdjustSpeed(3)
+    print(self.Context.AnimationTracks.Walk.Speed)
+    
 
     --# Poll every frame to see if a valid instance
     --# is still in the detection radius, still inside agro?
@@ -47,7 +51,6 @@ function ChasingPlayer:Start()
         end
 
         if self.Context.CurrentTarget then
-            print(self.Context.CurrentTarget)
             if (self.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
                 self.Context:SwitchState(self.Context.States.PreparingAttack)
             end
@@ -57,7 +60,8 @@ function ChasingPlayer:Start()
 end
 
 function ChasingPlayer:Exit()
-    self.Context.AnimationTracks.Walk:Play()
+    self.Instance.Humanoid.WalkSpeed = 7
+    self.Context.AnimationTracks.Walk:Stop()
     self.Trove:Clean()    
     return
 end
