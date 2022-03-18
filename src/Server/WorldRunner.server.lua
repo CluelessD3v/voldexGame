@@ -19,9 +19,17 @@ local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>\
+
 local prevLevel = nil
-local currLevel = workspace.Lair:Clone()
-currLevel:PivotTo(workspace.Lobby:GetPivot() * CFrame.new(0, 0, currLevel:GetExtentsSize().Z/-2 + currLevel.SouthHallway.Size.Z/-2 + workspace.Lobby.NorthHallway.Size.Z/-2 ))
+
+local lobby             = workspace.Lobby
+local lobbyNorthHallway = lobby.NorthHallway
+
+local currLevel               = workspace.Lair:Clone()
+local theFrontOfThePrevMap    = lobby:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  lobby:GetExtentsSize().Z/-2))
+local itsNorthHallwayHalfSize = lobbyNorthHallway.Size.Z/-2
+
+currLevel:PivotTo(theFrontOfThePrevMap  +  itsNorthHallwayHalfSize)
 currLevel.Parent = workspace
 
 
