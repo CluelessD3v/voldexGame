@@ -1,3 +1,6 @@
+--# <|=============== SERVICES ===============|>
+local RunService = game:GetService("RunService")
+
 local FireBreathing = {}
 FireBreathing.__index = FireBreathing
 
@@ -17,11 +20,18 @@ function FireBreathing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end) 
-    
-    self.Context.AnimationTracks.FireBreath:Play()
-    self.Context.AnimationTracks.FireBreath.Stopped:Wait()
 
-    self.Context:SwitchState(self.Context.States.PreparingAttack)
+    local startedFireBreathing = time()
+    local stopFireBreathingAt = 3
+
+    self.Context.AnimationTracks.FireBreath:Play()
+
+    self.Trove:Add(RunService.Heartbeat:Connect(function()
+        if (time() - startedFireBreathing) >=stopFireBreathingAt then
+            self.Context:SwitchState(self.Context.States.PreparingAttack)
+        end
+    
+    end))
 end
 
 
