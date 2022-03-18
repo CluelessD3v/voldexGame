@@ -31,6 +31,10 @@ end
 
 
 function Homing:Start()
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+    
     local animator = self.Instance.Humanoid.Animator
     self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Walk)
     self.AnimationTrack:Play()
