@@ -2,7 +2,7 @@ local LevelEntity = {}
 LevelEntity.__index = LevelEntity
 
 
-function LevelEntity.new()
+function LevelEntity.new(Instance: Model)
     local self = setmetatable({}, LevelEntity)
     return self
 end
