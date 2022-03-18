@@ -67,7 +67,7 @@ for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
     
     newDragon:Start()
 
-    newDragon:SwitchState(newDragon.States.Attacking)
+    newDragon:SwitchState(newDragon.States.PreparingAttack)
 
 end
 

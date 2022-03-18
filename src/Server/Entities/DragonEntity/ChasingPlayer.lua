@@ -49,7 +49,7 @@ function ChasingPlayer:Start()
         if self.Context.CurrentTarget then
             print(self.Context.CurrentTarget)
             if (self.Instance:GetPivot().Position - self.Context.CurrentTarget:GetPivot().Position).Magnitude <= self.Context.AttackAgro then
-                self.Context:SwitchState(self.Context.States.Attacking)
+                self.Context:SwitchState(self.Context.States.PreparingAttack)
             end
         end
         

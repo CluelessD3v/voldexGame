@@ -73,11 +73,11 @@ function DragonEntity.new(instance: Model, dragonObject: table)
 
     --# States
     self.States = {
-        Idle          = require(script.Idle),
-        ChasingPlayer = require(script.ChasingPlayer),
-        Homing        = require(script.Homing),
-        Attacking     = require(script.Attacking),
-        Dead          = require(script.Dead),
+        Idle            = require(script.Idle),
+        ChasingPlayer   = require(script.ChasingPlayer),
+        Homing          = require(script.Homing),
+        PreparingAttack = require(script.PreparingAttack),
+        Dead            = require(script.Dead),
     }
     self.CurrentState = self.States.Idle.new(self)
     self.PreviousState = nil

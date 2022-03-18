@@ -1,11 +1,11 @@
-local Attacking = {}
-Attacking.__index = Attacking
+local PreparingAttack = {}
+PreparingAttack.__index = PreparingAttack
 
 
-function Attacking.new(context: table)
-    local self = setmetatable({}, Attacking)
+function PreparingAttack.new(context: table)
+    local self = setmetatable({}, PreparingAttack)
 
-    self.Name = "Attacking"
+    self.Name = "PreparingAttack"
     self.Context = context
     self.Instance = self.Context.Instance
     self.Trove = context.Trove:Extend()
@@ -14,7 +14,7 @@ function Attacking.new(context: table)
     return self
 end
 
-function Attacking:Start()
+function PreparingAttack:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end)
@@ -25,11 +25,11 @@ function Attacking:Start()
     
 end
 
-function Attacking:Exit()
+function PreparingAttack:Exit()
     self.Context.AnimationTracks.WingBeat:Stop()
     self.Trove:Clean()
     return
 end
 
 
-return Attacking
+return PreparingAttack
