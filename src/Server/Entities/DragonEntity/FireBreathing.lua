@@ -16,12 +16,17 @@ end
 function FireBreathing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
-    end)
+    end) 
+    
+    self.Context.AnimationTracks.FireBreath:Play()
+    self.Context.AnimationTracks.FireBreath.Stopped:Wait()
 
+    self.Context:SwitchState(self.Context.States.PreparingAttack)
 end
 
 
 function FireBreathing:Exit()
+    self.Context.AnimationTracks.FireBreath:stop()
     self.Trove:Clean()
 end
 
