@@ -1,5 +1,9 @@
 --[[
-    Dragon Entty state: In this state the dragon instance takes a momment to act
+    DragonEntity state: The dragon found a target within his attack agro
+    he will take a momment to allow targets to react, and to "decide"
+    which attack to use against the target.
+
+    If the target leaves the attack agro the dragon will attempt to give chase
 
 ]]
 --# <|=============== SERVICES ===============|>

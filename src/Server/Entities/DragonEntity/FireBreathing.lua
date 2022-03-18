@@ -1,6 +1,14 @@
+--[[
+    DragonEntity State: The dragon Instance will start breathing fire for
+    N ammount of seconds, after he finishes he will go back to prepare for
+    another attack
+]]
+
 --# <|=============== SERVICES ===============|>
 local RunService = game:GetService("RunService")
 
+
+--? <|=============== CONSTRUCTOR ===============|>
 local FireBreathing = {}
 FireBreathing.__index = FireBreathing
 
@@ -16,13 +24,15 @@ function FireBreathing.new(context: table)
     return self
 end
 
+--+ <|=============== PUBLIC FUNCTIONS ===============|>
+
 function FireBreathing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end) 
 
     local startedFireBreathing = time()
-    local stopFireBreathingAt = 3
+    local stopFireBreathingAt  = 3
 
     self.Context.AnimationTracks.FireBreath:Play()
 

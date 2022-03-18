@@ -1,3 +1,8 @@
+--[[
+    DragonEntity State: The dragon will beat his wings and attack his target
+]]
+
+--? <|=============== CONSTRUCTOR ===============|>
 local WingBeating = {}
 WingBeating.__index = WingBeating
 
@@ -12,6 +17,7 @@ function WingBeating.new(context: table)
     return self
 end
 
+--+ <|=============== PUBLIC FUNCTIONS ===============|>
 function WingBeating:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
