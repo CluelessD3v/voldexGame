@@ -17,10 +17,14 @@ function WingBeating:Start()
         self:Exit()
     end)
 
+    self.Context.AnimationTracks.WingBeat:Play()
+    self.Context.AnimationTracks.WingBeat.Stopped:Wait()
 
+    self.Context:SwitchState(self.Context.States.PreparingAttack)
 end
 
 function WingBeating:Exit()
+    self.Context.AnimationTracks.WingBeat:Stop()
     self.Trove:Clean()
 end
 
