@@ -40,14 +40,15 @@ playerEnteredCurrLevel.Event:Connect(function()
         currLevel.SouthDoor.CanCollide = true
 
     -- spawn dragon here
-    local dragonMesh = workspace.FrostDragon:Clone()
-    dragonMesh.Name = "FrostDragon1"
+    local dragonMesh                  = workspace.FrostDragon:Clone()
+    local atMobSpawn                  = currLevel.MobSpawn:GetPivot().Position
+    local lookingAtSouthDoor          = currLevel.SouthDoor:GetPivot().Position
+    local upOffsetToAvoidGettingStuck = Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0)
+
+    local currLevelMobSpawn  = CFrame.lookAt(atMobSpawn, lookingAtSouthDoor )
+    dragonMesh:PivotTo(currLevelMobSpawn + upOffsetToAvoidGettingStuck)
     
-    -- local dragonB
-    -- local spawnAt = currLevel.MobSpawn:GetPivot().Position 
-    -- local lookingAt = currLevel.SouthDoor:GetPivot().Position
-    
-    dragonMesh:PivotTo(CFrame.lookAt(currLevel.MobSpawn:GetPivot().Position + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0), currLevel.SouthDoor.Position))
+    dragonMesh.Name = "dragon"
     CollectionService:AddTag(dragonMesh, "LootContainer")
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
