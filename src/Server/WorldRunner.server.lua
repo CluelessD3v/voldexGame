@@ -39,22 +39,32 @@ playerEnteredCurrLevel.Event:Connect(function()
         currLevel.SouthDoor.Transparency = 0
         currLevel.SouthDoor.CanCollide = true
 
-    -- spawn dragon  and
+    -- spawn dragon here
+    local dragonMesh = workspace.FrostDragon:Clone()
+    dragonMesh.Name = "FrostDragon1"
+    -- dragonMesh:PivotTo(currLevel.MobSpawn:GetPivot() + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0))
+    dragonMesh.PrimaryPart.CFrame = CFrame.lookAt(currLevel.MobSpawn:GetPivot().Position + Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0), currLevel.SouthDoor.Position)
+    CollectionService:AddTag(dragonMesh, "LootContainer")
+    CollectionService:AddTag(dragonMesh, "Dragon")
+    dragonMesh.Parent = currLevel
+    
     -- start battle
 
     print("Fired")
 end)
-task.wait(1)
 
 playerEnteredCurrLevel:Fire()
 
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
-for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
-    local newDragon = eDragon.new(dragon)
 
-    -- newDragon:Start()
-    -- newDragon:SwitchState(newDragon.States.PreparingAttack)
-end
+--! Commented this out since it would attempt to create a new dragon entity after the previous one was created during testing.
+-- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
+--     print(dragon)
+--     -- local newDragon = eDragon.new(dragon)
+
+--     -- newDragon:Start()
+--     -- newDragon:SwitchState(newDragon.States.PreparingAttack)
+-- end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
