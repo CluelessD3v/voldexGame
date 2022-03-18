@@ -29,12 +29,19 @@ function PreparingAttack:Start()
     self.Context.AnimationTracks.Idle:AdjustSpeed(4)
 
     self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart:GetPivot().Position)
-
-
+    
+    local n = math.random(1, 2)
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
         if not self.Context:TaggedInstanceEnteredAttackAgro() then
             self.Context:SwitchState(self.Context.States.ChasingPlayer)
+        else
+            if n == 1 then
+
+            else
+
+            end
+
         end
     end))
 
