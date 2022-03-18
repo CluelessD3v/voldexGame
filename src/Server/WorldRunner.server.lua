@@ -1,8 +1,6 @@
 --# <|=============== SERVICES ===============|>
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
-local Workspace = game:GetService("Workspace")
-local Players             = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
