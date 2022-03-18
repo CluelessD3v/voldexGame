@@ -36,11 +36,15 @@ currLevel.Parent = workspace
 playerEnteredCurrLevel.Event:Connect(function()
     
     -- Close level here
+        currLevel.SouthDoor.Transparency = 0
+        currLevel.SouthDoor.CanCollide = true
+
     -- spawn dragon  and
     -- start battle
 
     print("Fired")
 end)
+task.wait(1)
 
 playerEnteredCurrLevel:Fire()
 
