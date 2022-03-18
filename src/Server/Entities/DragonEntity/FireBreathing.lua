@@ -14,7 +14,10 @@ function FireBreathing.new(context: table)
 end
 
 function FireBreathing:Start()
-    
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+
 end
 
 

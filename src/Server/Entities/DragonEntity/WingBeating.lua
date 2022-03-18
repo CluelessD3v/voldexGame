@@ -13,6 +13,10 @@ function WingBeating.new(context: table)
 end
 
 function WingBeating:Start()
+    self.Instance.Humanoid.Died:Connect(function()
+        self:Exit()
+    end)
+
 
 end
 
