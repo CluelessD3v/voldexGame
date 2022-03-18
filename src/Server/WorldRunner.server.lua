@@ -23,14 +23,24 @@ local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 
 local lobby  = workspace.Lobby
 
-local prevLevel             = lobby
-local prevLevelNorthHallway = prevLevel.NorthHallway
-local currLevel             = workspace.Lair:Clone()
+local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
+    local currLevel = newLevel
+    local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
+    local itsNorthHallwayHalfSize = prevLevel.NorthHallway.Size.Z/-2
 
-local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
-local itsNorthHallwayHalfSize = prevLevelNorthHallway.Size.Z/-2
+    currLevel:PivotTo(theFrontOfThePrevMap  +  Vector3.new(0, 0, itsNorthHallwayHalfSize))
+    return currLevel
+end
 
-currLevel:PivotTo(theFrontOfThePrevMap  +  Vector3.new(0, 0, itsNorthHallwayHalfSize))
+
+local numberOfLairs = 0
+local prevLevel = lobby
+local currLevel = workspace.Lair:Clone()
+PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+
+numberOfLairs += 1
+
+currLevel.Name = currLevel.Name..numberOfLairs
 currLevel.Parent = workspace
 
 playerEnteredCurrLevel.Event:Connect(function()
@@ -59,6 +69,12 @@ playerEnteredCurrLevel.Event:Connect(function()
     newDragonEntity.SpawnLocation = currLevel.MobSpawn
     newDragonEntity:Start()
     print("Fired")
+
+
+    -- When mob dies Create the new level
+    newDragonEntity.Instance.Humanoid.Died:Connect(function()
+        
+    end)
 end)
 
 playerEnteredCurrLevel:Fire()
