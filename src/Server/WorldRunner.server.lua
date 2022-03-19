@@ -85,13 +85,13 @@ playerEnteredCurrLevel.Event:Connect(function()
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
 
-    --# start dragon entity instance state machine
+--# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
+    
+--# start dragon entity instance state machine
 
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation = currLevel.MobSpawn
     newDragonEntity:Start()
-    print("Fired")
-
 
     --# When mob dies destroy the previous level and create a new one
     --# that will be set as the current level, then position it.
@@ -117,21 +117,12 @@ playerEnteredCurrLevel.Event:Connect(function()
                     con:Disconnect()
                 end
             end
-        
         end)
     end)
+
+    -- all connections has been stablished at this point, do testing starting from here
 end)
 
---# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
-
---! Commented this out since it would attempt to create a new dragon entity after the previous one was created during testing DO NOT REMOVE YET.
--- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
---     print(dragon)
---     -- local newDragon = eDragon.new(dragon)
-
---     -- newDragon:Start()
---     -- newDragon:SwitchState(newDragon.States.PreparingAttack)
--- end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
