@@ -23,6 +23,13 @@ function WingBeating:Start()
         self:Exit()
     end)
     
+    for _, v in pairs(self.Context.WingBeatingHitboxes) do
+        self.Trove:Add(v.Touched:Connect(function(t)
+            print(t)
+        
+        end))
+    end
+
 
     self.Context.AnimationTracks.WingBeat:Play()
     self.Context.AnimationTracks.WingBeat.Stopped:Wait()
