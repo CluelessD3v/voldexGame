@@ -1,8 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
-local Workspace = game:GetService("Workspace")
-local Players             = game:GetService("Players")
+local RunService          = game:GetService("RunService")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -14,82 +13,116 @@ local Entities = ServerScriptService.Entities
 local eGoldCoin: ModuleScript     = require(Entities.GoldCoinEntity)
 local eDragon: ModuleScript       = require(Entities.DragonEntity)
 local eLootableItem: ModuleScript = require(Entities.LootableItemEntity)
+local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
-local function BuildLair()
-    local Lair: Model    = workspace.Lair:Clone()
 
-    local SouthHallway: Part = workspace.Hallway:Clone()
-    SouthHallway.Name = "SouthHallway"
-    SouthHallway.Parent = Lair
+--* Aux function to position current level in front of the previous one
+local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
+    local currLevel = newLevel
+    local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
 
-    local shOffset = Lair.PrimaryPart.Size.Z * .5 + SouthHallway.Size.Z * .5
-    local shTargetCF = Lair:GetPivot() * CFrame.new(0,0, shOffset)
-    SouthHallway:PivotTo(shTargetCF)
-
-    
-    local NorthHallway: Model = workspace.Hallway:Clone()
-    NorthHallway.Name = "NorthHallway"
-    NorthHallway.Parent = Lair
-
-    local nhOffset = Lair.PrimaryPart.Size.Z * -.5 + NorthHallway.Size.Z * -.5
-    local nhTargerCF = Lair:GetPivot() * CFrame.new(0, 0 , nhOffset)
-    NorthHallway:PivotTo(nhTargerCF)
-
-
-    return Lair
+    currLevel:PivotTo(theFrontOfThePrevMap)
+    return currLevel
 end
 
-local Lair1 = BuildLair()
-Lair1:PivotTo(CFrame.new(0, 100, 0))
-Lair1.Parent = workspace
+--# Instancing lobby and first level
+local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
+local lobby  = workspace.Lobby
 
-local Lobby: Model = workspace.Lobby
-local lbOffset = Lair1.SouthHallway.Size.Z * .5 + Lobby.PrimaryPart.Size.Z * .5
-local lbTargetCF = Lair1.SouthHallway:GetPivot() * CFrame.new(0, 0, lbOffset)
-Lobby:PivotTo(lbTargetCF)
+local numberOfLairs = 0
+local prevLevel = lobby
+local currLevel = workspace.Lair:Clone()
+PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
-local Lair2 = BuildLair()
-local l2Offset = Lair1.NorthHallway.Size.Z * -.5 + Lair2.PrimaryPart.Size.Z * - .5 + Lair2.SouthHallway.Size.Z * -.5
-local l2TargetCF = Lair1.NorthHallway:GetPivot() * CFrame.new(0, 0, l2Offset)
-Lair2:PivotTo(l2TargetCF)
-Lair2.Parent = workspace
+numberOfLairs += 1
+
+currLevel.Name = currLevel.Name..numberOfLairs
+currLevel.Parent = workspace
 
 
---# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
-for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
-    local animations = dragon.Animations
-    local newDragon = eDragon.new(dragon)
-    newDragon:Start()
-    local animator: Animator = newDragon.Instance.Humanoid.Animator
-	newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
-	
-	newDragon.StateChanged.Event:Connect(function(newState)
-		print(newState)
-		
-		if newState == "Homing" or newState == "ChasingPlayer"then
-			newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Walk)
-            newDragon.AnimationTrack:Play()
-            
-		elseif newState == "Idle" then
-			newDragon.AnimationTrack:Stop()
-			newDragon.AnimationTrack = animator:LoadAnimation(animations.Idle)
-			newDragon.AnimationTrack:Play()
+--# Stablish first polling that will kickstart Level generation
+--# when a valid dragon target is close enough to level activation agro
+--# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-        elseif newState == "Dead" then
-            newDragon.AnimationTrack:Stop()
-            newDragon.AnimationTrack = animator:LoadAnimation(animations.Death)
-            newDragon.AnimationTrack:Play()
+local con 
+con = RunService.Heartbeat:Connect(function() 
+    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+
+        if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+            print("Entered")
+            playerEnteredCurrLevel:Fire()
+            con:Disconnect()
         end
+    end
+
+end)
+
+playerEnteredCurrLevel.Event:Connect(function()
+    --# Close level doors here to prevent the player escaping the 
+    --# Level bounds
+    
+    currLevel.SouthDoor.Transparency = 0
+    currLevel.SouthDoor.CanCollide = true
+
+    --# Spawn Dragon mesh, and possition him to be at his spawn 
+    --# looking at the south door
+
+    local dragonMesh                  = workspace.FrostDragon:Clone()
+    local atMobSpawn                  = currLevel.MobSpawn:GetPivot().Position
+    local lookingAtSouthDoor          = currLevel.SouthDoor:GetPivot().Position
+    local upOffsetToAvoidGettingStuck = Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0)
+
+    local currLevelMobSpawn  = CFrame.lookAt(atMobSpawn, lookingAtSouthDoor )
+    dragonMesh:PivotTo(currLevelMobSpawn + upOffsetToAvoidGettingStuck)
+    
+    dragonMesh.Name = "dragon"
+    CollectionService:AddTag(dragonMesh, "LootContainer")
+    CollectionService:AddTag(dragonMesh, "Dragon")
+    dragonMesh.Parent = currLevel
+
+--# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
+    
+--# start dragon entity instance state machine
+
+    local newDragonEntity = eDragon.new(dragonMesh)
+    newDragonEntity.SpawnLocation = currLevel.MobSpawn
+    newDragonEntity:Start()
+
+    --# When mob dies destroy the previous level and create a new one
+    --# that will be set as the current level, then position it.
+
+    newDragonEntity.Instance.Humanoid.Died:Connect(function()
+        prevLevel:Destroy()
+        prevLevel = currLevel
+        currLevel = workspace.Lair:Clone()
+        PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+        currLevel.Parent = workspace
+        
+        --# Create a new run service connection to poll if a valid dragon target 
+        --# entered the current level activation agro because the first one to kickstart
+        --# this cyclic process no longer exist
+
+        con = RunService.Heartbeat:Connect(function() 
+            for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+        
+                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+                    print("Entered")
+
+                    playerEnteredCurrLevel:Fire()
+                    con:Disconnect()
+                end
+            end
+        end)
     end)
 
+    -- all connections has been stablished at this point, do testing starting from here
+end)
 
-end
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 

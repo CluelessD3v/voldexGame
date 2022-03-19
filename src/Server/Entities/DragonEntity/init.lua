@@ -41,7 +41,20 @@ function DragonEntity.new(instance: Model, dragonObject: table)
 
     --# DragonEntity class properties
     self.CurrentTarget  = nil
-    self.AnimationTrack = nil
+    self.AnimationTracks = nil
+    self.AnimationTracks = {}
+
+    local animsFolder = self.Instance.Animations
+    local animator = self.Instance.Humanoid.Animator
+    for _, animation in pairs (animsFolder:GetChildren()) do
+        print(animation)
+        self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
+    end
+
+    print(self.AnimationTracks)
+    -- self.Animations = self.Instance.Animations
+
+    
 
     --# DragonEntity class events
     self.StateChanged        = Instance.new("BindableEvent")
@@ -60,15 +73,16 @@ function DragonEntity.new(instance: Model, dragonObject: table)
 
     --# States
     self.States = {
-        Idle          = require(script.Idle),
-        ChasingPlayer = require(script.ChasingPlayer),
-        Homing        = require(script.Homing),
-        Attacking     = require(script.Attacking),
-        Dead          = require(script.Dead),
+        Idle            = require(script.Idle),
+        ChasingPlayer   = require(script.ChasingPlayer),
+        Homing          = require(script.Homing),
+        PreparingAttack = require(script.PreparingAttack),
+        Dead            = require(script.Dead),
+        FireBreathing   = require(script.FireBreathing),
+        WingBeating     = require(script.WingBeating),
     }
-
-    self.CurrentState = nil
-
+    self.CurrentState = self.States.Idle.new(self)
+    self.PreviousState = nil
     self.Instance.Humanoid.Died:Connect(function()
         self:SwitchState(self.States.Dead)
     end)
@@ -116,26 +130,40 @@ function DragonEntity:TaggedInstanceEnteredAgro()
     end
 end
 
+--* Checks if an instance with a valid target tag entered the Dragon attack detection radius
+function DragonEntity:TaggedInstanceEnteredAttackAgro()
+    for _, validTag in ipairs(self.ValidTargetTags) do
+        for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
+            local target: Part = taggedInstance
+
+            if CheckIfInstanceIsInsideRadius(self.Instance.PrimaryPart, taggedInstance, self.AttackAgro) then
+                self.CurrentTarget = target
+                return true
+            else
+                self.CurrentTarget = nil
+                return false
+            end
+        end
+    end
+end
+
 --* Switches Dragon concrete states
 function DragonEntity:SwitchState(newState: table)
     --# Does the Current state object exist? Great
     --# transition out of said current state, set 
     --# new state as current & start it, else default to idle
 
-    if self.CurrentState then
-        self.CurrentState:Exit()
+    self.CurrentState:Exit()
+    self.PreviousState = self.CurrentState
+    self.CurrentState = newState.new(self)
 
-        self.CurrentState = newState.new(self)
-        self.Instance:SetAttribute("CurrentState", self.CurrentState.Name)
-        self.Instance.StateChanged:Fire(self.CurrentState.Name)
+    print("Entered", self.CurrentState.Name, "from", self.PreviousState.Name )
 
-        self.CurrentState:Start()
-        return
-    end
+    self.Instance:SetAttribute("CurrentState", self.CurrentState.Name)
+    self.Instance.StateChanged:Fire(self.CurrentState.Name)
 
-    self.CurrentState = self.States.Idle.new(self)
     self.CurrentState:Start()
-
+    return
 end
 
 return DragonEntity

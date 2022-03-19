@@ -8,16 +8,18 @@ Dead.__index = Dead
 
 function Dead.new(context: table)
     local self = setmetatable({}, Dead)
-
     self.Name = "Dead"
     self.Context = context
+    self.Instance = self.Context.Instance
     self.Trove = self.Context.Trove:Extend()
     
     return self
 end
 
 function Dead:Start()
-    for _, child in ipairs(self.Context.Instance:GetChildren()) do
+    self.Context.AnimationTracks.Death:Play()
+
+    for _, child in ipairs(self.Instance:GetChildren()) do
         if child:IsA("Part") or child:IsA("MeshPart") then
             local tweenInfo = TweenInfo.new(
                 1.5,
@@ -40,6 +42,7 @@ function Dead:Start()
 end
 
 function Dead:Exit()
+    self.Context.AnimationTracks.Death:Stop()
     self.Trove:Clean()
 end
 
