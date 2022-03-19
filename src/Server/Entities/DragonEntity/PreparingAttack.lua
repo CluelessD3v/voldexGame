@@ -40,7 +40,7 @@ function PreparingAttack:Start()
     self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart:GetPivot().Position)
 
     
-    local n = 2
+    local n = math.random(1, 2)
     local prepareTime = 2
     local startedPreparing = time()
 
