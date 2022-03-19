@@ -5,8 +5,10 @@
 ]]
 
 --# <|=============== SERVICES ===============|>
-local RunService   = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
+local RunService        = game:GetService("RunService")
+local TweenService      = game:GetService("TweenService")
+local CollectionService = game:GetService("CollectionService")
+
 
 --? <|=============== CONSTRUCTOR ===============|>
 local FireBreathing = {}
@@ -35,6 +37,7 @@ function FireBreathing:Start()
     local fireHitbox = Instance.new("Part")
     self.Trove:Add(fireHitbox)
 
+    --# The hitbox of the fire ability of the dragon
     fireHitbox.Anchored     = true
     fireHitbox.Transparency = .5
     fireHitbox.Size         = Vector3.new(5,5,5)
@@ -43,6 +46,24 @@ function FireBreathing:Start()
     --# Slight rotatiom so the hitbox does not look upward, but rather straight 
     fireHitbox.CFrame       = self.Instance.Head.CFrame:ToWorldSpace(CFrame.new(0, 0, fireHitbox.Size.Z * -.5 +  self.Instance.Head.Size.Z * -.5) * CFrame.Angles(math.rad(7), 0, 0))
     fireHitbox.Parent       = self.Instance.Head
+
+    --#  Listen if the Fire touched a valid dragon target
+    --# Due to the nature of fire damage this is not debounce
+    self.Trove:Add(fireHitbox.Touched:Connect(function(theTouchedPart) 
+        for _, validTag in ipairs(self.Context.ValidTargetTags) do
+            
+            if CollectionService:HasTag(theTouchedPart.Parent , validTag) then
+            print(theTouchedPart)
+
+                local humanoid: Humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
+
+                if humanoid then
+                    humanoid:TakeDamage(.3)
+                end
+            end
+        end
+    end))
+
 
     local fireParticleEmmiterHolder = Instance.new("Part")
     self.Trove:Add(fireParticleEmmiterHolder)
@@ -59,7 +80,7 @@ function FireBreathing:Start()
     --# Parent the Particle emmiter to the holder
     --# so the rotation of the head does not affect
     --# particles direction
-    
+
     self.ParticleEmmiter.Parent = fireParticleEmmiterHolder
     self.ParticleEmmiter.Enabled = true
 
