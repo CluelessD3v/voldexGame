@@ -141,8 +141,8 @@ end)
 ]]
 
 --* Aux function to construct lootable items from the lootable items config table
-local function ConstructLootableItem(lootableItem)
-    local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
+local function ConstructLootableItem(lootableItem: PVInstance, configTable: table)
+    local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, configTable)
    
     if lootableItemData then
         local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
@@ -158,11 +158,11 @@ end
 --# new LootableItems Entities
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    ConstructLootableItem(lootableItem)
+    ConstructLootableItem(lootableItem, tLootableItems)
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    ConstructLootableItem(lootableItem)    
+    ConstructLootableItem(lootableItem, tLootableItems)    
 end
 
 --# Caching all concrete LootableItems configs into a single table,
