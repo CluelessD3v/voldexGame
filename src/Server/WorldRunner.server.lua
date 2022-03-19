@@ -73,8 +73,19 @@ playerEnteredCurrLevel.Event:Connect(function()
 
     -- When mob dies Create the new level
     newDragonEntity.Instance.Humanoid.Died:Connect(function()
-        
+        prevLevel:Destroy()
+        prevLevel = currLevel
+        currLevel = workspace.Lair:Clone()
+        PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+        currLevel.Parent = workspace
+
+
+        playerEnteredCurrLevel:Fire() --! MOVE THIS TO A POLLING FOR WHEN THE PLAYER ACTUALLY ENTERS THE LEVEL
     end)
+
+    task.wait(2.5)
+
+    newDragonEntity.Instance.Humanoid.Health = 0
 end)
 
 playerEnteredCurrLevel:Fire()
