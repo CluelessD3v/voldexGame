@@ -66,7 +66,7 @@ for _, v in ipairs(CollectionService:GetTagged("Dragon")) do
     n:Start()
     print(v)
     task.wait(1)
-    n:SwitchState(n.States.WingBeating)
+    -- n:SwitchState(n.States.WingBeating)
     -- n.Instance.Humanoid.Health = 0
 end
 
