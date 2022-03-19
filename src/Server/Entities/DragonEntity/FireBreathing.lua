@@ -56,16 +56,22 @@ function FireBreathing:Start()
     fireParticleEmmiterHolder.Parent       = self.Instance.Head
 
 
+    --# Parent the Particle emmiter to the holder
+    --# so the rotation of the head does not affect
+    --# particles direction
+    
+    self.ParticleEmmiter.Parent = fireParticleEmmiterHolder
+    self.ParticleEmmiter.Enabled = true
 
-    local maxSize = 30 --# Max size in studs the hitbox will resize infront of the dragon
+
 
     --# Tween to move and resize the fire hitbox
     --# This is done to simulate resizing so the 
     --# hitbox instead of going through the dragon the body
     --# it is always keeping itself in front of itself
 
-    self.ParticleEmmiter.Parent = fireParticleEmmiterHolder
-    self.ParticleEmmiter.Enabled = true
+
+    local maxSize = 30 --# Max size in studs the hitbox will resize infront of the dragon
 
     local info = TweenInfo.new(
 	1.5,
