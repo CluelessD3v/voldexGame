@@ -44,7 +44,6 @@ numberOfLairs += 1
 currLevel.Name = currLevel.Name..numberOfLairs
 currLevel.Parent = workspace
 
-
 --# Stablish first polling that will kickstart Level generation
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin

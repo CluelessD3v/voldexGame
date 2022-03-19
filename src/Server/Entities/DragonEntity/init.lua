@@ -117,14 +117,12 @@ end
 function DragonEntity:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
-            local target: Part = taggedInstance
-
+            print(taggedInstance)
             if CheckIfInstanceIsInsideRadius(self.SpawnLocation, taggedInstance, self.DetectionAgro) then
-                self.CurrentTarget = target
+                self.CurrentTarget = taggedInstance
                 return true
             else
                 self.CurrentTarget = nil
-                return false
             end
         end
     end
@@ -134,14 +132,12 @@ end
 function DragonEntity:TaggedInstanceEnteredAttackAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
-            local target: Part = taggedInstance
 
             if CheckIfInstanceIsInsideRadius(self.Instance.PrimaryPart, taggedInstance, self.AttackAgro) then
-                self.CurrentTarget = target
+                self.CurrentTarget = taggedInstance
                 return true
             else
                 self.CurrentTarget = nil
-                return false
             end
         end
     end
