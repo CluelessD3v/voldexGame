@@ -129,7 +129,6 @@ playerEnteredCurrLevel.Event:Connect(function()
         end)
     end)
 
-    -- all connections has been stablished at this point, do testing starting from here
 end)
 
 
