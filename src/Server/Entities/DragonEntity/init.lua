@@ -117,7 +117,7 @@ end
 function DragonEntity:TaggedInstanceEnteredAgro()
     for _, validTag in ipairs(self.ValidTargetTags) do
         for _, taggedInstance in ipairs(CollectionService:GetTagged(validTag)) do
-            print(taggedInstance)
+            
             if CheckIfInstanceIsInsideRadius(self.SpawnLocation, taggedInstance, self.DetectionAgro) then
                 self.CurrentTarget = taggedInstance
                 return true

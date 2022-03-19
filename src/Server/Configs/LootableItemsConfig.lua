@@ -8,7 +8,8 @@ return {
                 Attributes = {
                     Damage   = 25,
                     ItemType = "SwordType",
-                    Owner    = " "
+                    Owner    = " ",
+                    ItemName = "ClassicSword"
                 },
                 Tags = {"SwordType", "LootableItem"},
             },
