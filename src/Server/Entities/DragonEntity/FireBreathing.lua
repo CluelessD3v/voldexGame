@@ -20,6 +20,8 @@ function FireBreathing.new(context: table)
     self.Context = context
     self.Instance = self.Context.Instance
     self.Trove   = context.Trove:Extend()
+
+    self.ParticleEmmiter = self.Instance.Head.ParticleEmitter
     
     return self
 end
@@ -30,21 +32,60 @@ function FireBreathing:Start()
         self:Exit()
     end) 
     
-    local fhb = Instance.new("Part")
-    self.Trove:Add(fhb)
-    local head = self.Instance.Head
-    fhb.Anchored = true
-    fhb.Transparency = .75
-    fhb.CFrame = head.CFrame:ToWorldSpace(CFrame.new(0, 0, fhb.Size.Z * -.5 +  head.Size.Z * -.5)) 
-    fhb.Parent = head
-    
+    local fireHitbox = Instance.new("Part")
+    self.Trove:Add(fireHitbox)
 
+    fireHitbox.Anchored     = true
+    fireHitbox.Transparency = .5
+    fireHitbox.Size         = Vector3.new(5,5,5)
+    fireHitbox.CanCollide   = false
+
+    --# Slight rotatiom so the hitbox does not look upward, but rather straight 
+    fireHitbox.CFrame       = self.Instance.Head.CFrame:ToWorldSpace(CFrame.new(0, 0, fireHitbox.Size.Z * -.5 +  self.Instance.Head.Size.Z * -.5) * CFrame.Angles(math.rad(7), 0, 0))
+    fireHitbox.Parent       = self.Instance.Head
+
+    local fireParticleEmmiterHolder = Instance.new("Part")
+    self.Trove:Add(fireParticleEmmiterHolder)
+
+    --# A part to hold the fire particle emmiter is being used because an attachment was not positioning itself correctly
+    fireParticleEmmiterHolder.Anchored     = true
+    fireParticleEmmiterHolder.Transparency = .5
+    fireParticleEmmiterHolder.Size         = Vector3.new(1,1,1)
+    fireParticleEmmiterHolder.CanCollide   = false
+    fireParticleEmmiterHolder.CFrame       = self.Instance.Head.CFrame + self.Instance.Head.CFrame.LookVector * self.Instance.Head.Size.Z * 0.5
+    fireParticleEmmiterHolder.Parent       = self.Instance.Head
+
+
+
+    local maxSize = 30 --# Max size in studs the hitbox will resize infront of the dragon
+
+    --# Tween to move and resize the fire hitbox
+    --# This is done to simulate resizing so the 
+    --# hitbox instead of going through the dragon the body
+    --# it is always keeping itself in front of itself
+
+    self.ParticleEmmiter.Parent = fireParticleEmmiterHolder
+    self.ParticleEmmiter.Enabled = true
+
+    local info = TweenInfo.new(
+	1.5,
+	Enum.EasingStyle.Sine,
+	Enum.EasingDirection.Out,
+	0,
+	false,
+	0)
+    local goals = {
+        CFrame = fireHitbox.CFrame * CFrame.new(0,0, maxSize/-2),
+        Size = fireHitbox.Size + Vector3.new(0, 0, maxSize)
+    }
+
+    local tween = TweenService:Create(fireHitbox, info, goals)
+    tween:Play()
 
     local startedFireBreathing = time()
-    local stopFireBreathingAt  = 3
+    local stopFireBreathingAt  = 2.5
 
-
-
+    
     self.Context.AnimationTracks.FireBreath:Play()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
@@ -57,6 +98,8 @@ end
 
 
 function FireBreathing:Exit()
+    self.ParticleEmmiter.Enabled = false
+    self.ParticleEmmiter.Parent = self.Instance.Head
     self.Context.AnimationTracks.FireBreath:stop()
     self.Trove:Clean()
 end
