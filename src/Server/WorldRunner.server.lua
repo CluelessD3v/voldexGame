@@ -1,6 +1,7 @@
 --# <|=============== SERVICES ===============|>
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
+local RunService          = game:GetService("RunService")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -42,8 +43,21 @@ numberOfLairs += 1
 currLevel.Name = currLevel.Name..numberOfLairs
 currLevel.Parent = workspace
 
+local con 
+
+con = RunService.Heartbeat:Connect(function() 
+    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+
+        if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+            print("Entered")
+            playerEnteredCurrLevel:Fire()
+            con:Disconnect()
+        end
+    end
+
+end)
+
 playerEnteredCurrLevel.Event:Connect(function()
-    
     -- Close level here
     currLevel.SouthDoor.Transparency = 0
     currLevel.SouthDoor.CanCollide = true
@@ -76,18 +90,23 @@ playerEnteredCurrLevel.Event:Connect(function()
         prevLevel = currLevel
         currLevel = workspace.Lair:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
-        currLevel.Parent = workspace
+        currLevel.Parent = workspace    
+        con = RunService.Heartbeat:Connect(function() 
+            for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+        
+                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+                    print("Entered")
 
-
-        playerEnteredCurrLevel:Fire() --! MOVE THIS TO A POLLING FOR WHEN THE PLAYER ACTUALLY ENTERS THE LEVEL
+                    playerEnteredCurrLevel:Fire()
+                    con:Disconnect()
+                end
+            end
+        
+        end)
     end)
-
-    task.wait(2.5)
-
-    newDragonEntity.Instance.Humanoid.Health = 0
 end)
 
-playerEnteredCurrLevel:Fire()
+-- playerEnteredCurrLevel:Fire()
 
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 
