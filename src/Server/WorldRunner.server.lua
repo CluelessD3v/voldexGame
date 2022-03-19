@@ -26,9 +26,8 @@ local lobby  = workspace.Lobby
 local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
     local currLevel = newLevel
     local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
-    local itsNorthHallwayHalfSize = prevLevel.NorthHallway.Size.Z/-2
 
-    currLevel:PivotTo(theFrontOfThePrevMap  +  Vector3.new(0, 0, itsNorthHallwayHalfSize))
+    currLevel:PivotTo(theFrontOfThePrevMap)
     return currLevel
 end
 
