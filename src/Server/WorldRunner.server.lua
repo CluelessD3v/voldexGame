@@ -19,11 +19,9 @@ local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
 
---# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>\
-local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
+--# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 
-local lobby  = workspace.Lobby
-
+--* Aux function to position current level in front of the previous one
 local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
     local currLevel = newLevel
     local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
@@ -32,6 +30,9 @@ local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: M
     return currLevel
 end
 
+--# Instancing lobby and first level
+local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
+local lobby  = workspace.Lobby
 
 local numberOfLairs = 0
 local prevLevel = lobby
@@ -43,8 +44,12 @@ numberOfLairs += 1
 currLevel.Name = currLevel.Name..numberOfLairs
 currLevel.Parent = workspace
 
-local con 
 
+--# Stablish first polling that will kickstart Level generation
+--# when a valid dragon target is close enough to level activation agro
+--# call playerEnteredCurrLevel, then a cyclic behavior will begin
+
+local con 
 con = RunService.Heartbeat:Connect(function() 
     for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
 
@@ -58,11 +63,15 @@ con = RunService.Heartbeat:Connect(function()
 end)
 
 playerEnteredCurrLevel.Event:Connect(function()
-    -- Close level here
+    --# Close level doors here to prevent the player escaping the 
+    --# Level bounds
+    
     currLevel.SouthDoor.Transparency = 0
     currLevel.SouthDoor.CanCollide = true
 
-    -- spawn dragon here
+    --# Spawn Dragon mesh, and possition him to be at his spawn 
+    --# looking at the south door
+
     local dragonMesh                  = workspace.FrostDragon:Clone()
     local atMobSpawn                  = currLevel.MobSpawn:GetPivot().Position
     local lookingAtSouthDoor          = currLevel.SouthDoor:GetPivot().Position
@@ -76,7 +85,7 @@ playerEnteredCurrLevel.Event:Connect(function()
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
 
-    -- start battle
+    --# start dragon entity instance state machine
 
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation = currLevel.MobSpawn
@@ -84,13 +93,20 @@ playerEnteredCurrLevel.Event:Connect(function()
     print("Fired")
 
 
-    -- When mob dies Create the new level
+    --# When mob dies destroy the previous level and create a new one
+    --# that will be set as the current level, then position it.
+
     newDragonEntity.Instance.Humanoid.Died:Connect(function()
         prevLevel:Destroy()
         prevLevel = currLevel
         currLevel = workspace.Lair:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
-        currLevel.Parent = workspace    
+        currLevel.Parent = workspace
+        
+        --# Create a new run service connection to poll if a valid dragon target 
+        --# entered the current level activation agro because the first one to kickstart
+        --# this cyclic process no longer exist
+
         con = RunService.Heartbeat:Connect(function() 
             for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
         
@@ -106,11 +122,9 @@ playerEnteredCurrLevel.Event:Connect(function()
     end)
 end)
 
--- playerEnteredCurrLevel:Fire()
-
 --# <|=============== DRAGON MOBS CONSTRUCTION AND MEDIATION ===============|>
 
---! Commented this out since it would attempt to create a new dragon entity after the previous one was created during testing.
+--! Commented this out since it would attempt to create a new dragon entity after the previous one was created during testing DO NOT REMOVE YET.
 -- for _, dragon in ipairs(CollectionService:GetTagged("Dragon")) do
 --     print(dragon)
 --     -- local newDragon = eDragon.new(dragon)
