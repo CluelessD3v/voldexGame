@@ -38,13 +38,17 @@ function PreparingAttack:Start()
     self.Context.AnimationTracks.Idle:AdjustSpeed(2.5)
 
     self.Instance.Humanoid:MoveTo(self.Instance.PrimaryPart:GetPivot().Position)
+
     
     local n = math.random(1, 2)
-    local prepareTime = 2.5
+    local prepareTime = 2
     local startedPreparing = time()
 
-
     self.Trove:Add(RunService.Heartbeat:Connect(function()
+        --//TODO clean this formula
+        --* Cancels the y rotation by looking self Y position component instead of the target position Y component, which keeps rotations in one axis
+        self.Instance:PivotTo(CFrame.lookAt(self.Instance:GetPivot().Position, Vector3.new(self.Context.CurrentTarget:GetPivot().Position.X, self.Instance:GetPivot().Y, self.Context.CurrentTarget:GetPivot().Position.Z )))
+
         if (time() - startedPreparing) >= prepareTime then
             if not self.Context:TaggedInstanceEnteredAttackAgro() then
                 self.Context:SwitchState(self.Context.States.ChasingPlayer)

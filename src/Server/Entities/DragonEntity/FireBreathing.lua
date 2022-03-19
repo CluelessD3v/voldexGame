@@ -25,7 +25,6 @@ function FireBreathing.new(context: table)
 end
 
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
-
 function FireBreathing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
