@@ -22,6 +22,7 @@ function WingBeating:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end)
+    
 
     self.Context.AnimationTracks.WingBeat:Play()
     self.Context.AnimationTracks.WingBeat.Stopped:Wait()

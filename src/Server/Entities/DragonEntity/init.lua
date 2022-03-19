@@ -41,8 +41,13 @@ function DragonEntity.new(instance: Model, dragonObject: table)
 
     --# DragonEntity class properties
     self.CurrentTarget       = nil  -- The current target the dragon is gonna pursue (as long as it is in agro)
-    self.AnimationTracks     = {}  -- the concrete animation tracks objects loaded to the humanoid animator
-    self.WingBeatingHitBoxes = {}  -- the hitboxes whose touched event will be connected to on wing beating
+    self.AnimationTracks     = {}   -- the concrete animation tracks objects loaded to the humanoid animator
+    self.WingBeatingHitboxes = {    -- the hitboxes whose touched event will be connected to on wing beating
+        self.Instance.LeftWingHitbox,
+        self.Instance.RightWingHitbox,
+        self.Instance.Head,
+
+    }  
     self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
 
     local animsFolder = self.Instance.Animations
