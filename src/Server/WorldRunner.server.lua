@@ -48,18 +48,27 @@ currLevel.Parent = workspace
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local con 
-con = RunService.Heartbeat:Connect(function() 
-    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+-- local con 
+-- con = RunService.Heartbeat:Connect(function() 
+--     for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
 
-        if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
-            print("Entered")
-            playerEnteredCurrLevel:Fire()
-            con:Disconnect()
-        end
-    end
+--         if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+--             print("Entered")
+--             playerEnteredCurrLevel:Fire()
+--             con:Disconnect()
+--         end
+--     end
 
-end)
+-- end)
+
+for _, v in ipairs(CollectionService:GetTagged("Dragon")) do
+    local n = eDragon.new(v)
+    n:Start()
+    print(v)
+    task.wait(1)
+    n.Instance.Humanoid.Health = 0
+end
+
 
 playerEnteredCurrLevel.Event:Connect(function()
     --# Close level doors here to prevent the player escaping the 
@@ -125,13 +134,21 @@ end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
-local function ConstructLootableItem(lootableItem)
-    local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
-   if lootableItemData then
+--[[
+    Lootable items are created when Instances with the Collection service tag "LootContainer"
+    are destroyed.
+
+]]
+
+--* Aux function to construct lootable items from the lootable items config table
+local function ConstructLootableItem(lootableItem: PVInstance, configTable: table)
+    local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, configTable)
+   
+    if lootableItemData then
         local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
         newLootableItem:Start()
-   else
-        warn("No LootableItemData was found!")
+    else
+        warn("No LootableItem Data was found!")
    end
 end 
 
@@ -141,16 +158,12 @@ end
 --# new LootableItems Entities
 
 CollectionService:GetInstanceAddedSignal("LootableItem"):Connect(function(lootableItem)
-    ConstructLootableItem(lootableItem)
+    ConstructLootableItem(lootableItem, tLootableItems)
 end)
 
 for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
-    ConstructLootableItem(lootableItem)    
+    ConstructLootableItem(lootableItem, tLootableItems)    
 end
-
-
-
---# <|=============== LOOT_CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
 --# Caching all concrete LootableItems configs into a single table,
 --# This is so we only have to get all our configs once, so every time
@@ -163,6 +176,10 @@ for _, objectTypeList in pairs(tLootableItems) do
         localLootableItemsDict[objectName] = typeObject
     end
 end
+
+--* Aux function to map the basic identifying data to build a new lootable item
+--* These data being, the ItemType and ItemName, this is solely here in case the
+--* "perch" the item is cloned from DOES NOT has that data already!
 
 local function SpawnLootableItemFromContainerByWeight(lootContainer)
     local lastCF: CFrame = lootContainer:GetPivot()
@@ -177,10 +194,13 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer)
     newDisplayItemInstance.Parent = workspace
     
     newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
+    newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
+
     CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
     CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
+--# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()

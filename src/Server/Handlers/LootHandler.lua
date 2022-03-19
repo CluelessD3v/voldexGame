@@ -40,6 +40,8 @@ function LootHandler:GetItemByWeight(itemList)
 end
 
 --[[
+    GetLootableItemConfigFromTable: 
+    
     function for lootable item data handling. Checks if the given item has either:     
     - Tag
     - Attribute
