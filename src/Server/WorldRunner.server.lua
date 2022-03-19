@@ -134,13 +134,20 @@ end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
+--[[
+    Lootable items are created when Instances with the Collection service tag "LootContainer"
+    are destroyed.
+
+]]
+
+--* Aux function to construct lootable items from the lootable items config table
 local function ConstructLootableItem(lootableItem)
     local lootableItemData = hLootHandler:GetLootableItemConfigFromTable(lootableItem, tLootableItems)
-    print(lootableItemData)
-   if lootableItemData then
+   
+    if lootableItemData then
         local newLootableItem  = eLootableItem.new(lootableItem, lootableItemData.DisplayItem)
         newLootableItem:Start()
-   else
+    else
         warn("No LootableItem Data was found!")
    end
 end 
@@ -158,10 +165,6 @@ for _, lootableItem in ipairs(CollectionService:GetTagged("LootableItem")) do
     ConstructLootableItem(lootableItem)    
 end
 
-
-
---# <|=============== LOOT_CONTAINER ENTITIES CONSTRUCTION AND MEDIATION ===============|>
-
 --# Caching all concrete LootableItems configs into a single table,
 --# This is so we only have to get all our configs once, so every time
 --# A lootableItem needs to be spawned, it fetches from this flat dictionary instead.
@@ -173,6 +176,10 @@ for _, objectTypeList in pairs(tLootableItems) do
         localLootableItemsDict[objectName] = typeObject
     end
 end
+
+--* Aux function to map the basic identifying data to build a new lootable item
+--* These data being, the ItemType and ItemName, this is solely here in case the
+--* "perch" the item is cloned from DOES NOT has that data already!
 
 local function SpawnLootableItemFromContainerByWeight(lootContainer)
     local lastCF: CFrame = lootContainer:GetPivot()
@@ -193,6 +200,7 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer)
     CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
+--# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
