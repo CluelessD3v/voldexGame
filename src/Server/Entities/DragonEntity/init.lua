@@ -40,19 +40,19 @@ function DragonEntity.new(instance: Model, dragonObject: table)
     self.Instance.Humanoid.HipHeight = 2.17
 
     --# DragonEntity class properties
-    self.CurrentTarget  = nil
-    self.AnimationTracks = nil
-    self.AnimationTracks = {}
+    self.CurrentTarget       = nil  -- The current target the dragon is gonna pursue (as long as it is in agro)
+    self.AnimationTracks     = {}  -- the concrete animation tracks objects loaded to the humanoid animator
+    self.WingBeatingHitBoxes = {}  -- the hitboxes whose touched event will be connected to on wing beating
+    self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
 
     local animsFolder = self.Instance.Animations
+
     local animator = self.Instance.Humanoid.Animator
     for _, animation in pairs (animsFolder:GetChildren()) do
         print(animation)
         self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
     end
 
-    print(self.AnimationTracks)
-    -- self.Animations = self.Instance.Animations
 
     
 
