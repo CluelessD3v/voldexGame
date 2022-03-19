@@ -48,7 +48,7 @@ function FireBreathing:Start()
     fireHitbox.Parent       = self.Instance.Head
 
     --#  Listen if the Fire touched a valid dragon target
-    --# Due to the nature of fire damage this is not debounce
+    --# Due to the nature of fire damage this is not debounced &
     self.Trove:Add(fireHitbox.Touched:Connect(function(theTouchedPart) 
         for _, validTag in ipairs(self.Context.ValidTargetTags) do
             
