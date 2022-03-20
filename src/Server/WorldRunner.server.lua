@@ -120,6 +120,10 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
     WorldData.DragonLevel.Value     = currentLevelPlayerIs
 
+    newDragonEntity.Instance.Humanoid.HealthChanged:Connect(function(newVal)
+        WorldData.DragonHealth.Value = newVal
+    end)
+
     newDragonEntity:Start()
 
     --# When mob dies destroy the previous level and create a new one
