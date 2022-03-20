@@ -56,7 +56,7 @@ return {
             Weight = 50,
             DisplayItem = {
                 Name       = "SwordOfDarkness",
-                Instance   = workspace.DisplayItems.SwordofStarlightDisplay,
+                Instance   = workspace.DisplayItems.SwordOfDarkness,
                 Attributes = {
                     Damage   = 100,
                     ItemType = "SwordType",
