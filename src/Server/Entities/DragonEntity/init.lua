@@ -22,11 +22,11 @@ local Trove = require(ReplicatedStorage.Packages.trove)
 local DragonEntity = {}
 DragonEntity.__index = DragonEntity
 
-function DragonEntity.new(instance: Model, dragonObject: table)
+function DragonEntity.new(instance: Model, dragonConfig: table)
     local self = setmetatable({}, DragonEntity)
 
-    if not dragonObject then 
-        dragonObject = {}
+    if not dragonConfig then 
+        dragonConfig = {}
         warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
     end
 
@@ -39,14 +39,31 @@ function DragonEntity.new(instance: Model, dragonObject: table)
     self.Instance.Humanoid.BreakJointsOnDeath = false
     self.Instance.Humanoid.HipHeight = 2.17
 
+
+    --# Mapping Concrete Dragon Object fields to new entity
+
+    self.StatsScalling = dragonConfig.StatScaling or 1
+
+    self.FireDamage                  = if dragonConfig.BaseFireDamage then dragonConfig.BaseFireDamage * self.StatScaling else 0.1
+    self.MeleeDamage                 = if dragonConfig.BaseMeleeDamage then dragonConfig.BaseMeleeDamage * self.StatScaling else  25
+    self.AttackPrepareTime           = if dragonConfig.BaseAttackPrepareTime then math.sqrt(dragonConfig.BaseAttackPrepareTime/self.StatScaling) + 1 else 1
+    self.Instance.Humanoid.MaxHealth = if dragonConfig.BaseHealth then dragonConfig.BaseHealth * self.StatScaling else 150
+    self.Instance.Humanoid.Health    = if dragonConfig.BaseHealth then dragonConfig.BaseHealth * self.StatScaling else 150
+
+    
+    self.DetectionAgro   = dragonConfig.DetectionAgro or 60
+    self.AttackAgro      = dragonConfig.AttackAgro or 25
+    self.SpawnLocation   = dragonConfig.SpawnLocation or workspace.DragonSpawn
+    self.ValidTargetTags = dragonConfig.ValidTargetTags or {"DragonTarget"}
+
     --# DragonEntity class properties
     self.CurrentTarget       = nil  -- The current target the dragon is gonna pursue (as long as it is in agro)
     self.AnimationTracks     = {}   -- the concrete animation tracks objects loaded to the humanoid animator
     self.WingBeatingHitboxes = {    -- the hitboxes whose touched event will be connected to on wing beating
+
         self.Instance.LeftWingHitbox,
         self.Instance.RightWingHitbox,
         self.Instance.Head,
-
     }  
     self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
 
@@ -57,24 +74,20 @@ function DragonEntity.new(instance: Model, dragonObject: table)
         print(animation)
         self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
     end
-
-
     
-
+    --# DragonEntity Class Attributes
+    self.Instance:SetAttribute("CurrentState", "someState")
+    
     --# DragonEntity class events
     self.StateChanged        = Instance.new("BindableEvent")
     self.StateChanged.Name   = "StateChanged"
     self.StateChanged.Parent = self.Instance
 
     
-    --# DragonEntity Class Attributes
-    self.Instance:SetAttribute("CurrentState", "someState")
-    
-    --# Mapping Concrete Dragon Object fields to new entity
-    self.DetectionAgro   = dragonObject.DetectionAgro or 60
-    self.AttackAgro      = dragonObject.AttackAgro or 25
-    self.SpawnLocation   = dragonObject.SpawnLocation or workspace.DragonSpawn
-    self.ValidTargetTags = dragonObject.ValidTargetTags or {"DragonTarget"}
+
+
+    --# Scaled Stats by dificulty
+
 
     --# States
     self.States = {
@@ -147,6 +160,7 @@ function DragonEntity:TaggedInstanceEnteredAttackAgro()
         end
     end
 end
+
 
 --* Switches Dragon concrete states
 function DragonEntity:SwitchState(newState: table)

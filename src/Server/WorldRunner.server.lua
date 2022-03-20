@@ -120,10 +120,15 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
-    --# Construct new dragon instance and set world data
+    --# Construct new dragon 
 
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
+    newDragonEntity.StatScaling     = currentLevelPlayerIs
+
+    print(newDragonEntity)
+
+    --# World data to feed GUI
     WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
     WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
     WorldData.DragonLevel.Value     = currentLevelPlayerIs
