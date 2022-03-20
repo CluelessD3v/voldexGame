@@ -3,6 +3,7 @@ local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService          = game:GetService("RunService")
 local ReplicatedStorage   = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -22,7 +23,7 @@ local tLootableItems    = require(Configs.LootableItemsConfig)
 
 -- Remote Events
 local WorldEvents                     = ReplicatedStorage.Events.WorldRunner
-local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel.model
+local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 
@@ -58,9 +59,13 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
     for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
 
         if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
-            print("Entered")
-            playerEnteredCurrLevel:Fire()
-            PlayerEnteredLevelPoll:Disconnect()
+            local player = Players:GetPlayerFromCharacter(dragonTarget)
+
+            if player then
+                print("player entered level")
+                playerEnteredCurrLevel:Fire()
+                PlayerEnteredLevelPoll:Disconnect()
+            end
         end
     end
 
@@ -99,6 +104,9 @@ playerEnteredCurrLevel.Event:Connect(function()
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
 
+    --# Let know the client he entered the curr level.
+    playerEnteredCurrentLevelRemote:FireAllClients()  -- game is single player so we can take advantage of this.
+
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
 --# start dragon entity instance state machine
@@ -124,11 +132,16 @@ playerEnteredCurrLevel.Event:Connect(function()
         PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
             for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
         
-                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
+                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 80 then
                     print("Entered")
 
-                    playerEnteredCurrLevel:Fire()
-                    PlayerEnteredLevelPoll:Disconnect()
+                    local player = Players:GetPlayerFromCharacter(dragonTarget)
+
+                    if player then
+                        print("player entered level")
+                        playerEnteredCurrLevel:Fire()
+                        PlayerEnteredLevelPoll:Disconnect()
+                    end
                 end
             end
         end)
