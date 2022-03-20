@@ -40,14 +40,13 @@ end
 local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 local lobby  = workspace.Lobby
 
-local numberOfLairs = 0
+local playerCurrentLevel = 0
 local prevLevel = lobby
 local currLevel = workspace.Lair:Clone()
 PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
-numberOfLairs += 1
 
-currLevel.Name = currLevel.Name..numberOfLairs
+currLevel.Name = currLevel.Name..playerCurrentLevel
 currLevel.Parent = workspace
 
 --# Stablish first polling that will kickstart Level generation
@@ -63,7 +62,9 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
 
             if player then
                 print("player entered level")
-                playerEnteredCurrLevel:Fire()
+                playerEnteredCurrLevel:Fire(player)
+                playerEnteredCurrentLevelRemote:FireClient(player)
+                playerCurrentLevel += 1  --//todo change these to be set through the player data handler
                 PlayerEnteredLevelPoll:Disconnect()
             end
         end
@@ -71,22 +72,15 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
 
 end)
 
--- for _, v in ipairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v)
---     n:Start()
---     print(v)
---     task.wait(1)
---     -- n:SwitchState(n.States.WingBeating)
---     -- n.Instance.Humanoid.Health = 0
--- end
 
-
-playerEnteredCurrLevel.Event:Connect(function()
+playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
-    --# Level bounds
+    --# Level bounds and increment Player current levels
     
     currLevel.SouthDoor.Transparency = 0
     currLevel.SouthDoor.CanCollide = true
+    
+    playerCurrentLevel += 1
 
     --# Spawn Dragon mesh, and possition him to be at his spawn 
     --# looking at the south door
@@ -105,7 +99,8 @@ playerEnteredCurrLevel.Event:Connect(function()
     dragonMesh.Parent = currLevel
 
     --# Let know the client he entered the curr level.
-    playerEnteredCurrentLevelRemote:FireAllClients()  -- game is single player so we can take advantage of this.
+    playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered) 
+
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
