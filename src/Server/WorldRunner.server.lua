@@ -87,6 +87,14 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
     end
 end)
 
+
+-- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+--     local n = eDragon.new(v)
+--     n:Start()
+--     task.wait(1)
+--     n.Instance.Humanoid.Health = 0
+-- end
+
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
     --# Level bounds
@@ -112,7 +120,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
---# start dragon entity instance state machine
+    --# Construct new dragon instance and set world data
 
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
