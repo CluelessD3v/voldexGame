@@ -9,6 +9,7 @@ local Players = game:GetService("Players")
 -- Handlers
 local Handlers = ServerScriptService.Handlers
 local hLootHandler = require(Handlers.LootHandler)
+local hPlayerDataHandler = require(Handlers.PlayerDataHandler)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -128,8 +129,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
             for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
         
                 if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 80 then
-                    print("Entered")
-
                     local player = Players:GetPlayerFromCharacter(dragonTarget)
 
                     if player then

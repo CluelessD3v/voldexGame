@@ -5,6 +5,13 @@ return {
             Name   = "GoldCoins",
             Value  = 0,
             Parent = nil,
+        },
+        
+        ClearedLevels = {
+            Type = "NumberValue",
+            Name = "ClearedLevels",
+            Value = 0,
+            parent = nil,
         }
     },
 

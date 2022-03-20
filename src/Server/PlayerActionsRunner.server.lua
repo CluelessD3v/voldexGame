@@ -70,6 +70,7 @@ Players.PlayerAdded:Connect(function(player:Player)
     stats.Name = "stats"
     
     tPlayerDataSchema.ObjectValues.GoldCoins.Parent = player
+    tPlayerDataSchema.ObjectValues.ClearedLevels.Parent = player
     hPlayerData:BuildPlayerDataObject(player, tPlayerDataSchema)
 
     player.CharacterAdded:Connect(function(character)
