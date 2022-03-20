@@ -2,11 +2,14 @@
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService          = game:GetService("RunService")
+local ReplicatedStorage   = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
 local Handlers = ServerScriptService.Handlers
 local hLootHandler = require(Handlers.LootHandler)
+local hPlayerDataHandler = require(Handlers.PlayerDataHandler)
 
 -- Entities
 local Entities = ServerScriptService.Entities
@@ -18,60 +21,86 @@ local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
+local tFrostDragon  = require(Configs.Dragons.FrostDragonConfig)
+
+
+-- Remote Events
+local WorldEvents                     = ReplicatedStorage.Events.WorldRunner
+local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel
+local DragonDiedRemote                = WorldEvents.DragonDied
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
-
---* Aux function to position current level in front of the previous one
-local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
-    local currLevel = newLevel
-    local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
-
-    currLevel:PivotTo(theFrontOfThePrevMap)
-    return currLevel
-end
-
 --# Instancing lobby and first level
+local WorldData = workspace.WorldData
 local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 local lobby  = workspace.Lobby
 
-local numberOfLairs = 0
-local prevLevel = lobby
-local currLevel = workspace.Lair:Clone()
-PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+local currentLevelPlayerIs = 0      --# Used for difculty scalling value of the dragon
+local prevLevel = lobby  --# The first prev level is the lobby
+local currLevel = workspace.Level:Clone()
 
-numberOfLairs += 1
 
-currLevel.Name = currLevel.Name..numberOfLairs
+currLevel.Name = currLevel.Name..currentLevelPlayerIs
 currLevel.Parent = workspace
+
+
+--* Aux function to position current level in front of the previous one
+local function PositionCurrLevelInFrontOfPrevLevel(previousLevel: Model, newLevel: Model)
+    local currentLevel = newLevel
+    local theFrontOfThePrevMap    = previousLevel:GetPivot() * CFrame.new(0, 0, (currentLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
+
+    currentLevel:PivotTo(theFrontOfThePrevMap)
+    return currentLevel
+end
+
+local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
+    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+
+        if (currentLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= levelAgro then
+            local playerWhoEntered = Players:GetPlayerFromCharacter(dragonTarget)
+
+            if playerWhoEntered then
+                print("player entered level")
+                currentLevelPlayerIs += 1
+
+                 --# Let know the client he entered the current level.
+                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
+                
+                --# Let know the world runner a player entered the curr level
+                playerEnteredCurrLevel:Fire(playerWhoEntered)
+                return true
+            end
+        end
+    end
+end
+
+
+--# Position current level in front of previous one (which would be the lobby, this early)
+PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
 --# Stablish first polling that will kickstart Level generation
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local con 
-con = RunService.Heartbeat:Connect(function() 
-    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
-
-        if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
-            print("Entered")
-            playerEnteredCurrLevel:Fire()
-            con:Disconnect()
-        end
+local PlayerEnteredLevelPoll 
+PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+    if DidPlayerEnteredCurrLevel(currLevel, 100) then
+        PlayerEnteredLevelPoll:Disconnect()
     end
-
 end)
 
--- for _, v in ipairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v)
+
+-- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+--     local n = eDragon.new(v, tFrostDragon)
+--     n.StatsScalling = 3
+--     print(n)
 --     n:Start()
---     print(v)
+
 --     task.wait(1)
---     -- n:SwitchState(n.States.WingBeating)
---     -- n.Instance.Humanoid.Health = 0
+--     n:SwitchState(n.States.Idle)
 -- end
 
-
-playerEnteredCurrLevel.Event:Connect(function()
+playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
     --# Level bounds
     
@@ -96,10 +125,23 @@ playerEnteredCurrLevel.Event:Connect(function()
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
---# start dragon entity instance state machine
+    --# Construct new dragon 
 
     local newDragonEntity = eDragon.new(dragonMesh)
-    newDragonEntity.SpawnLocation = currLevel.MobSpawn
+    newDragonEntity.SpawnLocation   = currLevel.MobSpawn
+    newDragonEntity.StatScaling     = currentLevelPlayerIs
+
+    print(newDragonEntity)
+
+    --# World data to feed GUI
+    WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
+    WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
+    WorldData.DragonLevel.Value     = currentLevelPlayerIs
+
+    newDragonEntity.Instance.Humanoid.HealthChanged:Connect(function(newVal)
+        WorldData.DragonHealth.Value = newVal
+    end)
+
     newDragonEntity:Start()
 
     --# When mob dies destroy the previous level and create a new one
@@ -108,27 +150,25 @@ playerEnteredCurrLevel.Event:Connect(function()
     newDragonEntity.Instance.Humanoid.Died:Connect(function()
         prevLevel:Destroy()
         prevLevel = currLevel
-        currLevel = workspace.Lair:Clone()
+        currLevel = workspace.Level:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
+
+        DragonDiedRemote:FireClient(playerWhoEntered)
+
+        local clearedLevels = hPlayerDataHandler:GetPlayerObjectValue(playerWhoEntered, "ClearedLevels")
+        hPlayerDataHandler:SetPlayerDataValue(playerWhoEntered, "ClearedLevels", clearedLevels.Value + 1)
         
         --# Create a new run service connection to poll if a valid dragon target 
         --# entered the current level activation agro because the first one to kickstart
         --# this cyclic process no longer exist
 
-        con = RunService.Heartbeat:Connect(function() 
-            for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
-        
-                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
-                    print("Entered")
-
-                    playerEnteredCurrLevel:Fire()
-                    con:Disconnect()
-                end
+        PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+            if DidPlayerEnteredCurrLevel(currLevel, 100) then
+                PlayerEnteredLevelPoll:Disconnect()
             end
         end)
     end)
-
 end)
 
 
@@ -169,48 +209,55 @@ end
 --# This is so we only have to get all our configs once, so every time
 --# A lootableItem needs to be spawned, it fetches from this flat dictionary instead.
 
-local localLootableItemsDict = {}
+local cachedLootablesItems = {}
 
 for _, objectTypeList in pairs(tLootableItems) do
-    for objectName, typeObject in pairs(objectTypeList) do
-        localLootableItemsDict[objectName] = typeObject
+    for objectName, objectData in pairs(objectTypeList) do
+        --# ommit non lootable itmes i.e starting sword
+        --# (yeah, a bit contradicting to original intent)
+
+        if objectData.Lootable == true then
+            cachedLootablesItems[objectName] = objectData
+        end
     end
 end
+
+print(cachedLootablesItems)
 
 --* Aux function to map the basic identifying data to build a new lootable item
 --* These data being, the ItemType and ItemName, this is solely here in case the
 --* "perch" the item is cloned from DOES NOT has that data already!
 
-local function SpawnLootableItemFromContainerByWeight(lootContainer)
-    local lastCF: CFrame = lootContainer:GetPivot()
-    print(lootContainer, "Was destroyed")
-    
-    local selectedItemConfig = hLootHandler:GetItemByWeight(localLootableItemsDict)
-    local displayItemConfig = selectedItemConfig.DisplayItem
-    
-    local newDisplayItemInstance = displayItemConfig.Instance:Clone()
-    
-    newDisplayItemInstance.Position = lastCF.Position
-    newDisplayItemInstance.Parent = workspace
-    
-    newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
-    newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
+local function SpawnLootableItemFromContainerByWeight(lootContainer, lootablesList)
+        local lastCF: CFrame = lootContainer:GetPivot()
+        print(lootContainer, "Was destroyed")
+        
+        local selectedItemConfig = hLootHandler:GetItemByWeight(lootablesList)
+        local displayItemConfig = selectedItemConfig.DisplayItem
+        
+        local newDisplayItemInstance = displayItemConfig.Instance:Clone()
+        
+        newDisplayItemInstance.Position = lastCF.Position
+        newDisplayItemInstance.Parent   = workspace
+        
+        newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
+        newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
 
-    CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
-    CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
+        CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
+        CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
 --# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
-        SpawnLootableItemFromContainerByWeight(lootContainer)
+        SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
     lootContainer.Destroying:Connect(function()
-        SpawnLootableItemFromContainerByWeight(lootContainer)
+        SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
     end)
 end)
 

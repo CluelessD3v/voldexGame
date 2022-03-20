@@ -58,7 +58,7 @@ function FireBreathing:Start()
                 local humanoid: Humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
 
                 if humanoid then
-                    humanoid:TakeDamage(.3)
+                    humanoid:TakeDamage(self.Context.FireDamage * self.Context.StatsScalling)
                 end
             end
         end
