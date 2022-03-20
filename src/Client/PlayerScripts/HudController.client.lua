@@ -11,14 +11,18 @@ local PlayerEnteredCurrentLevel = WorldEvents.PlayerEnteredCurrentLevel
 local worldData: Folder = Workspace.WorldData
 local dragonLevelObject: NumberValue  = worldData.DragonLevel
 local dragonHealthObject: NumberValue = worldData.DragonHealthObject
-local dragonMaxHealth: NumberValue = worldData.DragonMaxHealth
+local dragonMaxHealth: NumberValue    = worldData.DragonMaxHealth
 
 local PlayerGui: PlayerGui = Players.LocalPlayer.PlayerGui 
-local dataFrame: Frame         = PlayerGui:WaitForChild("DataFrame")
+local dragonDataFrame: Frame         = PlayerGui:WaitForChild("DragonDataFrame")
 local dragonHealthBar: Frame   = PlayerGui:WaitForChild("DragonHealthBar")
 local healthCounter: TextLabel = dragonHealthBar:WaitForChild("HealthCounter")
 
+dragonDataFrame.Visible = false
+
 PlayerEnteredCurrentLevel.OnClientEvent:Connect(function()
+    dragonDataFrame.Visible = true
+
     
 end)
 
