@@ -199,53 +199,55 @@ end
 --# This is so we only have to get all our configs once, so every time
 --# A lootableItem needs to be spawned, it fetches from this flat dictionary instead.
 
-local localLootableItemsDict = {}
+local cachedLootablesItems = {}
 
 for _, objectTypeList in pairs(tLootableItems) do
     for objectName, objectData in pairs(objectTypeList) do
-        --* ommit non lootable itmes i.e starting sword (yeah, a bit contradicting to original intent)
-        if objectData.Lootable then
-            localLootableItemsDict[objectName] = objectData
+        --# ommit non lootable itmes i.e starting sword
+        --# (yeah, a bit contradicting to original intent)
+
+        if objectData.Lootable == true then
+            cachedLootablesItems[objectName] = objectData
         end
     end
 end
 
-print(localLootableItemsDict)
+print(cachedLootablesItems)
 
 --* Aux function to map the basic identifying data to build a new lootable item
 --* These data being, the ItemType and ItemName, this is solely here in case the
 --* "perch" the item is cloned from DOES NOT has that data already!
 
-local function SpawnLootableItemFromContainerByWeight(lootContainer)
-    local lastCF: CFrame = lootContainer:GetPivot()
-    print(lootContainer, "Was destroyed")
-    
-    local selectedItemConfig = hLootHandler:GetItemByWeight(localLootableItemsDict)
-    local displayItemConfig = selectedItemConfig.DisplayItem
-    
-    local newDisplayItemInstance = displayItemConfig.Instance:Clone()
-    
-    newDisplayItemInstance.Position = lastCF.Position
-    newDisplayItemInstance.Parent   = workspace
-    
-    newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
-    newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
+local function SpawnLootableItemFromContainerByWeight(lootContainer, lootablesList)
+        local lastCF: CFrame = lootContainer:GetPivot()
+        print(lootContainer, "Was destroyed")
+        
+        local selectedItemConfig = hLootHandler:GetItemByWeight(lootablesList)
+        local displayItemConfig = selectedItemConfig.DisplayItem
+        
+        local newDisplayItemInstance = displayItemConfig.Instance:Clone()
+        
+        newDisplayItemInstance.Position = lastCF.Position
+        newDisplayItemInstance.Parent   = workspace
+        
+        newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
+        newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
 
-    CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
-    CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
+        CollectionService:AddTag(newDisplayItemInstance, displayItemConfig.Attributes.ItemType)
+        CollectionService:AddTag(newDisplayItemInstance, "LootableItem")
 end
 
 --# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
-        SpawnLootableItemFromContainerByWeight(lootContainer)
+        SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("LootContainer"):Connect(function(lootContainer)
     lootContainer.Destroying:Connect(function()
-        SpawnLootableItemFromContainerByWeight(lootContainer)
+        SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
     end)
 end)
 

@@ -23,7 +23,7 @@ function LootableItemEntity.new(instance, data: table)
     self.ProximityPrompt.Parent = self.Instance
 
     self.ProximityPrompt.ActionText = "Grab:"
-    self.ProximityPrompt.ObjectText = self.Instance.Name
+    self.ProximityPrompt.ObjectText = data.Name
 
 
 

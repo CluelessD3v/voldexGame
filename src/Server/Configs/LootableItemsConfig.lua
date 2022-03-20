@@ -1,7 +1,7 @@
 return {
     SwordType = {
         ClassicSword = {
-            lootable = false,  --contradicting to file name, but avoids ugly hardcoding
+            Lootable = false, 
             Weight = 100,
             DisplayItem = {
                 Name       = "ClassicSword",
@@ -28,7 +28,7 @@ return {
         },
 
         UberClassicSword = {
-            lootable = true,
+            Lootable = true,
             Weight = 100,
             DisplayItem = {
                 Name       = "UberClassicSword",
@@ -47,7 +47,7 @@ return {
                 Instance   = workspace.ToolItems.ClassicSword,
                 Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage   = 25,
+                    Damage   = 50,
                     ItemType = "SwordType",
                     ItemName = "UberClassicSword",
                 }
@@ -55,7 +55,7 @@ return {
         },
 
         SwordOfDarkness = {
-            lootable = true,
+            Lootable = true,
             Weight = 50,
             DisplayItem = {
                 Name       = "SwordOfDarkness",
@@ -74,7 +74,7 @@ return {
                 Instance   = workspace.ToolItems.SwordOfDarkness,
                 Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage   = 25,
+                    Damage   = 100,
                     ItemType = "SwordType",
                     ItemName = "SwordOfDarkness",
                 }
@@ -82,7 +82,7 @@ return {
         },
 
         SwordofStarlight = {
-            lootable = true,
+            Lootable = true,
             Weight = 25,
             DisplayItem = {
                 Name       = "SwordofStarlight",
@@ -101,7 +101,7 @@ return {
                 Instance   = workspace.ToolItems.SwordofStarlight,
                 Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage   = 25,
+                    Damage   = 200,
                     ItemType = "SwordType",
                     ItemName = "SwordofStarlight",
                 }

@@ -31,6 +31,6 @@ playerEnteredCurrentLevel.OnClientEvent:Connect(function()
 end)
 
 
-dragonDied.OnClientEventn:Connect(function()
+dragonDied.OnClientEvent:Connect(function()
     DragonHealthUpdateConn:Disconnect()
 end)
