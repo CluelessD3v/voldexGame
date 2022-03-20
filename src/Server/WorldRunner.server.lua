@@ -28,16 +28,6 @@ local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel
 local DragonDiedRemote                = WorldEvents.DragonDied
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
-
---* Aux function to position current level in front of the previous one
-local function PositionCurrLevelInFrontOfPrevLevel(prevLevel: Model, newLevel: Model)
-    local currLevel = newLevel
-    local theFrontOfThePrevMap    = prevLevel:GetPivot() * CFrame.new(0, 0, (currLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
-
-    currLevel:PivotTo(theFrontOfThePrevMap)
-    return currLevel
-end
-
 --# Instancing lobby and first level
 local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 local lobby  = workspace.Lobby
@@ -45,31 +35,51 @@ local lobby  = workspace.Lobby
 local playerCurrentLevel = 0
 local prevLevel = lobby
 local currLevel = workspace.Lair:Clone()
-PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
 
 currLevel.Name = currLevel.Name..playerCurrentLevel
 currLevel.Parent = workspace
 
+
+--* Aux function to position current level in front of the previous one
+local function PositionCurrLevelInFrontOfPrevLevel(previousLevel: Model, newLevel: Model)
+    local currentLevel = newLevel
+    local theFrontOfThePrevMap    = previousLevel:GetPivot() * CFrame.new(0, 0, (currentLevel:GetExtentsSize().Z/-2 +  prevLevel:GetExtentsSize().Z/-2))
+
+    currentLevel:PivotTo(theFrontOfThePrevMap)
+    return currentLevel
+end
+
+local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
+    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
+
+        if (currentLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= levelAgro then
+            local playerWhoEntered = Players:GetPlayerFromCharacter(dragonTarget)
+
+            if playerWhoEntered then
+                print("player entered level")
+                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered) 
+
+                playerEnteredCurrLevel:Fire(playerWhoEntered)
+                return true
+            end
+        end
+    end
+end
+
+
 --# Stablish first polling that will kickstart Level generation
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
+
+PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+
 local PlayerEnteredLevelPoll 
 PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
-    for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
-
-        if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
-            local player = Players:GetPlayerFromCharacter(dragonTarget)
-
-            if player then
-                print("player entered level")
-                playerEnteredCurrLevel:Fire(player)
-                PlayerEnteredLevelPoll:Disconnect()
-            end
-        end
+    if DidPlayerEnteredCurrLevel(currLevel, 100) then
+        PlayerEnteredLevelPoll:Disconnect()
     end
-
 end)
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
@@ -97,7 +107,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     dragonMesh.Parent = currLevel
 
     --# Let know the client he entered the current level.
-    playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered) 
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
@@ -127,21 +136,11 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
         --# this cyclic process no longer exist
 
         PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
-            for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
-        
-                if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 80 then
-                    local player = Players:GetPlayerFromCharacter(dragonTarget)
-
-                    if player then
-                        print("player entered level")
-                        playerEnteredCurrLevel:Fire()
-                        PlayerEnteredLevelPoll:Disconnect()
-                    end
-                end
+            if DidPlayerEnteredCurrLevel(currLevel, 100) then
+                PlayerEnteredLevelPoll:Disconnect()
             end
         end)
     end)
-
 end)
 
 

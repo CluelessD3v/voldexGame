@@ -2,8 +2,6 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-
-
 local WorldEvents               = ReplicatedStorage.Events.WorldRunner
 local DragonDied                = WorldEvents.DragonDied
 local PlayerEnteredCurrentLevel = WorldEvents.PlayerEnteredCurrentLevel
