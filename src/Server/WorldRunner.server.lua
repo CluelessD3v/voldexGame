@@ -21,6 +21,8 @@ local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
+local tFrostDragon  = require(Configs.Dragons.FrostDragonConfig)
+
 
 -- Remote Events
 local WorldEvents                     = ReplicatedStorage.Events.WorldRunner
@@ -80,20 +82,21 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local PlayerEnteredLevelPoll 
-PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
-    if DidPlayerEnteredCurrLevel(currLevel, 100) then
-        PlayerEnteredLevelPoll:Disconnect()
-    end
-end)
+-- local PlayerEnteredLevelPoll 
+-- PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+--     if DidPlayerEnteredCurrLevel(currLevel, 100) then
+--         PlayerEnteredLevelPoll:Disconnect()
+--     end
+-- end)
 
 
--- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v)
---     n:Start()
---     task.wait(1)
---     n.Instance.Humanoid.Health = 0
--- end
+for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+    local n = eDragon.new(v, tFrostDragon)
+    print(n)
+    n:Start()
+    task.wait(1)
+    n:SwitchState(n.States.Idle)
+end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 

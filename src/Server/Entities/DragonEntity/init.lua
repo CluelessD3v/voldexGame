@@ -24,7 +24,7 @@ DragonEntity.__index = DragonEntity
 
 function DragonEntity.new(instance: Model, dragonConfig: table)
     local self = setmetatable({}, DragonEntity)
-
+    print(dragonConfig)
     if not dragonConfig then 
         dragonConfig = {}
         warn("No config table was passed to", instance.Name, "dragon entity, using default values") 
@@ -35,26 +35,25 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
 
     self.Trove:Add(self.Instance)
 
-    self.Instance.Humanoid.WalkSpeed = 8
+    self.Instance.Humanoid.WalkSpeed          = 8
     self.Instance.Humanoid.BreakJointsOnDeath = false
-    self.Instance.Humanoid.HipHeight = 2.17
+    self.Instance.Humanoid.HipHeight          = 2.17
 
 
     --# Mapping Concrete Dragon Object fields to new entity
 
     self.StatsScalling = dragonConfig.StatScaling or 1
 
-    self.FireDamage                  = if dragonConfig.BaseFireDamage then dragonConfig.BaseFireDamage * self.StatScaling else 0.1
-    self.MeleeDamage                 = if dragonConfig.BaseMeleeDamage then dragonConfig.BaseMeleeDamage * self.StatScaling else  25
-    self.AttackPrepareTime           = if dragonConfig.BaseAttackPrepareTime then math.sqrt(dragonConfig.BaseAttackPrepareTime/self.StatScaling) + 1 else 1
-    self.Instance.Humanoid.MaxHealth = if dragonConfig.BaseHealth then dragonConfig.BaseHealth * self.StatScaling else 150
-    self.Instance.Humanoid.Health    = if dragonConfig.BaseHealth then dragonConfig.BaseHealth * self.StatScaling else 150
+    self.MeleeDamage                 = dragonConfig.BaseMeleeDamage or 25   --> Formula: BaseMeleeDamage * StatsScaling 
+    self.FireDamage                  = dragonConfig.BaseFireDamage or 0.1       --> Formula:  BaseFireDamage * StatsScaling
+    self.AttackPrepareTime           = dragonConfig.BaseAttackPrepareTime  or 2 --> Formula:  math.sqrt(BaseAttackPrepareTime/StatsScaling) + 1
+    self.Instance.Humanoid.MaxHealth = dragonConfig.BaseHealth or 200   --> Formula: BaseHealth * StatsScaling
 
-    
-    self.DetectionAgro   = dragonConfig.DetectionAgro or 60
-    self.AttackAgro      = dragonConfig.AttackAgro or 25
-    self.SpawnLocation   = dragonConfig.SpawnLocation or workspace.DragonSpawn
-    self.ValidTargetTags = dragonConfig.ValidTargetTags or {"DragonTarget"}
+    self.Instance.Humanoid.Health = self.Instance.Humanoid.MaxHealth
+    self.DetectionAgro            = dragonConfig.DetectionAgro or 60
+    self.AttackAgro               = dragonConfig.AttackAgro or 25
+    self.SpawnLocation            = dragonConfig.SpawnLocation or workspace.DragonSpawn
+    self.ValidTargetTags          = dragonConfig.ValidTargetTags or {"DragonTarget"}
 
     --# DragonEntity class properties
     self.CurrentTarget       = nil  -- The current target the dragon is gonna pursue (as long as it is in agro)
@@ -65,8 +64,8 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
         self.Instance.RightWingHitbox,
         self.Instance.Head,
     }  
-    self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
 
+    self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
     local animsFolder = self.Instance.Animations
 
     local animator = self.Instance.Humanoid.Animator
@@ -83,11 +82,6 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.StateChanged.Name   = "StateChanged"
     self.StateChanged.Parent = self.Instance
 
-    
-
-
-    --# Scaled Stats by dificulty
-
 
     --# States
     self.States = {
@@ -101,6 +95,7 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     }
     self.CurrentState = self.States.Idle.new(self)
     self.PreviousState = nil
+    
     self.Instance.Humanoid.Died:Connect(function()
         self:SwitchState(self.States.Dead)
     end)
