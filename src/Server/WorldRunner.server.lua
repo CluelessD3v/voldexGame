@@ -32,12 +32,12 @@ local DragonDiedRemote                = WorldEvents.DragonDied
 local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 local lobby  = workspace.Lobby
 
-local playerCurrentLevel = 0
-local prevLevel = lobby
+local currentLevelPlayerIs = 0      --# Used for difculty scalling value of the dragon
+local prevLevel = lobby  --# The first prev level is the lobby
 local currLevel = workspace.Lair:Clone()
 
 
-currLevel.Name = currLevel.Name..playerCurrentLevel
+currLevel.Name = currLevel.Name..currentLevelPlayerIs
 currLevel.Parent = workspace
 
 
@@ -58,8 +58,12 @@ local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
 
             if playerWhoEntered then
                 print("player entered level")
-                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered) 
+                currentLevelPlayerIs += 1
 
+                 --# Let know the client he entered the current level.
+                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
+                
+                --# Let know the world runner a player entered the curr level
                 playerEnteredCurrLevel:Fire(playerWhoEntered)
                 return true
             end
@@ -68,12 +72,12 @@ local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
 end
 
 
+--# Position current level in front of previous one (which would be the lobby, this early)
+PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
+
 --# Stablish first polling that will kickstart Level generation
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
-
-
-PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
 local PlayerEnteredLevelPoll 
 PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
@@ -88,7 +92,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     
     currLevel.SouthDoor.Transparency = 0
     currLevel.SouthDoor.CanCollide = true
-    
 
     --# Spawn Dragon mesh, and possition him to be at his spawn 
     --# looking at the south door
@@ -106,14 +109,17 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
 
-    --# Let know the client he entered the current level.
-
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
 --# start dragon entity instance state machine
+    local WorldData = workspace.WorldData
 
     local newDragonEntity = eDragon.new(dragonMesh)
-    newDragonEntity.SpawnLocation = currLevel.MobSpawn
+    newDragonEntity.SpawnLocation   = currLevel.MobSpawn
+    WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
+    WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
+    WorldData.DragonLevel.Value     = currentLevelPlayerIs
+
     newDragonEntity:Start()
 
     --# When mob dies destroy the previous level and create a new one
