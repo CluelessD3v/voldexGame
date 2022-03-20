@@ -119,7 +119,8 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
 
-        -- hPlayerDataHandler:SetPlayerDataValue(playerWhoEntered, ClearedLevels, playerWhoEntered.)
+        local clearedLevels = hPlayerDataHandler:GetPlayerObjectValue(playerWhoEntered, "ClearedLevels")
+        hPlayerDataHandler:SetPlayerDataValue(playerWhoEntered, "ClearedLevels", clearedLevels.Value + 1)
         
         --# Create a new run service connection to poll if a valid dragon target 
         --# entered the current level activation agro because the first one to kickstart

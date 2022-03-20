@@ -32,8 +32,6 @@ function WingBeating:Start()
         self.Trove:Add(v.Touched:Connect(function(theTouchedPart)
             
             for _, validTag in ipairs(self.Context.ValidTargetTags) do
-                print(theTouchedPart)
-                
                 if CollectionService:HasTag(theTouchedPart.Parent , validTag) and not debounce  then
                     debounce = true
                     local humanoid: Humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
