@@ -22,6 +22,10 @@ function LootableItemEntity.new(instance, data: table)
     self.ProximityPrompt        = Instance.new("ProximityPrompt")
     self.ProximityPrompt.Parent = self.Instance
 
+    self.ProximityPrompt.ActionText = "Grab:"
+    self.ProximityPrompt.ObjectText = self.Instance.Name
+
+
 
     MapToInstance(self.Instance, data)
     return self
