@@ -1,6 +1,7 @@
 return {
     SwordType = {
         ClassicSword = {
+            lootable = false,  --contradicting to file name, but avoids ugly hardcoding
             Weight = 100,
             DisplayItem = {
                 Name       = "ClassicSword",
@@ -27,6 +28,7 @@ return {
         },
 
         UberClassicSword = {
+            lootable = true,
             Weight = 100,
             DisplayItem = {
                 Name       = "UberClassicSword",
@@ -53,6 +55,7 @@ return {
         },
 
         SwordOfDarkness = {
+            lootable = true,
             Weight = 50,
             DisplayItem = {
                 Name       = "SwordOfDarkness",
@@ -79,6 +82,7 @@ return {
         },
 
         SwordofStarlight = {
+            lootable = true,
             Weight = 25,
             DisplayItem = {
                 Name       = "SwordofStarlight",

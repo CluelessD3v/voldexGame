@@ -6,8 +6,8 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local WorldEvents               = ReplicatedStorage.Events.WorldRunner
-local DragonDied                = WorldEvents.DragonDied
-local PlayerEnteredCurrentLevel = WorldEvents.PlayerEnteredCurrentLevel
+local dragonDied                = WorldEvents.DragonDied
+local playerEnteredCurrentLevel = WorldEvents.PlayerEnteredCurrentLevel
 
 local worldData: Folder = Workspace.WorldData
 local dragonLevelObject: NumberValue  = worldData.DragonLevel
@@ -23,15 +23,14 @@ local dragonHealthBar: Frame       = dragonHealthBarHolder:WaitForChild("DragonH
 -- local healthCounter: TextLabel = dragonStatsFrame:WaitForChild("HealthCounter")
 
 local DragonHealthUpdateConn 
-PlayerEnteredCurrentLevel.OnClientEvent:Connect(function()
+
+playerEnteredCurrentLevel.OnClientEvent:Connect(function()
     DragonHealthUpdateConn = RunService.RenderStepped:Connect(function()
         dragonHealthBar.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealth.Value, 1)
     end)
 end)
 
 
-
-
-DragonDied.OnClientEvent:Connect(function()
-
+dragonDied.OnClientEventn:Connect(function()
+    DragonHealthUpdateConn:Disconnect()
 end)

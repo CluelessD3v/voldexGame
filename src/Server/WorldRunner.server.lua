@@ -202,10 +202,15 @@ end
 local localLootableItemsDict = {}
 
 for _, objectTypeList in pairs(tLootableItems) do
-    for objectName, typeObject in pairs(objectTypeList) do
-        localLootableItemsDict[objectName] = typeObject
+    for objectName, objectData in pairs(objectTypeList) do
+        --* ommit non lootable itmes i.e starting sword (yeah, a bit contradicting to original intent)
+        if objectData.Lootable then
+            localLootableItemsDict[objectName] = objectData
+        end
     end
 end
+
+print(localLootableItemsDict)
 
 --* Aux function to map the basic identifying data to build a new lootable item
 --* These data being, the ItemType and ItemName, this is solely here in case the
@@ -221,7 +226,7 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer)
     local newDisplayItemInstance = displayItemConfig.Instance:Clone()
     
     newDisplayItemInstance.Position = lastCF.Position
-    newDisplayItemInstance.Parent = workspace
+    newDisplayItemInstance.Parent   = workspace
     
     newDisplayItemInstance:SetAttribute("ItemType", displayItemConfig.Attributes.ItemType)
     newDisplayItemInstance:SetAttribute("ItemName", displayItemConfig.Attributes.ItemName)
