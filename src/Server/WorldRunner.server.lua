@@ -2,6 +2,7 @@
 local CollectionService   = game:GetService("CollectionService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService          = game:GetService("RunService")
+local ReplicatedStorage   = game:GetService("ReplicatedStorage")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -18,6 +19,10 @@ local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
+
+-- Remote Events
+local WorldEvents                     = ReplicatedStorage.Events.WorldRunner
+local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel.model
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 
@@ -48,14 +53,14 @@ currLevel.Parent = workspace
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local con 
-con = RunService.Heartbeat:Connect(function() 
+local PlayerEnteredLevelPoll 
+PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
     for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
 
         if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
             print("Entered")
             playerEnteredCurrLevel:Fire()
-            con:Disconnect()
+            PlayerEnteredLevelPoll:Disconnect()
         end
     end
 
@@ -116,14 +121,14 @@ playerEnteredCurrLevel.Event:Connect(function()
         --# entered the current level activation agro because the first one to kickstart
         --# this cyclic process no longer exist
 
-        con = RunService.Heartbeat:Connect(function() 
+        PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
             for _, dragonTarget in ipairs(CollectionService:GetTagged("DragonTarget")) do
         
                 if (currLevel:GetPivot().Position - dragonTarget:GetPivot().Position).Magnitude <= 50 then
                     print("Entered")
 
                     playerEnteredCurrLevel:Fire()
-                    con:Disconnect()
+                    PlayerEnteredLevelPoll:Disconnect()
                 end
             end
         end)
