@@ -4,7 +4,7 @@ return {
             Weight = 100,
             DisplayItem = {
                 Name       = "ClassicSword",
-                Instance   = workspace.DisplayItems.ClassicSwordDisplay,
+                Instance   = workspace.DisplayItems.ClassicSword,
                 Attributes = {
                     Damage   = 25,
                     ItemType = "SwordType",
@@ -30,7 +30,7 @@ return {
             Weight = 100,
             DisplayItem = {
                 Name       = "UberClassicSword",
-                Instance   = workspace.DisplayItems.ClassicSwordDisplay,
+                Instance   = workspace.DisplayItems.ClassicSword,
                 Attributes = {
                     Damage   = 50,
                     ItemType = "SwordType",
@@ -56,7 +56,7 @@ return {
             Weight = 50,
             DisplayItem = {
                 Name       = "SwordOfDarkness",
-                Instance   = workspace.DisplayItems.SwordOfDarknessDisplay,
+                Instance   = workspace.DisplayItems.SwordOfDarkness,
                 Attributes = {
                     Damage   = 100,
                     ItemType = "SwordType",
@@ -82,7 +82,7 @@ return {
             Weight = 25,
             DisplayItem = {
                 Name       = "SwordofStarlight",
-                Instance   = workspace.DisplayItems.SwordofStarlightDisplay,
+                Instance   = workspace.DisplayItems.SwordofStarlight,
                 Attributes = {
                     Damage   = 200,
                     ItemType = "SwordType",

@@ -22,10 +22,9 @@ local dragonHealthBar: Frame       = dragonHealthBarHolder:WaitForChild("DragonH
 
 -- local healthCounter: TextLabel = dragonStatsFrame:WaitForChild("HealthCounter")
 
-
+local DragonHealthUpdateConn 
 PlayerEnteredCurrentLevel.OnClientEvent:Connect(function()
-
-    local Conn = RunService.RenderStepped:Connect(function()
+    DragonHealthUpdateConn = RunService.RenderStepped:Connect(function()
         dragonHealthBar.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealth.Value, 1)
     end)
 end)
