@@ -65,7 +65,6 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
                 print("player entered level")
                 playerEnteredCurrLevel:Fire(player)
                 playerEnteredCurrentLevelRemote:FireClient(player)
-                playerCurrentLevel += 1  --//todo change these to be set through the player data handler
                 PlayerEnteredLevelPoll:Disconnect()
             end
         end
@@ -76,12 +75,11 @@ end)
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
-    --# Level bounds and increment Player current levels
+    --# Level bounds
     
     currLevel.SouthDoor.Transparency = 0
     currLevel.SouthDoor.CanCollide = true
     
-    playerCurrentLevel += 1
 
     --# Spawn Dragon mesh, and possition him to be at his spawn 
     --# looking at the south door
@@ -120,6 +118,8 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
         currLevel = workspace.Lair:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
+
+        -- hPlayerDataHandler:SetPlayerDataValue(playerWhoEntered, ClearedLevels, playerWhoEntered.)
         
         --# Create a new run service connection to poll if a valid dragon target 
         --# entered the current level activation agro because the first one to kickstart
