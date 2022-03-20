@@ -92,8 +92,10 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 
 for _, v in pairs(CollectionService:GetTagged("Dragon")) do
     local n = eDragon.new(v, tFrostDragon)
+    n.StatsScalling = 3
     print(n)
     n:Start()
+
     task.wait(1)
     n:SwitchState(n.States.Idle)
 end

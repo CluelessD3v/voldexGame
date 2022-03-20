@@ -6,7 +6,7 @@ return {
     },
 
     BaseFireDamage        = 1,   --> keep this number low
-    BaseMeleeDamge        = 25,
+    BaseMeleeDamge        = 10,
     BaseAttackPrepareTime = 1.5,
     BaseSpawnLocation = nil,  --> set this at run time
     BaseMaxhealth = 200,

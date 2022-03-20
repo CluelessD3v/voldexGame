@@ -41,7 +41,7 @@ function PreparingAttack:Start()
 
     
     local n = math.random(1, 2)
-    local prepareTime = math.sqrt(self.Context.PreparingAttack/self.Context.StatsScalling) + 1
+    local prepareTime = math.sqrt(self.Context.AttackPrepareTime/self.Context.StatsScalling) + 1
     local startedPreparing = time()
 
     self.Trove:Add(RunService.Heartbeat:Connect(function()
