@@ -65,7 +65,6 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
             if player then
                 print("player entered level")
                 playerEnteredCurrLevel:Fire(player)
-                playerEnteredCurrentLevelRemote:FireClient(player)
                 PlayerEnteredLevelPoll:Disconnect()
             end
         end
@@ -117,6 +116,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
         currLevel = workspace.Lair:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
+
         DragonDiedRemote:FireClient(playerWhoEntered)
 
         local clearedLevels = hPlayerDataHandler:GetPlayerObjectValue(playerWhoEntered, "ClearedLevels")
