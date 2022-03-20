@@ -25,6 +25,7 @@ local tLootableItems    = require(Configs.LootableItemsConfig)
 -- Remote Events
 local WorldEvents                     = ReplicatedStorage.Events.WorldRunner
 local playerEnteredCurrentLevelRemote = WorldEvents.PlayerEnteredCurrentLevel
+local DragonDiedRemote                = WorldEvents.DragonDied
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 
@@ -72,7 +73,6 @@ PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function()
 
 end)
 
-
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
     --# Level bounds
@@ -97,9 +97,8 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
 
-    --# Let know the client he entered the curr level.
+    --# Let know the client he entered the current level.
     playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered) 
-
 
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
@@ -118,6 +117,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
         currLevel = workspace.Lair:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
+        DragonDiedRemote:FireClient(playerWhoEntered)
 
         local clearedLevels = hPlayerDataHandler:GetPlayerObjectValue(playerWhoEntered, "ClearedLevels")
         hPlayerDataHandler:SetPlayerDataValue(playerWhoEntered, "ClearedLevels", clearedLevels.Value + 1)
