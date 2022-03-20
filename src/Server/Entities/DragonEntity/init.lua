@@ -36,8 +36,8 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.Trove:Add(self.Instance)
 
     self.Instance.Humanoid.WalkSpeed          = 8
-    self.Instance.Humanoid.BreakJointsOnDeath = false
-    self.Instance.Humanoid.HipHeight          = 2.17
+    self.Instance.Humanoid.BreakJointsOnDeath = false  
+    self.Instance.Humanoid.HipHeight          = self.Instance.PrimaryPart.Size.Y  --> necessary so the dragon does not slide aroundd
 
 
     --# Mapping Concrete Dragon Object fields to new entity
@@ -56,16 +56,16 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.ValidTargetTags          = dragonConfig.ValidTargetTags or {"DragonTarget"}
 
     --# DragonEntity class properties
-    self.CurrentTarget       = nil  -- The current target the dragon is gonna pursue (as long as it is in agro)
-    self.AnimationTracks     = {}   -- the concrete animation tracks objects loaded to the humanoid animator
-    self.WingBeatingHitboxes = {    -- the hitboxes whose touched event will be connected to on wing beating
+    self.CurrentTarget       = nil  --> The current target the dragon is gonna pursue (as long as it is in agro)
+    self.AnimationTracks     = {}   --> the concrete animation tracks objects loaded to the humanoid animator
+    self.WingBeatingHitboxes = {    --> the hitboxes whose touched event will be connected to on wing beating
 
         self.Instance.LeftWingHitbox,
         self.Instance.RightWingHitbox,
         self.Instance.Head,
     }  
 
-    self.Animations          = {}  -- the concrete animation objects to load to the humanoid animator object
+    self.Animations          = {}  --> the concrete animation objects to load to the humanoid animator object
     local animsFolder = self.Instance.Animations
 
     local animator = self.Instance.Humanoid.Animator
