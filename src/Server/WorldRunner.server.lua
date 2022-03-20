@@ -29,6 +29,7 @@ local DragonDiedRemote                = WorldEvents.DragonDied
 
 --# <|=============== LEVEL CONSTRUCTION AND MEDIATION ===============|>
 --# Instancing lobby and first level
+local WorldData = workspace.WorldData
 local playerEnteredCurrLevel:BindableEvent = Instance.new("BindableEvent")
 local lobby  = workspace.Lobby
 
@@ -112,7 +113,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
 --# ===============|> DRAGON MOBS CONSTRUCTION AND MEDIATION 
     
 --# start dragon entity instance state machine
-    local WorldData = workspace.WorldData
 
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
