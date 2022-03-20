@@ -35,7 +35,7 @@ local lobby  = workspace.Lobby
 
 local currentLevelPlayerIs = 0      --# Used for difculty scalling value of the dragon
 local prevLevel = lobby  --# The first prev level is the lobby
-local currLevel = workspace.Lair:Clone()
+local currLevel = workspace.Level:Clone()
 
 
 currLevel.Name = currLevel.Name..currentLevelPlayerIs
@@ -140,7 +140,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     newDragonEntity.Instance.Humanoid.Died:Connect(function()
         prevLevel:Destroy()
         prevLevel = currLevel
-        currLevel = workspace.Lair:Clone()
+        currLevel = workspace.Level:Clone()
         PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
         currLevel.Parent = workspace
 
