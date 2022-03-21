@@ -4,6 +4,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local RunService          = game:GetService("RunService")
 local ReplicatedStorage   = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -171,7 +172,8 @@ end)
 --# Cache Dragon config tables so we have access to them
 --# to deremine how many coins we should drop for the player
 local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
-local dragonsDataTables = {} 
+local dragonsDataTables = {}
+local coinSpawningRadius = 5 
 
 for _, dragonConfig in pairs(dragonConfigs) do
     dragonsDataTables[dragonConfig.Name] = require(dragonConfig)
@@ -184,6 +186,26 @@ local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsL
 
         if dragonInstance.Name == dragonConfig.Name then
             local lastCF = dragonInstance:GetPivot()
+            local baseGoldCoinsDropped = dragonConfig.BaseGoldCoinsDropped
+            local maxGoldCoinsDropped = dragonConfig.MaxGoldCoinsDropped
+
+            for _ = 1, math.random(baseGoldCoinsDropped, maxGoldCoinsDropped)do
+                local coin = workspace.Coin:Clone()
+                coin.PrimaryPart.Anchored = false
+                coin:PivotTo(lastCF)
+                local goal = {CFrame = lastCF + Vector3.new(math.random(0, coinSpawningRadius), 0, math.random(0, coinSpawningRadius))}
+                local info = TweenInfo.new(
+                    .5,
+                    Enum.EasingStyle.Circular,
+                    Enum.EasingDirection.Out,
+                    0,
+                    false,
+                    0
+                )
+                coin.Parent = currLevel
+                local tween = TweenService:Create(coin.PrimaryPart, info, goal)
+                tween:Play()
+            end	
         else
             warn("Dragon instance name does not match that of the config!")
         end
@@ -193,14 +215,12 @@ end
 
 for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
     dragonInstance.Destroying:Connect(function()
-        print(dragonInstance, "died")
         OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
     dragonInstance.Destroying:Connect(function()
-        print(dragonInstance, "died")
         OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
     end)
 end)
