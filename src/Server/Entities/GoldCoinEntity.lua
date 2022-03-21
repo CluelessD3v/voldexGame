@@ -25,8 +25,7 @@ function GoldCoinEntity.new(instance: Model)
     return self
 end
 
-function GoldCoinEntity:Init()
-    print("Init")
+function GoldCoinEntity:Start()
     self.RootPart.Touched:Connect(function(theTouchedPart) 
         local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)
         
@@ -34,7 +33,6 @@ function GoldCoinEntity:Init()
             self:Destroy()
         end
     end)
-
 end
 
 function GoldCoinEntity:Destroy()

@@ -235,7 +235,7 @@ end)
 CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinInstance)
     print(goldCoinInstance)
     local newGoldCoin = eGoldCoin.new(goldCoinInstance)
-    newGoldCoin:Init()
+    newGoldCoin:Start()
 end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
