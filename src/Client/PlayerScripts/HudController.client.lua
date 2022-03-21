@@ -15,18 +15,21 @@ local dragonHealthObject: NumberValue = worldData.DragonHealth
 local dragonMaxHealth: NumberValue    = worldData.DragonMaxHealth
 
 local PlayerGui: PlayerGui = Players.LocalPlayer.PlayerGui 
-local hud = PlayerGui:WaitForChild("HUD")
-local dragonStatsFrame: Frame      = hud:WaitForChild("DragonStatsFrame")
-local dragonHealthBarHolder: Frame = dragonStatsFrame:WaitForChild("DragonHealthBarHolder")
-local dragonHealthBar: Frame       = dragonHealthBarHolder:WaitForChild("DragonHealthBar")
+
+local hud                            = PlayerGui:WaitForChild("HUD")
+local dragonStatsFrame: Frame        = hud:WaitForChild("DragonStatsFrame")
+local dragonHealthBackground: Frame  = dragonStatsFrame:WaitForChild("DragonHealthBackground")
+local dragonHealthDisplay: Frame     = dragonHealthBackground:WaitForChild("DragonHealthDisplay")
+local HealthCounter: TextLabel = dragonHealthDisplay:WaitForChild("HealthCounter")
 
 -- local healthCounter: TextLabel = dragonStatsFrame:WaitForChild("HealthCounter")
 
 local DragonHealthUpdateConn 
-
+dragonStatsFrame.Visible = false
 playerEnteredCurrentLevel.OnClientEvent:Connect(function()
+    dragonStatsFrame.Visible = true
     DragonHealthUpdateConn = RunService.RenderStepped:Connect(function()
-        dragonHealthBar.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealth.Value, 1)
+        dragonHealthDisplay.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealth.Value, 1)
     end)
 end)
 

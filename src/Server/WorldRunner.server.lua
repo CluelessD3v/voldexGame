@@ -130,10 +130,11 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
 
-    --# World data to feed GUI
+    --# Set World data to feed player HUD
     WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
     WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
     WorldData.DragonLevel.Value     = currentLevelPlayerIs
+    WorldData.DragonName.Value      = newDragonEntity.Instance.Name
 
     newDragonEntity.Instance.Humanoid.HealthChanged:Connect(function(newVal)
         WorldData.DragonHealth.Value = newVal
