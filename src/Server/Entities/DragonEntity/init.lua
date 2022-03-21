@@ -83,6 +83,7 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.StateChanged.Parent = self.Instance
 
 
+
     --# States
     self.States = {
         Idle            = require(script.Idle),

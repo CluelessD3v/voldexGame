@@ -21,24 +21,26 @@ function GoldCoinEntity.new(instance: Model)
     
     self.Instance = instance
     self.RootPart = self.Instance.PrimaryPart
-    CollectionService:AddTag(self.Instance, "GoldCoin")
+
+    --# Events (this exist so the instance does not has to reach outside of this script to a handler or system)
+    self.TouchedByPlayer = Instance.new("BindableEvent")
+    self.TouchedByPlayer.Name   = "TouchedByPlayer"
+    self.TouchedByPlayer.Parent = self.Instance
+    
     return self
 end
 
-function GoldCoinEntity:Init()
-    print("Init")
+function GoldCoinEntity:Start()
     self.RootPart.Touched:Connect(function(theTouchedPart) 
-        local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)
-        
+        local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)        
         if player then
+            self.TouchedByPlayer:Fire(player)
             self:Destroy()
         end
     end)
-
 end
 
 function GoldCoinEntity:Destroy()
-    print("Destroying")
     self.Instance:Destroy()
 end
 

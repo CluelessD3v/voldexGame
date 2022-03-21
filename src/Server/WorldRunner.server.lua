@@ -4,6 +4,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local RunService          = game:GetService("RunService")
 local ReplicatedStorage   = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 --# <|=============== DEPENDENCIES ===============|>
 -- Handlers
@@ -38,8 +39,6 @@ local lobby  = workspace.Lobby
 local currentLevelPlayerIs = 0      --# Used for difculty scalling value of the dragon
 local prevLevel = lobby  --# The first prev level is the lobby
 local currLevel = workspace.Level:Clone()
-
-
 currLevel.Name = currLevel.Name..currentLevelPlayerIs
 currLevel.Parent = workspace
 
@@ -82,23 +81,23 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local PlayerEnteredLevelPoll 
-PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
-    if DidPlayerEnteredCurrLevel(currLevel, 100) then
-        PlayerEnteredLevelPoll:Disconnect()
-    end
-end)
+-- local PlayerEnteredLevelPoll 
+-- PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+--     if DidPlayerEnteredCurrLevel(currLevel, 100) then
+--         PlayerEnteredLevelPoll:Disconnect()
+--     end
+-- end)
 
 
--- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v, tFrostDragon)
---     n.StatsScalling = 3
---     print(n)
---     n:Start()
+for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+    local n = eDragon.new(v, tFrostDragon)
+    n.StatsScalling = 3
+    n:Start()
 
---     task.wait(1)
---     n:SwitchState(n.States.Idle)
--- end
+    task.wait(1)
+    -- n:SwitchState(n.States.Idle)
+    n.Instance.Humanoid.Health = 0
+end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
@@ -118,7 +117,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     local currLevelMobSpawn  = CFrame.lookAt(atMobSpawn, lookingAtSouthDoor )
     dragonMesh:PivotTo(currLevelMobSpawn + upOffsetToAvoidGettingStuck)
     
-    dragonMesh.Name = "dragon"
+    dragonMesh.Name = "FrostDragon"
     CollectionService:AddTag(dragonMesh, "LootContainer")
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
@@ -130,8 +129,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     local newDragonEntity = eDragon.new(dragonMesh)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
-
-    print(newDragonEntity)
 
     --# World data to feed GUI
     WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
@@ -171,6 +168,79 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     end)
 end)
 
+--# <|=============== GoldCoins ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+--# Cache Dragon config tables so we have access to them
+--# to deremine how many coins we should drop for the player
+local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
+local cachedDragonConfigs = {}
+local coinSpawningRadius = 5 
+
+for _, dragonConfig in pairs(dragonConfigs) do
+    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
+end
+
+local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
+    for _, dragonConfig in pairs(dragonConfigsList) do
+        if dragonInstance.Name == dragonConfig.Name then
+            local lastCF = dragonInstance:GetPivot()
+            local baseGoldCoinsDropped = dragonConfig.BaseGoldCoinsDropped
+            local maxGoldCoinsDropped = dragonConfig.MaxGoldCoinsDropped
+            
+            for _ = 1, math.random(baseGoldCoinsDropped, maxGoldCoinsDropped)do
+                local coin = workspace.Coin:Clone()
+                coin:PivotTo(lastCF)
+                coin.PrimaryPart.CanCollide = false
+                coin.Parent = currLevel
+
+                local goal = {CFrame = lastCF + Vector3.new(math.random(0, coinSpawningRadius), 0, math.random(0, coinSpawningRadius))}
+                local info = TweenInfo.new(
+                    .5,
+                    Enum.EasingStyle.Circular,
+                    Enum.EasingDirection.Out,
+                    0,
+                    false,
+                    0
+                )
+
+                CollectionService:AddTag(coin, "GoldCoin")
+                local tween = TweenService:Create(coin.PrimaryPart, info, goal)
+                tween:Play()
+            end	
+        else
+            warn("Dragon instance name does not match that of the config!")
+        end
+    end
+
+end
+
+
+--# When the dragon humanoid instance health reaches 0
+--# Spawn the between [BaseGoldCoinsDropped, MaxGoldCoinsDropped] coins
+
+--> GO through ones that might already exist
+for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
+    dragonInstance.Humanoid.Died:Connect(function()
+        OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
+    end)
+
+end
+--> Listen for new ones that might get tagged
+CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
+    dragonInstance.Humanoid.Died:Connect(function()
+        OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
+    end)
+end)
+
+
+CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinInstance)
+    print(goldCoinInstance)
+    local newGoldCoin = eGoldCoin.new(goldCoinInstance)
+    newGoldCoin.TouchedByPlayer.Event:Connect(function(player)
+        hPlayerDataHandler:IncrementPlayerDataValue(player, "GoldCoins", 1)
+    end)
+    newGoldCoin:Start()
+end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
@@ -222,8 +292,6 @@ for _, objectTypeList in pairs(tLootableItems) do
     end
 end
 
-print(cachedLootablesItems)
-
 --* Aux function to map the basic identifying data to build a new lootable item
 --* These data being, the ItemType and ItemName, this is solely here in case the
 --* "perch" the item is cloned from DOES NOT has that data already!
@@ -248,6 +316,10 @@ local function SpawnLootableItemFromContainerByWeight(lootContainer, lootablesLi
 end
 
 --# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
+
+--# Pick through a weighted choice the item that will be dropped to the player for killing the dragon
+--# Note, this not done when the loot container "humanoid" dies because
+--# ideally not all loot containers are humanoids!
 
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
