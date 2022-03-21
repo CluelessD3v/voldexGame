@@ -228,6 +228,7 @@ for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
     end)
 
 end
+
 --> Listen for new ones that might get tagged
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
     dragonInstance.Humanoid.Died:Connect(function()
@@ -235,7 +236,8 @@ CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstan
     end)
 end)
 
-
+--# Listen for coin instances being added If the
+--# coin is touched Increment the player coin value
 CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinInstance)
     local newGoldCoin = eGoldCoin.new(goldCoinInstance)
     newGoldCoin.TouchedByPlayer.Event:Connect(function(player)
