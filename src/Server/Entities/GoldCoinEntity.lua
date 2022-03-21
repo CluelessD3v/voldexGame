@@ -34,7 +34,11 @@ function GoldCoinEntity:Start()
     self.RootPart.Touched:Connect(function(theTouchedPart) 
         local player: Player = Players:GetPlayerFromCharacter(theTouchedPart.Parent)        
         if player then
+            self.Instance.Sounds.Coin:Play()
             self.TouchedByPlayer:Fire(player)
+            self.Instance.PrimaryPart.Transparency = 1  --# Quick hack around the sound not beign able to play when the coin is destroyed
+            self.Instance.Sounds.Coin.Ended:Wait()
+
             self:Destroy()
         end
     end)
