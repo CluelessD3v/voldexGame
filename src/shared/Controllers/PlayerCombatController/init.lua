@@ -27,7 +27,7 @@ PlayerCombatController.__index = PlayerCombatController
 
 function PlayerCombatController.new()
     local self = setmetatable({}, PlayerCombatController)
-    
+
     self.EquippedWeapon = nil
     self.Trove = Trove.new()
 
@@ -35,7 +35,10 @@ function PlayerCombatController.new()
     self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
     self.DamageMob       = eventsNameSpace:WaitForChild("DamageMob")
 
-    self.ComboCount = 0
+    self.ComboCount      = 0
+    self.Animator        = nil
+    self.AnimationTracks = {}
+    self.Sounds          = {}
 
     --# Objecst with these tags can be damaged
     self.ValidTargetTags = {  
@@ -45,7 +48,6 @@ function PlayerCombatController.new()
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
-        CastingActionTwo = require(script.CastingActionTwo),
         Idle             = require(script.Idle)
     }
 
@@ -56,8 +58,21 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
-function PlayerCombatController:Start(equippedWeapon)
+function PlayerCombatController:Start(player: Player, equippedWeapon: Tool)
     self.EquippedWeapon = equippedWeapon
+    self.Animator = player.Character:WaitForChild("Humanoid").Animator
+
+    --# Load the animations to the animations table
+    for _, anim in pairs(self.EquippedWeapon.Animations:GetChildren()) do
+        table.insert(self.AnimationTracks, self.Animator:LoadAnimation(anim))
+    end
+
+    --# Load Sounds
+    for _, sound in pairs(self.EquippedWeapon.Sounds:GetChildren()) do
+        self.Sounds[sound.Name] = sound
+    end
+
+    self.Sounds.DrawSword:Play()
     self:SwitchState(self.States.Idle)
 end
 

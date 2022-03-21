@@ -24,12 +24,6 @@ function Idle:Start()
         end
     end))
 
-    --# ActionTwo input listener
-    self.Trove:Add(UserInputService.InputBegan:Connect(function(io: InputObject, busy: boolean )
-        if io.UserInputType == Enum.UserInputType.MouseButton2 and not busy then
-            self.Context:SwitchState(self.Context.States.CastingActionTwo)
-        end
-    end))
 end
 
 function Idle:Exit()
