@@ -61,10 +61,7 @@ local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
             if playerWhoEntered then
                 print("player entered level")
                 currentLevelPlayerIs += 1
-
-                 --# Let know the client he entered the current level.
-                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
-                
+    
                 --# Let know the world runner a player entered the curr level
                 playerEnteredCurrLevel:Fire(playerWhoEntered)
                 return true
@@ -139,6 +136,11 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     newDragonEntity.Instance.Humanoid.HealthChanged:Connect(function(newVal)
         WorldData.DragonHealth.Value = newVal
     end)
+
+    --# Just after the server has finished set up
+    --# Let the client he entered the current level.
+    
+    playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
 
     newDragonEntity:Start()
 

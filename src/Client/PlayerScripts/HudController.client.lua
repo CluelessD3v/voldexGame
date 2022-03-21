@@ -29,10 +29,12 @@ local DragonHealthUpdateConn
 dragonStatsFrame.Visible = false
 
 playerEnteredCurrentLevel.OnClientEvent:Connect(function()
-    
-    DragonHealthUpdateConn = RunService.RenderStepped:Connect(function()
-        dragonHealthDisplay.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealthObject.Value, 1)
-        healthCounter.Text = tostring(dragonMaxHealthObject.Value.."/"..dragonHealthObject.Value)
+    dragonHealthDisplay.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealthObject.Value, 1)
+    healthCounter.Text = tostring(dragonMaxHealthObject.Value.."/"..dragonHealthObject.Value)
+
+    dragonHealthObject.Changed:Connect(function(newValue)
+        dragonHealthDisplay.Size = UDim2.fromScale(newValue/dragonMaxHealthObject.Value, 1)
+        healthCounter.Text = tostring(dragonMaxHealthObject.Value.."/"..newValue)
     end)
 
     dragonStatsFrame.Visible = true
@@ -41,5 +43,6 @@ end)
 
 
 dragonDied.OnClientEvent:Connect(function()
+    
     DragonHealthUpdateConn:Disconnect()
 end)
