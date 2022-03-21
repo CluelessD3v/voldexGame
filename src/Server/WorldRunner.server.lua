@@ -185,10 +185,13 @@ local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsL
             local lastCF = dragonInstance:GetPivot()
             local baseGoldCoinsDropped = dragonConfig.BaseGoldCoinsDropped
             local maxGoldCoinsDropped = dragonConfig.MaxGoldCoinsDropped
-
+            
             for _ = 1, math.random(baseGoldCoinsDropped, maxGoldCoinsDropped)do
                 local coin = workspace.Coin:Clone()
                 coin:PivotTo(lastCF)
+                coin.PrimaryPart.CanCollide = false
+                coin.Parent = currLevel
+
                 local goal = {CFrame = lastCF + Vector3.new(math.random(0, coinSpawningRadius), 0, math.random(0, coinSpawningRadius))}
                 local info = TweenInfo.new(
                     .5,
@@ -198,7 +201,8 @@ local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsL
                     false,
                     0
                 )
-                coin.Parent = currLevel
+
+                CollectionService:AddTag(coin, "GoldCoin")
                 local tween = TweenService:Create(coin.PrimaryPart, info, goal)
                 tween:Play()
             end	
@@ -212,17 +216,26 @@ end
 
 --# When the dragon humanoid instance health reaches 0
 --# Spawn the between [BaseGoldCoinsDropped, MaxGoldCoinsDropped] coins
+
+--> GO through ones that might already exist
 for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
     dragonInstance.Humanoid.Died:Connect(function()
         OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
 
 end
-
+--> Listen for new ones that might get tagged
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
     dragonInstance.Humanoid.Died:Connect(function()
         OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
+end)
+
+
+CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinInstance)
+    print(goldCoinInstance)
+    local newGoldCoin = eGoldCoin.new(goldCoinInstance)
+    newGoldCoin:Init()
 end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
