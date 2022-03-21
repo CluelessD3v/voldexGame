@@ -14,7 +14,7 @@ function CastingActionOne.new(context)
     self.Context = context
     self.Trove = context.Trove:Extend()
 
-    self.AnimationTrack = nil
+    self.CurrentAnimationTrack = nil
     return self
 end
 
@@ -26,9 +26,10 @@ function CastingActionOne:Start()
             return
         end
 
-        debounce = true
+        debounce = true 
 
-
+        --# If what we touched has a valid tag, then fire
+        --# to the server and substract its health
 
         for _, validTag in ipairs(self.Context.ValidTargetTags) do
             if CollectionService:HasTag(touchedPart.Parent, validTag) then
@@ -40,30 +41,31 @@ function CastingActionOne:Start()
         end
     end))
 
-    local humanoid = Players.LocalPlayer.Character.Humanoid
-    local animator = humanoid.Animator
-    local animationsList = self.Context.EquippedWeapon.Animations:GetChildren()
+    --# Increase the "Combo Cound" so we can play a
+    --# Different animation
 
     self.Context.ComboCount += 1
     
-    if self.Context.ComboCount > #animationsList then
+    if self.Context.ComboCount > #self.Context.AnimationTracks then
         self.Context.ComboCount = 1
     end
 
 
-    self.AnimationTrack = animator:LoadAnimation(animationsList[self.Context.ComboCount])
-    self.AnimationTrack:Play()
-    self.AnimationTrack:AdjustSpeed(1.8) 
+    --# Play the current animation track &
+    --# wait for it to finish (adjust its speed cause some anims are hella slow)
+
+    self.CurrentAnimationTrack = self.Context.AnimationTracks[self.Context.ComboCount]
+    self.CurrentAnimationTrack:Play()
+    self.CurrentAnimationTrack:AdjustSpeed(1.8) 
     
-    
-    self.AnimationTrack.Stopped:Wait()
+    self.CurrentAnimationTrack.Stopped:Wait()
     self.Context:SwitchState(self.Context.States.Idle)
 end
 
 
 function CastingActionOne:Exit()
     print("exited")
-    self.AnimationTrack:Stop()
+    self.CurrentAnimationTrack:Stop()
     self.Trove:Clean()
     return
 end

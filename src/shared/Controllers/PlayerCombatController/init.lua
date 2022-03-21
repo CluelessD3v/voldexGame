@@ -27,7 +27,7 @@ PlayerCombatController.__index = PlayerCombatController
 
 function PlayerCombatController.new()
     local self = setmetatable({}, PlayerCombatController)
-    
+
     self.EquippedWeapon = nil
     self.Trove = Trove.new()
 
@@ -36,6 +36,9 @@ function PlayerCombatController.new()
     self.DamageMob       = eventsNameSpace:WaitForChild("DamageMob")
 
     self.ComboCount = 0
+
+    self.AnimationTracks = {}
+    self.Animator = nil
 
     --# Objecst with these tags can be damaged
     self.ValidTargetTags = {  
@@ -56,8 +59,17 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --* KickStarts PlayerCombat State machine & allows players to engage with the combat system
-function PlayerCombatController:Start(equippedWeapon)
+function PlayerCombatController:Start(player: Player, equippedWeapon: Tool)
     self.EquippedWeapon = equippedWeapon
+    self.Animator = player.Character:WaitForChild("Humanoid").Animator
+
+    --# Load the animations to the animations table
+    for _, anim in pairs(self.EquippedWeapon.Animations:GetChildren()) do
+        print(anim)
+        table.insert(self.AnimationTracks, self.Animator:LoadAnimation(anim))
+    end
+
+
     self:SwitchState(self.States.Idle)
 end
 

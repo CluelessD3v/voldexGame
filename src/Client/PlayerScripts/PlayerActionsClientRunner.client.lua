@@ -14,7 +14,7 @@ Players.LocalPlayer.CharacterAdded:Connect(function()
 
     cPlayerCombat.StartCombatMode.OnClientEvent:Connect(function(equippedWeapon)
         local camera = workspace.CurrentCamera
-        cPlayerCombat:Start(equippedWeapon)
+        cPlayerCombat:Start(player, equippedWeapon)
         cCameraController:Start(player.Character, camera)
     end)    
 

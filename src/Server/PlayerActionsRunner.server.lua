@@ -91,7 +91,6 @@ Players.PlayerAdded:Connect(function(player:Player)
     end)
 
     hPlayerInventory.WeaponUnEquipped.Event:Connect(function(_, weapon)
-        print("fired")
         hPlayerCombat.ExitCombatMode:FireClient(player, weapon)
     end)
 end)
