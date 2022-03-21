@@ -39,7 +39,7 @@ function FireBreathing:Start()
 
     --# The hitbox of the fire ability of the dragon
     fireHitbox.Anchored     = true
-    fireHitbox.Transparency = .5
+    fireHitbox.Transparency = 1
     fireHitbox.Size         = Vector3.new(5,5,5)
     fireHitbox.CanCollide   = false
 
