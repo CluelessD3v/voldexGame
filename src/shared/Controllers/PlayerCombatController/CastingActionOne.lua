@@ -12,8 +12,7 @@ function CastingActionOne.new(context)
 
     self.Name = "CastingActionOne"
     self.Context = context
-    self.Trove = context.Trove:Extend()
-
+    self.Trove = context.Trove:Extend() 
     self.CurrentAnimationTrack = nil
     return self
 end
@@ -21,6 +20,8 @@ end
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 function CastingActionOne:Start()
     local debounce = false
+    self.Context.Sounds.SwordSlash:Play()
+
     self.Trove:Add(self.Context.EquippedWeapon.Handle.Touched:Connect(function(touchedPart)
         if debounce then 
             return
@@ -35,6 +36,7 @@ function CastingActionOne:Start()
             if CollectionService:HasTag(touchedPart.Parent, validTag) then
                 local humanoid = touchedPart.Parent:FindFirstChild("Humanoid")
                 if humanoid then
+                    self.Context.Sounds.SwordHit:Play()
                     self.Context.DamageMob:FireServer(humanoid.Parent)
                 end
             end
@@ -65,7 +67,9 @@ end
 
 function CastingActionOne:Exit()
     print("exited")
-    self.CurrentAnimationTrack:Stop()
+    if self.CurrentAnimationTrack then
+        self.CurrentAnimationTrack:Stop()
+    end
     self.Trove:Clean()
     return
 end

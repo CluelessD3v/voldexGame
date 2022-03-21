@@ -35,10 +35,10 @@ function PlayerCombatController.new()
     self.ExitCombatMode  = eventsNameSpace:WaitForChild("ExitCombatMode")
     self.DamageMob       = eventsNameSpace:WaitForChild("DamageMob")
 
-    self.ComboCount = 0
-
+    self.ComboCount      = 0
+    self.Animator        = nil
     self.AnimationTracks = {}
-    self.Animator = nil
+    self.Sounds          = {}
 
     --# Objecst with these tags can be damaged
     self.ValidTargetTags = {  
@@ -65,11 +65,15 @@ function PlayerCombatController:Start(player: Player, equippedWeapon: Tool)
 
     --# Load the animations to the animations table
     for _, anim in pairs(self.EquippedWeapon.Animations:GetChildren()) do
-        print(anim)
         table.insert(self.AnimationTracks, self.Animator:LoadAnimation(anim))
     end
 
+    --# Load Sounds
+    for _, sound in pairs(self.EquippedWeapon.Sounds:GetChildren()) do
+        self.Sounds[sound.Name] = sound
+    end
 
+    self.Sounds.DrawSword:Play()
     self:SwitchState(self.States.Idle)
 end
 
