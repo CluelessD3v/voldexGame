@@ -65,14 +65,22 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
         self.Instance.Head,
     }  
 
-    self.Animations          = {}  --> the concrete animation objects to load to the humanoid animator object
+    self.Animations = {}  --> the concrete animation objects to load to the humanoid animator object
+    self.Sounds     = {}
+
     local animsFolder = self.Instance.Animations
+    local soundsFolder = self.Instance.Sounds
 
     local animator = self.Instance.Humanoid.Animator
     for _, animation in pairs (animsFolder:GetChildren()) do
         self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
     end
     
+    for _, sound in pairs(soundsFolder:GetChildren()) do
+        self.Sounds[sound.Name] = sound
+    end
+
+
     --# DragonEntity Class Attributes
     self.Instance:SetAttribute("CurrentState", "someState")
     
@@ -104,6 +112,7 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
 end
 
 function DragonEntity:Start()
+    self.Sounds.StartSound:Play()
     self:SwitchState(self.States.Idle)
 end
 

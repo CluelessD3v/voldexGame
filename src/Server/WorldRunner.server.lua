@@ -141,9 +141,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Let the client he entered the current level.
 
     playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
-
-    task.wait(3)
-    newDragonEntity.Instance.Humanoid.Health = 0
     newDragonEntity:Start()
 
     --# When mob dies destroy the previous level and create a new one
