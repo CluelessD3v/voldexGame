@@ -89,15 +89,15 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 -- end)
 
 
--- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v, tFrostDragon)
---     n.StatsScalling = 3
---     n:Start()
+for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+    local n = eDragon.new(v, tFrostDragon)
+    n.StatsScalling = 3
+    n:Start()
 
---     task.wait(1)
---     -- n:SwitchState(n.States.Idle)
---     -- n.Instance.Humanoid.Health = 0
--- end
+    task.wait(1)
+    -- n:SwitchState(n.States.Idle)
+    n.Instance.Humanoid.Health = 0
+end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
@@ -178,7 +178,6 @@ local coinSpawningRadius = 5
 for _, dragonConfig in pairs(dragonConfigs) do
     cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
 end
--- print(dragonsDataTables.FrostDragonConfig.Name)
 
 local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
     for _, dragonConfig in pairs(dragonConfigsList) do
@@ -189,7 +188,6 @@ local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsL
 
             for _ = 1, math.random(baseGoldCoinsDropped, maxGoldCoinsDropped)do
                 local coin = workspace.Coin:Clone()
-                coin.PrimaryPart.Anchored = false
                 coin:PivotTo(lastCF)
                 local goal = {CFrame = lastCF + Vector3.new(math.random(0, coinSpawningRadius), 0, math.random(0, coinSpawningRadius))}
                 local info = TweenInfo.new(
@@ -211,14 +209,18 @@ local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsL
 
 end
 
+
+--# When the dragon humanoid instance health reaches 0
+--# Spawn the between [BaseGoldCoinsDropped, MaxGoldCoinsDropped] coins
 for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
-    dragonInstance.Destroying:Connect(function()
+    dragonInstance.Humanoid.Died:Connect(function()
         OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
+
 end
 
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
-    dragonInstance.Destroying:Connect(function()
+    dragonInstance.Humanoid.Died:Connect(function()
         OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
 end)
