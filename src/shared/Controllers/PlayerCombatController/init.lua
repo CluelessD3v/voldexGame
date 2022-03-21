@@ -48,7 +48,6 @@ function PlayerCombatController.new()
     --# Concrete states the context manages
     self.States = {
         CastingActionOne = require(script.CastingActionOne),
-        CastingActionTwo = require(script.CastingActionTwo),
         Idle             = require(script.Idle)
     }
 
