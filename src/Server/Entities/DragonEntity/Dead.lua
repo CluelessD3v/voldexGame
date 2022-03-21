@@ -17,6 +17,7 @@ function Dead.new(context: table)
 end
 
 function Dead:Start()
+    self.Context.Sounds.DeathSound:Play()
     self.Context.AnimationTracks.Death:Play()
 
     for _, child in ipairs(self.Instance:GetChildren()) do
