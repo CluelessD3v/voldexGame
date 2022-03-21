@@ -89,15 +89,15 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 -- end)
 
 
-for _, v in pairs(CollectionService:GetTagged("Dragon")) do
-    local n = eDragon.new(v, tFrostDragon)
-    n.StatsScalling = 3
-    n:Start()
+-- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+--     local n = eDragon.new(v, tFrostDragon)
+--     n.StatsScalling = 3
+--     n:Start()
 
-    task.wait(1)
-    -- n:SwitchState(n.States.Idle)
-    n.Instance.Humanoid.Health = 0
-end
+--     task.wait(1)
+--     -- n:SwitchState(n.States.Idle)
+--     -- n.Instance.Humanoid.Health = 0
+-- end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
@@ -172,18 +172,16 @@ end)
 --# Cache Dragon config tables so we have access to them
 --# to deremine how many coins we should drop for the player
 local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
-local dragonsDataTables = {}
+local cachedDragonConfigs = {}
 local coinSpawningRadius = 5 
 
 for _, dragonConfig in pairs(dragonConfigs) do
-    dragonsDataTables[dragonConfig.Name] = require(dragonConfig)
+    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
 end
 -- print(dragonsDataTables.FrostDragonConfig.Name)
 
 local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
-    for _, dragonConfig in pairs(dragonsDataTables) do
-
-
+    for _, dragonConfig in pairs(dragonConfigsList) do
         if dragonInstance.Name == dragonConfig.Name then
             local lastCF = dragonInstance:GetPivot()
             local baseGoldCoinsDropped = dragonConfig.BaseGoldCoinsDropped
@@ -215,13 +213,13 @@ end
 
 for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
     dragonInstance.Destroying:Connect(function()
-        OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
+        OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
 end
 
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
     dragonInstance.Destroying:Connect(function()
-        OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
+        OnDragonDestroyedSpawnCoins(dragonInstance, cachedDragonConfigs)
     end)
 end)
 

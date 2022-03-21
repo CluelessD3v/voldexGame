@@ -81,6 +81,10 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.StateChanged        = Instance.new("BindableEvent")
     self.StateChanged.Name   = "StateChanged"
     self.StateChanged.Parent = self.Instance
+    
+    self.Died = Instance.new("BindableEvent")
+    self.Died.Name = "Died"
+    self.Died.Parent = self.Instance
 
 
     --# States
