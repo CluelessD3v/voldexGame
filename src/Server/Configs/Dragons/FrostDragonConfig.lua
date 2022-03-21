@@ -6,12 +6,12 @@ return {
     },
 
     Name = "FrostDragon",
-    BaseFireDamage        = .5,   --> keep this number low
-    BaseMeleeDamge        = 10,
+    BaseFireDamage        = .3,  --> keep this number low, the fire hitbox is not debounced!
+    BaseMeleeDamge        = 10, 
     BaseAttackPrepareTime = 1.5,
-    BaseSpawnLocation     = nil, --> set this at run time
-    BaseMaxhealth         = 200,
-    DetectionAgro         = 60,
+    BaseSpawnLocation     = nil, --> set this at run time if needed to set a custom spawn location
+    BaseMaxhealth         = 250,
+    DetectionAgro         = 70,
     AttackAgro            = 25,
     BaseGoldCoinsDropped  = 5,
     MaxGoldCoinsDropped   = 20,

@@ -70,7 +70,7 @@ function FireBreathing:Start()
 
     --# A part to hold the fire particle emmiter is being used because an attachment was not positioning itself correctly
     fireParticleEmmiterHolder.Anchored     = true
-    fireParticleEmmiterHolder.Transparency = .5
+    fireParticleEmmiterHolder.Transparency = 1
     fireParticleEmmiterHolder.Size         = Vector3.new(1,1,1)
     fireParticleEmmiterHolder.CanCollide   = false
     fireParticleEmmiterHolder.CFrame       = self.Instance.Head.CFrame + self.Instance.Head.CFrame.LookVector * self.Instance.Head.Size.Z * 0.5

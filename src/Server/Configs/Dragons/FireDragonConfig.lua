@@ -6,11 +6,11 @@ return {
     },
 
     Name = "FireDragon",
-    BaseFireDamage        = 1.5,   --> keep this number low
+    BaseFireDamage        = 1.5,   --> keep this number low, the fire hitbox is not debounced!
     BaseMeleeDamge        = 5,
     BaseAttackPrepareTime = 1.8,
-    BaseSpawnLocation     = nil, --> set this at run time
-    BaseMaxhealth         = 220,
+    BaseSpawnLocation     = nil, --> set this at run time if needed to set a custom spawn location
+    BaseMaxhealth         = 200,
     DetectionAgro         = 80,
     AttackAgro            = 30,
     BaseGoldCoinsDropped  = 5,
