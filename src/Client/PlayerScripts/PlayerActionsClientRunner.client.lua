@@ -1,4 +1,7 @@
+--# <|=============== DEPENDENCIES ===============|>
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService  = game:GetService("UserInputService")
+
 --# <|=============== DEPENDENCIES ===============|>
 -- Controllers
 local Controllers  = ReplicatedStorage.Controllers
@@ -8,6 +11,8 @@ local cCameraController = require(Controllers:FindFirstChild("CameraController",
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 
+--# Listen when a player equips an instance tagged with the weapon tag
+--# If so, start the combat state machine and the camera controller
 Players.LocalPlayer.CharacterAdded:Connect(function()
     local newPlayerCombatController = cPlayerCombatController.new()
 
@@ -23,4 +28,21 @@ Players.LocalPlayer.CharacterAdded:Connect(function()
         newPlayerCombatController:Exit()
         cCameraController:Exit()
     end)
+end)
+
+UserInputService.InputBegan:Connect(function(io, busy)
+    if io.KeyCode == Enum.KeyCode.LeftShift and not busy then
+        local player = Players.LocalPlayer
+        local humanoid = player.Character.Humanoid
+        humanoid.WalkSpeed = 32
+    end
+end)
+
+
+UserInputService.InputEnded:Connect(function(io, busy)
+    if io.KeyCode == Enum.KeyCode.LeftShift and not busy then
+        local player = Players.LocalPlayer
+        local humanoid = player.Character.Humanoid
+        humanoid.WalkSpeed = 16
+    end
 end)

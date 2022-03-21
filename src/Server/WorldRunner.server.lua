@@ -121,7 +121,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     local currLevelMobSpawn  = CFrame.lookAt(atMobSpawn, lookingAtSouthDoor )
     dragonMesh:PivotTo(currLevelMobSpawn + upOffsetToAvoidGettingStuck)
     
-    dragonMesh.Name = "FrostDragon"
+    dragonMesh.Name = chosenDragonConfig.Name
     CollectionService:AddTag(dragonMesh, "LootContainer")
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
