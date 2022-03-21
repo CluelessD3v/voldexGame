@@ -33,6 +33,8 @@ function FireBreathing:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end) 
+
+    self.Context.Sounds.FireBreathingSound:Play()
     
     local fireHitbox = Instance.new("Part")
     self.Trove:Add(fireHitbox)

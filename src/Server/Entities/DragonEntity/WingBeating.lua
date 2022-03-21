@@ -25,6 +25,8 @@ function WingBeating:Start()
     self.Instance.Humanoid.Died:Connect(function()
         self:Exit()
     end)
+
+    self.Context.Sounds.ChasingPlayerSound:Play()
     
     local debounce = false
     

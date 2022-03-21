@@ -29,6 +29,9 @@ function ChasingPlayer:Start()
         self:Exit()
     end)
 
+    self.Context.Sounds.ChasingPlayerSound:Play()
+
+
     self.Instance.Humanoid.WalkSpeed = 14
     print(self.Context.AnimationTracks.Walk.Speed)
     self.Context.AnimationTracks.Walk:Play()

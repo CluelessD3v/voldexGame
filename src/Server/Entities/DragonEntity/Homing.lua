@@ -35,7 +35,7 @@ function Homing:Start()
         self:Exit()
     end)
 
-    self.Sounds.HomingSound:Play()
+    self.Context.Sounds.HomingSound:Play()
     self.Context.AnimationTracks.Walk:Play()
 
     --# Poll every frame to see if a valid instance
