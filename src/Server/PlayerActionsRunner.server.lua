@@ -97,8 +97,6 @@ Players.PlayerAdded:Connect(function(player:Player)
 end)
 
 
-
-
 hPlayerCombat.DamageMob.OnServerEvent:Connect(function(player, mob)
     for _, validTag in ipairs(hPlayerCombat.ValidTargetTags) do
         if CollectionService:HasTag(mob, validTag) then
