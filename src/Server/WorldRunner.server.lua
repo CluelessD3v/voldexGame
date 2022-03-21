@@ -61,10 +61,7 @@ local function DidPlayerEnteredCurrLevel(currentLevel, levelAgro)
             if playerWhoEntered then
                 print("player entered level")
                 currentLevelPlayerIs += 1
-
-                 --# Let know the client he entered the current level.
-                playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
-                
+    
                 --# Let know the world runner a player entered the curr level
                 playerEnteredCurrLevel:Fire(playerWhoEntered)
                 return true
@@ -81,23 +78,23 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
--- local PlayerEnteredLevelPoll 
--- PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
---     if DidPlayerEnteredCurrLevel(currLevel, 100) then
---         PlayerEnteredLevelPoll:Disconnect()
---     end
--- end)
+local PlayerEnteredLevelPoll 
+PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+    if DidPlayerEnteredCurrLevel(currLevel, 100) then
+        PlayerEnteredLevelPoll:Disconnect()
+    end
+end)
 
 
-for _, v in pairs(CollectionService:GetTagged("Dragon")) do
-    local n = eDragon.new(v, tFrostDragon)
-    n.StatsScalling = 3
-    n:Start()
+-- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+--     local n = eDragon.new(v, tFrostDragon)
+--     n.StatsScalling = 3
+--     n:Start()
 
-    task.wait(1)
-    -- n:SwitchState(n.States.Idle)
-    n.Instance.Humanoid.Health = 0
-end
+--     task.wait(1)
+--     -- n:SwitchState(n.States.Idle)
+--     n.Instance.Humanoid.Health = 0
+-- end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
@@ -130,14 +127,20 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
 
-    --# World data to feed GUI
+    --# Set World data to feed player HUD
     WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
     WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
     WorldData.DragonLevel.Value     = currentLevelPlayerIs
+    WorldData.DragonName.Value      = newDragonEntity.Instance.Name
 
     newDragonEntity.Instance.Humanoid.HealthChanged:Connect(function(newVal)
         WorldData.DragonHealth.Value = newVal
     end)
+
+    --# Just after the server has finished set up
+    --# Let the client he entered the current level.
+
+    playerEnteredCurrentLevelRemote:FireClient(playerWhoEntered)
 
     newDragonEntity:Start()
 
@@ -234,7 +237,6 @@ end)
 
 
 CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinInstance)
-    print(goldCoinInstance)
     local newGoldCoin = eGoldCoin.new(goldCoinInstance)
     newGoldCoin.TouchedByPlayer.Event:Connect(function(player)
         hPlayerDataHandler:IncrementPlayerDataValue(player, "GoldCoins", 1)

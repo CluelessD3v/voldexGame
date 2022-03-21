@@ -70,7 +70,6 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
 
     local animator = self.Instance.Humanoid.Animator
     for _, animation in pairs (animsFolder:GetChildren()) do
-        print(animation)
         self.AnimationTracks[animation.Name] = animator:LoadAnimation(animation)
     end
     

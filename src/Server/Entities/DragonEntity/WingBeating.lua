@@ -37,7 +37,6 @@ function WingBeating:Start()
                     local humanoid: Humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
 
                     if humanoid then
-                        print(self.MeleeDamage, self.StatsScalling)
                         humanoid:TakeDamage(self.Context.MeleeDamage * self.Context.StatsScalling)
                     end
                 end

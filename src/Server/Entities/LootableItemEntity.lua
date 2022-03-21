@@ -32,7 +32,6 @@ function LootableItemEntity.new(instance, data: table)
 end
 
 function LootableItemEntity:Start()
-    print("started")
     self.ProximityPrompt.Triggered:Connect(function(player)
         self.Instance:SetAttribute("Owner", player.Name)
         self:Destroy()
