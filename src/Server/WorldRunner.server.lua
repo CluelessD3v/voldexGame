@@ -22,7 +22,6 @@ local eLevelEntity:ModuleScript   = require(Entities.LevelEntity)
 -- Configs
 local Configs = ServerScriptService.Configs
 local tLootableItems    = require(Configs.LootableItemsConfig)
-local tFrostDragon  = require(Configs.Dragons.FrostDragonConfig)
 
 
 -- Remote Events
@@ -93,17 +92,10 @@ end)
 
 --     task.wait(1)
 --     -- n:SwitchState(n.States.Idle)
---     n.Instance.Humanoid.Health = 0
+--     -- n.Instance.Humanoid.Health = 0
 -- end
---# Cache Dragon config tables so we have access to them
---# to deremine how many coins we should drop for the player
---# and which dragon arquetype we should spawn
-local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
-local cachedDragonConfigs = {}
 
-for _, dragonConfig in pairs(dragonConfigs) do
-    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
-end
+
 
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
@@ -119,7 +111,9 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Spawn Dragon mesh, and possition him to be at his spawn 
     --# looking at the south door
 
-    local dragonMesh                  = workspace.FrostDragon:Clone()
+    local chosenDragonConfig = require(Configs.Dragons:GetChildren()[math.random(1, #Configs.Dragons:GetChildren())])
+    
+    local dragonMesh                  = chosenDragonConfig.Instance:Clone()
     local atMobSpawn                  = currLevel.MobSpawn:GetPivot().Position
     local lookingAtSouthDoor          = currLevel.SouthDoor:GetPivot().Position
     local upOffsetToAvoidGettingStuck = Vector3.new(0, dragonMesh:GetExtentsSize().Y/2, 0)
@@ -136,7 +130,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     
     --# Construct new dragon 
 
-    local newDragonEntity = eDragon.new(dragonMesh, tFrostDragon)
+    local newDragonEntity = eDragon.new(dragonMesh, chosenDragonConfig)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
 
@@ -186,6 +180,18 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
 end)
 
 --# <|=============== GoldCoins ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
+--# Cache Dragon config tables so we have access to them
+--# to deremine how many coins we should drop for the player
+--# and which dragon arquetype we should spawn
+
+local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
+local cachedDragonConfigs = {}
+
+for _, dragonConfig in pairs(dragonConfigs) do
+    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
+end
+
 
 local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
     local coinSpawningRadius = 5 

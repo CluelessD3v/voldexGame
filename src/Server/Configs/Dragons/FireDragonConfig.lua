@@ -5,13 +5,13 @@ return {
         "DragonTarget"
     },
 
-    Name = "FrostDragon",
+    Name = "FireDragon",
     BaseFireDamage        = 1.5,   --> keep this number low
-    BaseMeleeDamge        = 6,
+    BaseMeleeDamge        = 5,
     BaseAttackPrepareTime = 1.8,
     BaseSpawnLocation     = nil, --> set this at run time
     BaseMaxhealth         = 220,
-    DetectionAgro         = 75,
+    DetectionAgro         = 80,
     AttackAgro            = 30,
     BaseGoldCoinsDropped  = 5,
     MaxGoldCoinsDropped   = 15,
