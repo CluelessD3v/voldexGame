@@ -33,13 +33,14 @@ function Dead:Start()
 
             local transparencyTween: Tween = TweenService:Create(child, tweenInfo, {Transparency = 1})
             transparencyTween:Play()
-            
-            task.delay(3, function()
-                self.Context:Destroy()
-            end)
+
+            child.CanCollide = false
         end
     end
 
+    task.delay(3, function()
+        self.Context:Destroy()
+    end)
 end
 
 function Dead:Exit()
