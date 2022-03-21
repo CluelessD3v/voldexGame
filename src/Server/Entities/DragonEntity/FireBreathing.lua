@@ -53,8 +53,6 @@ function FireBreathing:Start()
         for _, validTag in ipairs(self.Context.ValidTargetTags) do
             
             if CollectionService:HasTag(theTouchedPart.Parent , validTag) then
-            print(theTouchedPart)
-
                 local humanoid: Humanoid = theTouchedPart.Parent:FindFirstChild("Humanoid")
 
                 if humanoid then
