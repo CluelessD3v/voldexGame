@@ -56,7 +56,7 @@ return {
 
         SwordOfDarkness = {
             Lootable = true,
-            Weight = 50,
+            Weight = 35,
             DisplayItem = {
                 Name       = "SwordOfDarkness",
                 Instance   = workspace.DisplayItems.SwordOfDarkness,
@@ -83,7 +83,7 @@ return {
 
         SwordofStarlight = {
             Lootable = true,
-            Weight = 25,
+            Weight = 10,
             DisplayItem = {
                 Name       = "SwordofStarlight",
                 Instance   = workspace.DisplayItems.SwordofStarlight,
@@ -101,7 +101,7 @@ return {
                 Instance   = workspace.ToolItems.SwordofStarlight,
                 Tags       = {"SwordType", "Weapon"},
                 Attributes = {
-                    Damage   = 200,
+                    Damage   = 250,
                     ItemType = "SwordType",
                     ItemName = "SwordofStarlight",
                 }

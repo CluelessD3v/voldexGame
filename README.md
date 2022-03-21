@@ -55,3 +55,6 @@ visually, one can identify the dificulty of the dragon by its level on the HUD.
 - Sword Of Darkness: Extremely powerful sword that deals a lot of damage
 - Sword Of Starlight: The most devastating sword in the game, it will one hit dragons even in the higher levels.
 
+
+## Known bugs
+The health scalling cant be applied due to an arithmetic related error, a sollution is underway.

@@ -47,7 +47,8 @@ function DragonEntity.new(instance: Model, dragonConfig: table)
     self.MeleeDamage                 = dragonConfig.BaseMeleeDamage or 25   --> Formula: BaseMeleeDamage * StatsScaling 
     self.FireDamage                  = dragonConfig.BaseFireDamage or 0.1       --> Formula:  BaseFireDamage * StatsScaling
     self.AttackPrepareTime           = dragonConfig.BaseAttackPrepareTime  or 2 --> Formula:  math.sqrt(BaseAttackPrepareTime/StatsScaling) + 1
-    self.Instance.Humanoid.MaxHealth = dragonConfig.BaseHealth or 200   --> Formula: BaseHealth * StatsScaling
+    self.Instance.Humanoid.MaxHealth = dragonConfig.BaseMaxhealth or 200   --> Formula: BaseHealth * StatsScaling
+
 
     self.Instance.Humanoid.Health = self.Instance.Humanoid.MaxHealth
     self.DetectionAgro            = dragonConfig.DetectionAgro or 60
