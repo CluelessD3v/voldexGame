@@ -169,6 +169,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
 end)
 
 --# <|=============== GoldCoins ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+
 --# Cache Dragon config tables so we have access to them
 --# to deremine how many coins we should drop for the player
 local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
@@ -236,7 +237,7 @@ CollectionService:GetInstanceAddedSignal("GoldCoin"):Connect(function(goldCoinIn
     print(goldCoinInstance)
     local newGoldCoin = eGoldCoin.new(goldCoinInstance)
     newGoldCoin.TouchedByPlayer.Event:Connect(function(player)
-        hPlayerDataHandler:SetPlayerDataValue(player, "GoldCoins", 1)
+        hPlayerDataHandler:IncrementPlayerDataValue(player, "GoldCoins", 1)
     end)
     newGoldCoin:Start()
 end)

@@ -38,6 +38,11 @@ local function SetObjectValueInstanceValue(parent, name, newValue)
     ov.Value = newValue
 end
 
+local function IncrementObjectValueInstanceValue(parent, name, newValue)
+    local ov: ObjectValue = parent:FindFirstChild(name, true)
+    ov.Value += newValue
+end
+
 --+ <|=============== PUBLIC FUNCTIONS ===============|>
 
 --# Builds a data object for a player from the given MetaData and ObjectvVlue tables.
@@ -89,6 +94,31 @@ function PlayerDataHandler:SetPlayerDataValue(player: Player, name: string, newV
             if name == objectValue.Name or name == key then
                 objectValue.Value = newValue
                 SetObjectValueInstanceValue(objectValue.Parent, name or key, newValue)
+                return
+            end
+        end
+
+        warn("ObjectValue field not found!")
+        return nil
+    end
+
+    warn("Given PlayerDataObject was not found")
+    return nil
+end
+
+--* Overwrites value field from both PlayerDataObject ObjectValue and its physical instance in the game
+function PlayerDataHandler:IncrementPlayerDataValue(player: Player, name: string, byValue: any )
+    local playerDataObject = self.PlayerDataObjects[player.Name]
+
+    --# The PlayerDataObject Exists? Great!
+    --# Now look if the objectvalue type exist... It does!? Great!
+    --# Then overwrite both the internal valueObject value and Instance value
+
+    if playerDataObject then
+        for key, objectValue in pairs(playerDataObject.ObjectValues) do
+            if name == objectValue.Name or name == key and objectValue.Type == "NumberValue" then
+                objectValue.Value += byValue
+                IncrementObjectValueInstanceValue(objectValue.Parent, name or key, byValue)
                 return
             end
         end
