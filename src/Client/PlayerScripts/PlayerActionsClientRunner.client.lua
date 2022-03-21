@@ -8,10 +8,8 @@ local cCameraController = require(Controllers:FindFirstChild("CameraController",
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 
-local player = Players.LocalPlayer
-
 Players.LocalPlayer.CharacterAdded:Connect(function()
-
+    local player = Players.LocalPlayer
     cPlayerCombat.StartCombatMode.OnClientEvent:Connect(function(equippedWeapon)
         local camera = workspace.CurrentCamera
         cPlayerCombat:Start(player, equippedWeapon)

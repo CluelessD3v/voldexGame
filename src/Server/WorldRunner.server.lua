@@ -97,6 +97,9 @@ end)
 -- end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
+    currLevel.SpawnLocation.Neutral = true
+    playerWhoEntered.RespawnLocation = currLevel.SpawnLocation
+
     --# Close level doors here to prevent the player escaping the 
     --# Level bounds
     
