@@ -23,7 +23,7 @@ function CameraController.new()
 end
 
 function CameraController:Start(character, camera)
-
+    UserInputService.MouseIconEnabled = false
     self.Character = character
     self.Camera = camera
 
@@ -60,6 +60,7 @@ end
 function CameraController:Exit()
     self.Character.Humanoid.AutoRotate = true
     self.Camera.CameraType = Enum.CameraType.Custom
+    UserInputService.MouseIconEnabled = true
     self.Trove:Clean()
 end
 
