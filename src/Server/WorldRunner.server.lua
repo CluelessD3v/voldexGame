@@ -80,23 +80,23 @@ PositionCurrLevelInFrontOfPrevLevel(prevLevel, currLevel)
 --# when a valid dragon target is close enough to level activation agro
 --# call playerEnteredCurrLevel, then a cyclic behavior will begin
 
-local PlayerEnteredLevelPoll 
-PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
-    if DidPlayerEnteredCurrLevel(currLevel, 100) then
-        PlayerEnteredLevelPoll:Disconnect()
-    end
-end)
+-- local PlayerEnteredLevelPoll 
+-- PlayerEnteredLevelPoll = RunService.Heartbeat:Connect(function() 
+--     if DidPlayerEnteredCurrLevel(currLevel, 100) then
+--         PlayerEnteredLevelPoll:Disconnect()
+--     end
+-- end)
 
 
--- for _, v in pairs(CollectionService:GetTagged("Dragon")) do
---     local n = eDragon.new(v, tFrostDragon)
---     n.StatsScalling = 3
---     print(n)
---     n:Start()
+for _, v in pairs(CollectionService:GetTagged("Dragon")) do
+    local n = eDragon.new(v, tFrostDragon)
+    n.StatsScalling = 3
+    n:Start()
 
---     task.wait(1)
---     n:SwitchState(n.States.Idle)
--- end
+    task.wait(1)
+    -- n:SwitchState(n.States.Idle)
+    n.Instance.Humanoid.Health = 0
+end
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# Close level doors here to prevent the player escaping the 
@@ -116,7 +116,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     local currLevelMobSpawn  = CFrame.lookAt(atMobSpawn, lookingAtSouthDoor )
     dragonMesh:PivotTo(currLevelMobSpawn + upOffsetToAvoidGettingStuck)
     
-    dragonMesh.Name = "dragon"
+    dragonMesh.Name = "FrostDragon"
     CollectionService:AddTag(dragonMesh, "LootContainer")
     CollectionService:AddTag(dragonMesh, "Dragon")
     dragonMesh.Parent = currLevel
@@ -176,17 +176,33 @@ local dragonsDataTables = {}
 for _, dragonConfig in pairs(dragonConfigs) do
     dragonsDataTables[dragonConfig.Name] = require(dragonConfig)
 end
+-- print(dragonsDataTables.FrostDragonConfig.Name)
 
+local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
+    for _, dragonConfig in pairs(dragonsDataTables) do
+
+
+        if dragonInstance.Name == dragonConfig.Name then
+            local lastCF = dragonInstance:GetPivot()
+        else
+            warn("Dragon instance name does not match that of the config!")
+        end
+    end
+
+end
+
+for _, dragonInstance in ipairs(CollectionService:GetTagged("Dragon")) do
+    dragonInstance.Destroying:Connect(function()
+        print(dragonInstance, "died")
+        OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
+    end)
+end
 
 CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
-
-
     dragonInstance.Destroying:Connect(function()
-        local lastCF = dragonInstance:GetPivot()
-        
-
+        print(dragonInstance, "died")
+        OnDragonDestroyedSpawnCoins(dragonInstance, dragonsDataTables)
     end)
-
 end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
