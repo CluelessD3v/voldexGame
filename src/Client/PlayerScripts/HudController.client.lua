@@ -43,6 +43,5 @@ end)
 
 
 dragonDied.OnClientEvent:Connect(function()
-    
-    DragonHealthUpdateConn:Disconnect()
+    dragonStatsFrame.Visible = false
 end)
