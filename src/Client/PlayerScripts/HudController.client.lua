@@ -22,13 +22,14 @@ local dragonStatsFrame: Frame       = hud:WaitForChild("DragonStatsFrame")
 local dragonHealthBackground: Frame = dragonStatsFrame:WaitForChild("DragonHealthBackground")
 local dragonHealthDisplay: Frame    = dragonHealthBackground:WaitForChild("DragonHealthDisplay")
 local healthCounter: TextLabel      = dragonHealthBackground:WaitForChild("HealthCounter")
+local dragonNameAndLevel:TextLabel  = dragonStatsFrame:WaitForChild("DragonNameAndLevel")
 
 -- local healthCounter: TextLabel = dragonStatsFrame:WaitForChild("HealthCounter")
 
-local DragonHealthUpdateConn 
 dragonStatsFrame.Visible = false
 
 playerEnteredCurrentLevel.OnClientEvent:Connect(function()
+    dragonNameAndLevel.Text = dragonNameObject.Value.." Level".." "..tostring(dragonLevelObject.Value)
     dragonHealthDisplay.Size = UDim2.fromScale(dragonHealthObject.Value/dragonMaxHealthObject.Value, 1)
     healthCounter.Text = tostring(dragonMaxHealthObject.Value.."/"..dragonHealthObject.Value)
 
