@@ -5,6 +5,7 @@ local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+--# <|=============== RUNDTIME DATA ===============|>
 local WorldEvents               = ReplicatedStorage.Events.WorldRunner
 local dragonDied                = WorldEvents.DragonDied
 local playerEnteredCurrentLevel = WorldEvents.PlayerEnteredCurrentLevel
@@ -17,6 +18,7 @@ local dragonNameObject : StringValue        = worldData.DragonName
 
 local PlayerGui: PlayerGui = Players.LocalPlayer.PlayerGui 
 
+--
 local hud                           = PlayerGui:WaitForChild("HUD")
 local dragonStatsFrame: Frame       = hud:WaitForChild("DragonStatsFrame")
 local dragonHealthBackground: Frame = dragonStatsFrame:WaitForChild("DragonHealthBackground")
@@ -24,9 +26,15 @@ local dragonHealthDisplay: Frame    = dragonHealthBackground:WaitForChild("Drago
 local healthCounter: TextLabel      = dragonHealthBackground:WaitForChild("HealthCounter")
 local dragonNameAndLevel:TextLabel  = dragonStatsFrame:WaitForChild("DragonNameAndLevel")
 
--- local healthCounter: TextLabel = dragonStatsFrame:WaitForChild("HealthCounter")
 
+--# <|=============== RUNDTIME PROCESSES ===============|>
+
+--# Set the HUD as invisible by default
 dragonStatsFrame.Visible = false
+
+
+--# When the player enters the currenet level and 
+--# the dragon spawns Show his health, name and level
 
 playerEnteredCurrentLevel.OnClientEvent:Connect(function()
     dragonNameAndLevel.Text = dragonNameObject.Value.." Level".." "..tostring(dragonLevelObject.Value)
@@ -42,7 +50,8 @@ playerEnteredCurrentLevel.OnClientEvent:Connect(function()
 
 end)
 
-
+--# When the player kills the level dragon 
+--# Hide his health, name and level
 dragonDied.OnClientEvent:Connect(function()
     dragonStatsFrame.Visible = false
 end)
