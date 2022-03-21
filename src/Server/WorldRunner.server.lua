@@ -131,8 +131,6 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
 
-    print(newDragonEntity)
-
     --# World data to feed GUI
     WorldData.DragonHealth.Value    = newDragonEntity.Instance.Humanoid.Health
     WorldData.DragonMaxHealth.Value = newDragonEntity.Instance.Humanoid.MaxHealth
@@ -171,6 +169,25 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     end)
 end)
 
+--# <|=============== GoldCoins ENTITIES CONSTRUCTION AND MEDIATION ===============|>
+--# Cache Dragon config tables so we have access to them
+--# to deremine how many coins we should drop for the player
+local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
+local dragonsDataTables = {} 
+
+for _, dragonConfig in pairs(dragonConfigs) do
+    dragonsDataTables[dragonConfig.Name] = require(dragonConfig)
+end
+
+
+CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstance:Model)
+
+
+    dragonInstance.Destroying:Connect(function()
+        local lastCF = dragonInstance:GetPivot()
+    end)
+
+end)
 
 --# <|=============== LOOTABLE_ITEM ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
@@ -222,8 +239,6 @@ for _, objectTypeList in pairs(tLootableItems) do
     end
 end
 
-print(cachedLootablesItems)
-
 --* Aux function to map the basic identifying data to build a new lootable item
 --* These data being, the ItemType and ItemName, this is solely here in case the
 --* "perch" the item is cloned from DOES NOT has that data already!
@@ -249,6 +264,7 @@ end
 
 --# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
+--# Pick through a weighted choice the item that will be dropped to the player for killing the dragon
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
         SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
