@@ -5,6 +5,7 @@ return {
         "DragonTarget"
     },
 
+    Name = "FrostDragon",
     BaseFireDamage        = 1,   --> keep this number low
     BaseMeleeDamge        = 10,
     BaseAttackPrepareTime = 1.5,

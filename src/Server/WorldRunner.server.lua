@@ -183,6 +183,8 @@ CollectionService:GetInstanceAddedSignal("Dragon"):Connect(function(dragonInstan
 
     dragonInstance.Destroying:Connect(function()
         local lastCF = dragonInstance:GetPivot()
+        
+
     end)
 
 end)
