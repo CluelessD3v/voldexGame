@@ -150,7 +150,8 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     --# that will be set as the current level, then position it.
 
     newDragonEntity.Instance.Humanoid.Died:Connect(function()
-        currLevel.MobSpawn.CoinsSpawned:Play()
+        currLevel.LevelUp:Play()        --# Play sound when the level is cleared
+
         prevLevel:Destroy()
         prevLevel = currLevel
         currLevel = workspace.Level:Clone()
