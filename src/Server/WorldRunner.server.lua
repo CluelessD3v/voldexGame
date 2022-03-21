@@ -38,8 +38,6 @@ local lobby  = workspace.Lobby
 local currentLevelPlayerIs = 0      --# Used for difculty scalling value of the dragon
 local prevLevel = lobby  --# The first prev level is the lobby
 local currLevel = workspace.Level:Clone()
-
-
 currLevel.Name = currLevel.Name..currentLevelPlayerIs
 currLevel.Parent = workspace
 
