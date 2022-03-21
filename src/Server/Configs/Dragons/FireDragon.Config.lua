@@ -6,18 +6,17 @@ return {
     },
 
     Name = "FrostDragon",
-    BaseFireDamage        = .5,   --> keep this number low
-    BaseMeleeDamge        = 10,
-    BaseAttackPrepareTime = 1.5,
+    BaseFireDamage        = 1.5,   --> keep this number low
+    BaseMeleeDamge        = 6,
+    BaseAttackPrepareTime = 1.8,
     BaseSpawnLocation     = nil, --> set this at run time
-    BaseMaxhealth         = 200,
-    DetectionAgro         = 60,
-    AttackAgro            = 25,
+    BaseMaxhealth         = 220,
+    DetectionAgro         = 75,
+    AttackAgro            = 30,
     BaseGoldCoinsDropped  = 5,
-    MaxGoldCoinsDropped   = 20,
+    MaxGoldCoinsDropped   = 15,
 
-
-    Instance = workspace.FrostDragon,
+    Instance = workspace.FireDragon,
     
     Animations = {
         Death = anims.Death,

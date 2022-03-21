@@ -95,6 +95,16 @@ end)
 --     -- n:SwitchState(n.States.Idle)
 --     n.Instance.Humanoid.Health = 0
 -- end
+--# Cache Dragon config tables so we have access to them
+--# to deremine how many coins we should drop for the player
+--# and which dragon arquetype we should spawn
+local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
+local cachedDragonConfigs = {}
+
+for _, dragonConfig in pairs(dragonConfigs) do
+    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
+end
+
 
 playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     currLevel.SpawnLocation.Neutral = true
@@ -126,7 +136,7 @@ playerEnteredCurrLevel.Event:Connect(function(playerWhoEntered)
     
     --# Construct new dragon 
 
-    local newDragonEntity = eDragon.new(dragonMesh)
+    local newDragonEntity = eDragon.new(dragonMesh, tFrostDragon)
     newDragonEntity.SpawnLocation   = currLevel.MobSpawn
     newDragonEntity.StatScaling     = currentLevelPlayerIs
 
@@ -177,17 +187,9 @@ end)
 
 --# <|=============== GoldCoins ENTITIES CONSTRUCTION AND MEDIATION ===============|>
 
---# Cache Dragon config tables so we have access to them
---# to deremine how many coins we should drop for the player
-local dragonConfigs = ServerScriptService.Configs.Dragons:GetChildren()
-local cachedDragonConfigs = {}
-local coinSpawningRadius = 5 
-
-for _, dragonConfig in pairs(dragonConfigs) do
-    cachedDragonConfigs[dragonConfig.Name] = require(dragonConfig)
-end
-
 local function OnDragonDestroyedSpawnCoins(dragonInstance: Model, dragonConfigsList)
+    local coinSpawningRadius = 5 
+
     for _, dragonConfig in pairs(dragonConfigsList) do
         if dragonInstance.Name == dragonConfig.Name then
             local lastCF = dragonInstance:GetPivot()
