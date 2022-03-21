@@ -301,6 +301,9 @@ end
 --# ===============|> LOOT_CONTAINER ENTITIES MEDIATION 
 
 --# Pick through a weighted choice the item that will be dropped to the player for killing the dragon
+--# Note, this not done when the loot container "humanoid" dies because
+--# ideally not all loot containers are humanoids!
+
 for _, lootContainer in ipairs(CollectionService:GetTagged("LootContainer")) do
     lootContainer.Destroying:Connect(function()
         SpawnLootableItemFromContainerByWeight(lootContainer, cachedLootablesItems)
