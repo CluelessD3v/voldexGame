@@ -2,22 +2,25 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --# <|=============== DEPENDENCIES ===============|>
 -- Controllers
 local Controllers  = ReplicatedStorage.Controllers
-local cPlayerCombat     = require(Controllers:FindFirstChild("PlayerCombatController", true))
+local cPlayerCombatController     = require(Controllers:FindFirstChild("PlayerCombatController", true))
 local cCameraController = require(Controllers:FindFirstChild("CameraController", true))
 
 --# <|=============== SERVICES ===============|>
 local Players = game:GetService("Players")
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
+    local newPlayerCombatController = cPlayerCombatController.new()
+
     local player = Players.LocalPlayer
-    cPlayerCombat.StartCombatMode.OnClientEvent:Connect(function(equippedWeapon)
+    newPlayerCombatController.StartCombatMode.OnClientEvent:Connect(function(equippedWeapon)
         local camera = workspace.CurrentCamera
-        cPlayerCombat:Start(player, equippedWeapon)
+        newPlayerCombatController:Start(player, equippedWeapon)
         cCameraController:Start(player.Character, camera)
     end)    
+    
 
-    cPlayerCombat.ExitCombatMode.OnClientEvent:Connect(function()
-        cPlayerCombat:Exit()
+    newPlayerCombatController.ExitCombatMode.OnClientEvent:Connect(function()
+        newPlayerCombatController:Exit()
         cCameraController:Exit()
     end)
 end)

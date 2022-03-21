@@ -26,10 +26,6 @@ end
 
 function Idle:Start()
     print("start")
-    -- local animator = self.Instance.Humanoid.Animator
-    -- self.AnimationTrack = animator:LoadAnimation(self.Context.Animations.Idle)
-    -- self.AnimationTrack:Play()
-
     self.Context.AnimationTracks.Idle:Play()
 
     --# Poll every frame to see if a valid instance

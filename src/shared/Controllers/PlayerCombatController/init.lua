@@ -102,4 +102,4 @@ function PlayerCombatController:SwitchState(newState: ModuleScript)
 end
 
 
-return PlayerCombatController.new()
+return PlayerCombatController
